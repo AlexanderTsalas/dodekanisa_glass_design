@@ -1,0 +1,75 @@
+/* App-specific styles */
+
+/* Smooth scroll behavior for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure sections stack properly */
+.section-pinned {
+  will-change: transform;
+}
+
+/* Image optimization */
+img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Better text rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Custom cursor for interactive elements */
+button, a, .service-card {
+  cursor: pointer;
+}
+
+/* Focus states */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3F4CCB;
+  outline-offset: 2px;
+}
+
+/* Loading state for images */
+img {
+  background: linear-gradient(135deg, #E9EAEC 0%, #d0d2d6 100%);
+}
+
+/* Animation performance */
+.headline-line,
+.service-card,
+.process-step {
+  will-change: transform, opacity;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .section-pinned {
+    min-height: 100svh;
+  }
+  
+  .headline-xl,
+  .headline-lg {
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Print styles */
+@media print {
+  .grain-overlay,
+  nav,
+  .fixed {
+    display: none !important;
+  }
+}
