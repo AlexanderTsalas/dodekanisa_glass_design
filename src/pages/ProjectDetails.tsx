@@ -22,13 +22,13 @@ export default function ProjectDetails() {
     }
 
     return (
-        <main data-theme="dark" className="bg-[#0B0C0E] min-h-screen pt-32 pb-32 text-[#E9EAEC]">
+        <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-32 pb-32 text-[#0B0C0E]">
 
             {/* Back Button */}
             <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-8">
                 <button
                     onClick={() => navigate('/projects')}
-                    className="inline-flex items-center gap-2 text-[#6D7278] hover:text-[#E9EAEC] transition-colors font-medium text-sm group"
+                    className="inline-flex items-center gap-2 text-[#6D7278] hover:text-[#0B0C0E] transition-colors font-medium text-sm group"
                 >
                     <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                     Επιστροφή στα Έργα
@@ -55,7 +55,7 @@ export default function ProjectDetails() {
             <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-24">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[60vh] lg:h-[75vh]">
                     {/* Primary Large Image */}
-                    <div className="lg:col-span-9 rounded-2xl overflow-hidden bg-[#1C1E23] relative border border-[rgba(233,234,236,0.05)] shadow-2xl reveal-fade-in group">
+                    <div className="lg:col-span-9 rounded-2xl overflow-hidden bg-[#edede9] relative border border-[rgba(11,12,14,0.1)]/40 shadow-2xl reveal-fade-in group">
                         <img
                             src={activeImage}
                             alt={project.title}
@@ -96,16 +96,16 @@ export default function ProjectDetails() {
 
                     {/* Left: Narrative Description */}
                     <div className="lg:col-span-7 reveal-fade-in">
-                        <h3 className="text-xs uppercase tracking-[0.2em] text-[#6D7278] mb-8 border-b border-[rgba(233,234,236,0.1)] pb-4">Το Έργο</h3>
-                        <p className="text-[#E9EAEC] text-lg lg:text-xl leading-relaxed opacity-90 font-medium whitespace-pre-line">
+                        <h3 className="text-xs uppercase tracking-[0.2em] text-[#6D7278] mb-8 border-b border-[rgba(11,12,14,0.1)]/40 pb-4">Το Έργο</h3>
+                        <p className="text-[#0B0C0E] text-lg lg:text-xl leading-relaxed opacity-90 font-medium whitespace-pre-line">
                             {project.description}
                         </p>
                     </div>
 
                     {/* Right: Technical Specs */}
                     <div className="lg:col-span-5 reveal-fade-in" style={{ animationDelay: '150ms' }}>
-                        <div className="bg-[#141518] border border-[rgba(233,234,236,0.05)] rounded-2xl p-8 shadow-xl">
-                            <h4 className="text-xs uppercase tracking-[0.15em] text-[#6D7278] mb-6 border-b border-[rgba(233,234,236,0.05)] pb-4">
+                        <div className="bg-[#141518] border border-[rgba(11,12,14,0.1)]/40 rounded-2xl p-8 shadow-xl">
+                            <h4 className="text-xs uppercase tracking-[0.15em] text-[#6D7278] mb-6 border-b border-[rgba(11,12,14,0.1)]/40 pb-4">
                                 Τεχνικά Χαρακτηριστικά
                             </h4>
 
@@ -113,7 +113,7 @@ export default function ProjectDetails() {
                                 {project.technicalSpecs.map((spec, i) => (
                                     <li key={i} className="flex flex-col gap-1.5">
                                         <span className="text-xs font-bold tracking-wider text-[#3F4CCB] uppercase">{spec.label}</span>
-                                        <span className="font-medium text-[#E9EAEC] leading-snug text-sm">{spec.value}</span>
+                                        <span className="font-medium text-[#0B0C0E] leading-snug text-sm">{spec.value}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -123,7 +123,7 @@ export default function ProjectDetails() {
                         <div className="mt-8">
                             <Link
                                 to="/contact"
-                                className="btn-primary w-full flex items-center justify-center gap-2 py-4 shadow-lg hover:-translate-y-1 transition-transform"
+                                className="w-full flex items-center justify-center gap-2 py-4 shadow-sm hover:shadow-md transition-all duration-300 border border-[#0B0C0E] rounded-full font-display font-medium text-sm tracking-wide bg-white/20 backdrop-blur-md text-[#0B0C0E] hover:bg-[#0B0C0E] hover:text-[#E9EAEC]"
                             >
                                 Συζητήστε το δικό σας έργο
                             </Link>
@@ -131,6 +131,18 @@ export default function ProjectDetails() {
                     </div>
 
                 </div>
+            </div>
+
+            {/* Final CTA Strip */}
+            <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center reveal-fade-in">
+                <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΘΕΛΕΤΕ ΚΑΤΙ ΑΝΤΙΣΤΟΙΧΟ ΓΙΑ ΤΟΝ ΧΩΡΟ ΣΑΣ;</h2>
+                <Link to="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
+                    Ζητήστε προσφορά
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
+                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </Link>
             </div>
 
         </main>

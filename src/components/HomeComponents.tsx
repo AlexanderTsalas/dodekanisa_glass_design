@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ChevronRight, Clock, Mail, MapPin, Phone } from 'lucide-react';
 
 // Section 1: Hero
@@ -23,6 +24,14 @@ export function HeroSection() {
                         Από την ιδέα έως την τοποθέτηση.
                     </p>
                 </div>
+                {/* Stationary Hero CTA - embedded in sticky section */}
+                <Link to="/contact" className="hero-cta absolute bottom-12 md:bottom-24 left-1/2 -translate-x-1/2 pointer-events-auto flex items-center gap-4 px-10 py-5 bg-white/10 backdrop-blur-md border border-white/30 text-white font-display font-medium text-sm lg:text-base rounded-full hover:bg-white hover:text-[#0B0C0E] transition-all duration-300 shadow-[0_8px_32px_rgba(255,255,255,0.05)] z-30">
+                    Ξεκινήστε το έργο σας
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
+                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </Link>
             </section>
         </div>
     );
@@ -107,7 +116,7 @@ export function SplitSection({
                 )}
 
                 {caption && (
-                    <div className="mt-6 pt-6 border-t border-[rgba(11,12,14,0.1)]">
+                    <div className="mt-6 pt-6 border-t border-[rgba(11,12,14,0.1)]/40">
                         <span className="label-micro opacity-60 text-[#0B0C0E]">{caption}</span>
                     </div>
                 )}
@@ -115,14 +124,13 @@ export function SplitSection({
 
             {/* Vertical Divider */}
             <div
-                className="absolute top-[10%] h-[80%] w-px bg-[rgba(11,12,14,0.12)]"
+                className="absolute top-[10%] h-[80%] w-px bg-[#E9EAEC]/30"
                 style={{ left: '50%' }}
             />
         </section>
     );
 }
 
-import { Link } from 'react-router-dom';
 
 // Section 9: Services
 export function ServicesSection() {
@@ -149,7 +157,7 @@ export function ServicesSection() {
                     {services.map((service, i) => (
                         <Link to={`/services#${service.id}`} key={i} className="service-card group cursor-pointer block">
                             <div className="overflow-hidden mb-4 rounded-xl relative">
-                                <div className="absolute inset-0 bg-[#0B0C0E] opacity-0 group-hover:opacity-10 transition-opacity duration-500 z-10" />
+                                <div className="absolute inset-0 bg-[#E9EAEC] opacity-0 group-hover:opacity-10 transition-opacity duration-500 z-10" />
                                 <img
                                     src={service.image}
                                     alt={service.title}
@@ -191,7 +199,7 @@ export function ProcessContactSection() {
                         {steps.map((step, i) => (
                             <div key={i} className="process-step relative pl-10">
                                 <div className="absolute left-0 top-0 w-6 h-6 rounded-full bg-[#3F4CCB] flex items-center justify-center">
-                                    <span className="text-white text-xs font-bold">{step.num}</span>
+                                    <span className="text-[#0B0C0E] text-xs font-bold">{step.num}</span>
                                 </div>
                                 <h3 className="font-display font-bold text-[#0B0C0E] text-lg mb-2">{step.title}</h3>
                                 <p className="text-[#6D7278] text-sm">{step.desc}</p>
@@ -202,12 +210,12 @@ export function ProcessContactSection() {
             </div>
 
             {/* Contact Section */}
-            <div id="contact" data-theme="dark" className="bg-[#0B0C0E] py-24 lg:py-32 px-6 lg:px-16 min-h-screen">
+            <div id="contact" data-theme="light" className="bg-[#E9EAEC] py-24 lg:py-32 px-6 lg:px-16 min-h-screen">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                         {/* Left - Form */}
                         <div>
-                            <h2 className="headline-lg text-[#E9EAEC] text-[clamp(32px,5vw,64px)] mb-4">Ας μιλήσουμε.</h2>
+                            <h2 className="headline-lg text-[#0B0C0E] text-[clamp(32px,5vw,64px)] mb-4">Ας μιλήσουμε.</h2>
                             <p className="text-[#6D7278] text-base mb-8">
                                 Περιγράψτε μας το έργο σας. Θα επικοινωνήσουμε εντός 24 ωρών.
                             </p>
@@ -215,19 +223,19 @@ export function ProcessContactSection() {
                             <form className="space-y-6">
                                 <div>
                                     <label className="label-micro text-[#6D7278] block mb-2">Όνομα</label>
-                                    <input type="text" className="w-full text-[#E9EAEC] border-[rgba(233,234,236,0.22)]" placeholder="Το όνομά σας" />
+                                    <input type="text" className="w-full text-[#0B0C0E] border-[rgba(11,12,14,0.1)]/40" placeholder="Το όνομά σας" />
                                 </div>
                                 <div>
                                     <label className="label-micro text-[#6D7278] block mb-2">Email</label>
-                                    <input type="email" className="w-full text-[#E9EAEC] border-[rgba(233,234,236,0.22)]" placeholder="your@email.com" />
+                                    <input type="email" className="w-full text-[#0B0C0E] border-[rgba(11,12,14,0.1)]/40" placeholder="your@email.com" />
                                 </div>
                                 <div>
                                     <label className="label-micro text-[#6D7278] block mb-2">Τηλέφωνο</label>
-                                    <input type="tel" className="w-full text-[#E9EAEC] border-[rgba(233,234,236,0.22)]" placeholder="+30 690 000 0000" />
+                                    <input type="tel" className="w-full text-[#0B0C0E] border-[rgba(11,12,14,0.1)]/40" placeholder="+30 690 000 0000" />
                                 </div>
                                 <div>
                                     <label className="label-micro text-[#6D7278] block mb-2">Μήνυμα</label>
-                                    <textarea className="w-full text-[#E9EAEC] border-[rgba(233,234,236,0.22)] resize-none" rows={4} placeholder="Περιγράψτε το έργο σας..." />
+                                    <textarea className="w-full text-[#0B0C0E] border-[rgba(11,12,14,0.1)]/40 resize-none" rows={4} placeholder="Περιγράψτε το έργο σας..." />
                                 </div>
                                 <button type="submit" className="btn-primary w-full flex items-center justify-center gap-2">
                                     Αποστολή
@@ -243,7 +251,7 @@ export function ProcessContactSection() {
                                     <Mail className="text-[#3F4CCB] mt-1" size={20} />
                                     <div>
                                         <p className="label-micro text-[#6D7278] mb-1">Email</p>
-                                        <p className="text-[#E9EAEC] font-medium">hello@dodekanisaglass.gr</p>
+                                        <p className="text-[#0B0C0E] font-medium">hello@dodekanisaglass.gr</p>
                                     </div>
                                 </div>
 
@@ -251,7 +259,7 @@ export function ProcessContactSection() {
                                     <Phone className="text-[#3F4CCB] mt-1" size={20} />
                                     <div>
                                         <p className="label-micro text-[#6D7278] mb-1">Τηλέφωνο</p>
-                                        <p className="text-[#E9EAEC] font-medium">+30 22410 00000</p>
+                                        <p className="text-[#0B0C0E] font-medium">+30 22410 00000</p>
                                     </div>
                                 </div>
 
@@ -259,7 +267,7 @@ export function ProcessContactSection() {
                                     <MapPin className="text-[#3F4CCB] mt-1" size={20} />
                                     <div>
                                         <p className="label-micro text-[#6D7278] mb-1">Διεύθυνση</p>
-                                        <p className="text-[#E9EAEC] font-medium">Ρόδος, Δωδεκάνησα</p>
+                                        <p className="text-[#0B0C0E] font-medium">Ρόδος, Δωδεκάνησα</p>
                                     </div>
                                 </div>
 
@@ -267,7 +275,7 @@ export function ProcessContactSection() {
                                     <Clock className="text-[#3F4CCB] mt-1" size={20} />
                                     <div>
                                         <p className="label-micro text-[#6D7278] mb-1">Ωράριο</p>
-                                        <p className="text-[#E9EAEC] font-medium">Δευ–Παρ: 09:00–18:00</p>
+                                        <p className="text-[#0B0C0E] font-medium">Δευ–Παρ: 09:00–18:00</p>
                                     </div>
                                 </div>
                             </div>

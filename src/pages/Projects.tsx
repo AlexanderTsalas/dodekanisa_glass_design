@@ -49,8 +49,8 @@ export default function Projects() {
                             key={cat}
                             onClick={() => handleCategoryChange(cat)}
                             className={`px-6 py-2 rounded-full text-sm font-medium transition-colors border ${activeCategory === cat
-                                ? 'bg-[#3F4CCB] text-white border-[#3F4CCB]'
-                                : 'bg-transparent text-[#6D7278] border-[rgba(11,12,14,0.15)] hover:border-[#0B0C0E] hover:text-[#0B0C0E]'
+                                ? 'bg-[#3F4CCB] text-[#0B0C0E] border-[#3F4CCB]'
+                                : 'bg-transparent text-[#6D7278] border-[rgba(11,12,14,0.1)]/40 hover:border-[rgba(11,12,14,0.1)] hover:text-[#0B0C0E]'
                                 }`}
                         >
                             {cat}
@@ -80,7 +80,7 @@ export default function Projects() {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
 
                             {/* Content */}
-                            <div className="absolute inset-0 p-8 flex flex-col justify-end text-[#E9EAEC]">
+                            <div className="absolute inset-0 p-8 flex flex-col justify-end text-[#0B0C0E]">
                                 <p className="text-xs uppercase tracking-widest text-[#3F4CCB] mb-2 font-bold translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                                     {project.category}
                                 </p>
@@ -108,7 +108,7 @@ export default function Projects() {
                         <button
                             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                             disabled={currentPage === 1}
-                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.15)] text-[#0B0C0E] disabled:opacity-30 hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-colors"
+                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.1)]/40 text-[#0B0C0E] disabled:opacity-30 hover:bg-[#E9EAEC] hover:text-[#0B0C0E] transition-colors"
                         >
                             &larr;
                         </button>
@@ -119,7 +119,7 @@ export default function Projects() {
                                     key={i}
                                     onClick={() => setCurrentPage(i + 1)}
                                     className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${currentPage === i + 1
-                                        ? 'bg-[#3F4CCB] text-white'
+                                        ? 'bg-[#3F4CCB] text-[#0B0C0E]'
                                         : 'text-[#6D7278] hover:text-[#0B0C0E] bg-transparent'
                                         }`}
                                 >
@@ -131,12 +131,24 @@ export default function Projects() {
                         <button
                             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                             disabled={currentPage === totalPages}
-                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.15)] text-[#0B0C0E] disabled:opacity-30 hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-colors"
+                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.1)]/40 text-[#0B0C0E] disabled:opacity-30 hover:bg-[#E9EAEC] hover:text-[#0B0C0E] transition-colors"
                         >
                             &rarr;
                         </button>
                     </div>
                 )}
+            </div>
+
+            {/* Final CTA Strip */}
+            <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center reveal-fade-in">
+                <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΘΕΛΕΤΕ ΚΑΤΙ ΑΝΤΙΣΤΟΙΧΟ ΓΙΑ ΤΟΝ ΧΩΡΟ ΣΑΣ;</h2>
+                <Link to="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
+                    Ζητήστε προσφορά
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
+                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </Link>
             </div>
 
         </main>

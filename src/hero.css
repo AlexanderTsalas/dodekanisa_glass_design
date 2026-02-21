@@ -3,9 +3,9 @@
 }
 
 .masthead .hero-text {
-    animation: text-zoom-out both linear, fade-away both linear;
+    animation: text-zoom-out both ease-in, fade-away both linear;
     animation-timeline: --hero-view, --hero-view;
-    animation-range: exit 0% exit 60%, exit 0% exit 60%;
+    animation-range: exit 0% exit 70%, exit 0% exit 70%;
     will-change: transform, opacity;
 }
 
@@ -13,8 +13,9 @@
     0% {
         transform: translate(-50%, -50%) scale(1);
     }
+
     100% {
-        transform: translate(-50%, -50%) scale(4);
+        transform: translate(-50%, -50%) scale(2.8);
     }
 }
 
@@ -22,4 +23,11 @@
     100% {
         opacity: 0;
     }
+}
+
+.masthead .hero-cta {
+    animation: fade-away both linear;
+    animation-timeline: --hero-view;
+    animation-range: exit 0% exit 20%;
+    will-change: opacity;
 }

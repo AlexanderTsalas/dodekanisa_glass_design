@@ -79,7 +79,7 @@ function Navigation() {
     };
   }, [location.pathname]);
 
-  const navTextColor = isNavWhite ? 'text-white' : 'text-[#0B0C0E]';
+  const navTextColor = isNavWhite ? 'text-[#0B0C0E]' : 'text-[#0B0C0E]';
 
   return (
     <>
@@ -108,12 +108,12 @@ function Navigation() {
       {menuOpen && (
         <div className="mobile-menu">
           <button
-            className="absolute top-6 right-6 text-[#E9EAEC]"
+            className="absolute top-6 right-6 text-[#0B0C0E]"
             onClick={() => setMenuOpen(false)}
           >
             <X size={28} />
           </button>
-          <div className="flex flex-col items-center gap-8 text-[#E9EAEC]">
+          <div className="flex flex-col items-center gap-8 text-[#0B0C0E]">
             <Link to="/" onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">Αρχική</Link>
             <Link to="/services" onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">Υπηρεσίες</Link>
             <Link to="/projects" onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">Έργα</Link>
@@ -129,13 +129,13 @@ function Navigation() {
 // Standard Footer
 function Footer() {
   const bgColor = 'bg-[#000000]';
-  const textColor = 'text-white/70';
-  const linkColor = 'text-white hover:text-[#3F4CCB]';
+  const textColor = 'text-[#0B0C0E]/70';
+  const linkColor = 'text-[#0B0C0E] hover:text-[#3F4CCB]';
   const borderColor = 'border-white/10';
 
   return (
     <footer className={`w-full ${bgColor} border-t ${borderColor} py-12 px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-8 text-sm font-medium mt-auto`}>
-      <div className="flex items-center gap-4 text-white">
+      <div className="flex items-center gap-4 text-[#0B0C0E]">
         <Logo className="h-7 w-auto" />
         <span className={`${textColor}`}>
           &copy; {new Date().getFullYear()} Dodekanisa Glass. All rights reserved.

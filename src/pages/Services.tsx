@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-
+import { Link } from 'react-router-dom';
 const servicesData = [
     {
         id: 'partitions',
@@ -99,7 +99,7 @@ export default function Services() {
     };
 
     return (
-        <main data-theme="dark" className="bg-[#0B0C0E] min-h-screen pt-32 pb-32 text-[#E9EAEC]">
+        <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-32 pb-32 text-[#0B0C0E]">
 
             {/* Intro Header */}
             <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-24 lg:mb-32">
@@ -115,7 +115,7 @@ export default function Services() {
                 <aside className="hidden lg:block w-1/4 relative">
                     <div className="sticky top-40 space-y-4">
                         <h3 className="text-xs uppercase tracking-[0.2em] text-[#6D7278] mb-8">Εξειδικευσεις</h3>
-                        <ul className="space-y-4 border-l border-[rgba(233,234,236,0.1)] pl-6">
+                        <ul className="space-y-4 border-l border-[rgba(11,12,14,0.1)]/40 pl-6">
                             {servicesData.map((service, idx) => {
                                 const isActive = activeSection === service.id;
                                 return (
@@ -126,7 +126,7 @@ export default function Services() {
                                         />
                                         <button
                                             onClick={() => scrollToService(service.id)}
-                                            className={`text-left font-display font-medium text-lg transition-all duration-300 ${isActive ? 'text-[#E9EAEC] translate-x-2' : 'text-[#6D7278] hover:text-[#E9EAEC]'
+                                            className={`text-left font-display font-medium text-lg transition-all duration-300 ${isActive ? 'text-[#0B0C0E] translate-x-2' : 'text-[#6D7278] hover:text-[#0B0C0E]'
                                                 }`}
                                         >
                                             <span className="text-xs opacity-50 mr-3 font-mono">0{idx + 1}</span>
@@ -157,7 +157,7 @@ export default function Services() {
                             </div>
 
                             {/* Cinematic Wide Image */}
-                            <div className="w-full aspect-[16/9] lg:aspect-[21/9] rounded-2xl overflow-hidden mb-12 shadow-2xl relative bg-[#1C1E23]">
+                            <div className="w-full aspect-[16/9] lg:aspect-[21/9] rounded-2xl overflow-hidden mb-12 shadow-2xl relative bg-[#edede9]">
                                 <img
                                     src={service.image}
                                     alt={service.title}
@@ -172,7 +172,7 @@ export default function Services() {
 
                                 {/* Description */}
                                 <div className="lg:col-span-7">
-                                    <p className="text-[#E9EAEC] text-lg leading-relaxed opacity-90 mb-8 font-medium">
+                                    <p className="text-[#0B0C0E] text-lg leading-relaxed opacity-90 mb-8 font-medium">
                                         {service.desc}
                                     </p>
 
@@ -191,8 +191,8 @@ export default function Services() {
 
                                 {/* Specs Box */}
                                 <div className="lg:col-span-5 relative">
-                                    <div className="bg-[#141518] border border-[rgba(233,234,236,0.05)] rounded-2xl p-6 lg:p-8">
-                                        <h4 className="text-xs uppercase tracking-[0.15em] text-[#6D7278] mb-6 border-b border-[rgba(233,234,236,0.05)] pb-4">
+                                    <div className="bg-white/20 backdrop-blur-xl border border-[#0B0C0E] rounded-2xl p-6 lg:p-8 shadow-[0_8px_32px_rgba(11,12,14,0.05)]">
+                                        <h4 className="text-xs uppercase tracking-[0.15em] text-[#0B0C0E] font-bold mb-6 border-b border-[#0B0C0E]/20 pb-4">
                                             Τεχνικα Στοιχεια
                                         </h4>
 
@@ -213,7 +213,7 @@ export default function Services() {
                                                 return (
                                                     <li key={i} className="flex flex-col gap-1">
                                                         <span className="text-xs text-[#6D7278] uppercase">{labels[key]}</span>
-                                                        <span className="font-medium text-[#E9EAEC]">{value as string}</span>
+                                                        <span className="font-medium text-[#0B0C0E]">{value as string}</span>
                                                     </li>
                                                 );
                                             })}
@@ -227,6 +227,19 @@ export default function Services() {
                 </div>
 
             </div>
+
+            {/* Final CTA Strip */}
+            <div className="mt-12 mb-24 relative z-20 text-center flex flex-col items-center reveal-fade-in">
+                <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΕΧΕΤΕ ΚΑΠΟΙΟ ΕΡΓΟ ΣΤΟ ΜΥΑΛΟ ΣΑΣ;</h2>
+                <Link to="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
+                    Επικοινωνήστε μαζί μας
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
+                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </Link>
+            </div>
+
         </main>
     );
 }

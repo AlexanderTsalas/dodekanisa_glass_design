@@ -17,24 +17,20 @@ export default function Contact() {
     ];
 
     return (
-        <main data-theme="dark" className="bg-[#0B0C0E] min-h-screen lg:h-screen pt-24 lg:pt-32 pb-12 flex items-center relative lg:overflow-hidden text-[#E9EAEC] selection:bg-[#3F4CCB] selection:text-white z-0">
-
-            {/* Ambient Background Glow */}
-            <div className="absolute top-1/2 left-1/4 -translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] bg-[#3F4CCB] rounded-full blur-[120px] lg:blur-[150px] opacity-20 pointer-events-none animate-pulse" style={{ animationDuration: '8s' }}></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] lg:w-[600px] lg:h-[600px] bg-white rounded-full blur-[120px] lg:blur-[150px] opacity-5 pointer-events-none"></div>
+        <main data-theme="light" className="bg-[#E9EAEC] min-h-screen lg:h-screen pt-24 lg:pt-32 pb-12 flex items-center relative lg:overflow-hidden text-[#0B0C0E] selection:bg-[#3F4CCB] selection:text-[#0B0C0E] z-0">
 
             <div className="max-w-7xl mx-auto w-full px-6 lg:px-16 grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] xl:grid-cols-[1.4fr_1fr] gap-12 lg:gap-20 relative z-10 h-auto lg:h-full max-h-none lg:max-h-[850px] items-center">
 
                 {/* Left Side: Content & Cards */}
                 <div className="flex flex-col justify-center h-auto lg:h-full reveal-fade-in pt-12 lg:pt-0">
                     <div className="mb-8 lg:mb-12">
-                        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[rgba(233,234,236,0.1)] bg-[rgba(233,234,236,0.03)] backdrop-blur-sm mb-6 lg:mb-8">
+                        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[rgba(11,12,14,0.1)]/40 bg-[#E9EAEC]/30 backdrop-blur-sm mb-6 lg:mb-8">
                             <span className="w-2 h-2 rounded-full bg-[#3F4CCB] animate-ping"></span>
-                            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#E9EAEC]">Διαθεσιμοι για νεα εργα</span>
+                            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#0B0C0E]">Διαθεσιμοι για νεα εργα</span>
                         </div>
                         <h1 className="headline-xl text-[clamp(28px,3.8vw,52px)] leading-[1.05] tracking-tight mb-4 lg:mb-6 pr-4">
                             Ας δημιουργήσουμε<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#6D7278]">κάτι κορυφαίο.</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3F4CCB] to-[#0B0C0E]">κάτι κορυφαίο.</span>
                         </h1>
                         <p className="text-[#6D7278] text-sm lg:text-xl font-medium leading-relaxed max-w-lg">
                             Έχετε ένα όραμα; Είμαστε εδώ για να του δώσουμε μορφή με κρύσταλλο. Επικοινωνήστε απευθείας με την ομάδα μας.
@@ -47,16 +43,16 @@ export default function Contact() {
                                 key={method.id}
                                 onMouseEnter={() => setHoveredCard(method.id)}
                                 onMouseLeave={() => setHoveredCard(null)}
-                                className={`group relative p-5 lg:p-6 rounded-2xl border transition-all duration-500 overflow-hidden ${hoveredCard === method.id ? 'border-[#3F4CCB] bg-[rgba(63,76,203,0.05)] shadow-[0_0_30px_rgba(63,76,203,0.15)] transform lg:-translate-y-1' : 'border-[rgba(233,234,236,0.08)] bg-[rgba(255,255,255,0.02)]'}`}
+                                className={`group relative p-5 lg:p-6 rounded-2xl border transition-all duration-500 overflow-hidden ${hoveredCard === method.id ? 'border-[#3F4CCB] bg-[#E9EAEC]/30 shadow-[0_0_30px_rgba(63,76,203,0.15)] transform lg:-translate-y-1' : 'border-[rgba(11,12,14,0.1)]/40 bg-[#E9EAEC]/30'}`}
                                 style={{ animationDelay: `${i * 100}ms` }}
                             >
                                 <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#3F4CCB] to-transparent transform -translate-x-full transition-transform duration-700 ${hoveredCard === method.id ? 'translate-x-full' : ''}`}></div>
                                 <method.icon className={`mb-3 transition-colors duration-300 ${hoveredCard === method.id ? 'text-[#3F4CCB]' : 'text-[#6D7278]'}`} size={24} />
                                 <p className="text-[10px] lg:text-xs font-bold uppercase tracking-widest text-[#6D7278] mb-1">{method.title}</p>
                                 {method.link ? (
-                                    <a href={method.link} className="block text-[#E9EAEC] font-display font-medium text-sm lg:text-base hover:text-[#3F4CCB] transition-colors truncate">{method.value}</a>
+                                    <a href={method.link} className="block text-[#0B0C0E] font-display font-medium text-sm lg:text-base hover:text-[#3F4CCB] transition-colors truncate">{method.value}</a>
                                 ) : (
-                                    <p className="block text-[#E9EAEC] font-display font-medium text-sm lg:text-base truncate">{method.value}</p>
+                                    <p className="block text-[#0B0C0E] font-display font-medium text-sm lg:text-base truncate">{method.value}</p>
                                 )}
                             </div>
                         ))}
@@ -65,7 +61,7 @@ export default function Contact() {
 
                 {/* Right Side: Interactive Form */}
                 <div className="flex flex-col justify-center h-auto lg:h-full reveal-fade-in pb-12 lg:pb-0" style={{ animationDelay: '300ms' }}>
-                    <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(233,234,236,0.08)] rounded-3xl p-6 lg:p-12 backdrop-blur-xl shadow-2xl relative overflow-hidden flex flex-col justify-between">
+                    <div className="bg-[#E9EAEC]/30 border border-[rgba(11,12,14,0.1)]/40 rounded-3xl p-6 lg:p-12 backdrop-blur-xl shadow-2xl relative overflow-hidden flex flex-col justify-between">
 
                         {/* Shimmer Effect */}
                         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(255,255,255,0.05)] to-transparent opacity-0 hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0"></div>
@@ -78,7 +74,7 @@ export default function Contact() {
                                         id="name"
                                         onFocus={() => setFocusedInput('name')}
                                         onBlur={() => setFocusedInput(null)}
-                                        className="w-full bg-transparent border-b border-[rgba(233,234,236,0.2)] pb-2 text-base lg:text-lg text-[#E9EAEC] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
+                                        className="w-full bg-transparent border-b border-[rgba(11,12,14,0.1)]/40 pb-2 text-base lg:text-lg text-[#0B0C0E] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
                                         placeholder="Ονοματεπώνυμο"
                                     />
                                     <label htmlFor="name" className="absolute left-0 text-base text-[#6D7278] font-medium transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:font-bold peer-focus:text-[#3F4CCB] z-10 top-0 text-xs uppercase tracking-widest font-bold">
@@ -92,7 +88,7 @@ export default function Contact() {
                                         id="phone"
                                         onFocus={() => setFocusedInput('phone')}
                                         onBlur={() => setFocusedInput(null)}
-                                        className="w-full bg-transparent border-b border-[rgba(233,234,236,0.2)] pb-2 text-base lg:text-lg text-[#E9EAEC] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
+                                        className="w-full bg-transparent border-b border-[rgba(11,12,14,0.1)]/40 pb-2 text-base lg:text-lg text-[#0B0C0E] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
                                         placeholder="Τηλέφωνο"
                                     />
                                     <label htmlFor="phone" className="absolute left-0 text-base text-[#6D7278] font-medium transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:font-bold peer-focus:text-[#3F4CCB] z-10 top-0 text-xs uppercase tracking-widest font-bold">
@@ -108,7 +104,7 @@ export default function Contact() {
                                     id="email"
                                     onFocus={() => setFocusedInput('email')}
                                     onBlur={() => setFocusedInput(null)}
-                                    className="w-full bg-transparent border-b border-[rgba(233,234,236,0.2)] pb-2 text-base lg:text-lg text-[#E9EAEC] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
+                                    className="w-full bg-transparent border-b border-[rgba(11,12,14,0.1)]/40 pb-2 text-base lg:text-lg text-[#0B0C0E] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
                                     placeholder="Email"
                                 />
                                 <label htmlFor="email" className="absolute left-0 text-base text-[#6D7278] font-medium transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:font-bold peer-focus:text-[#3F4CCB] z-10 top-0 text-xs uppercase tracking-widest font-bold">
@@ -122,7 +118,7 @@ export default function Contact() {
                                     id="message"
                                     onFocus={() => setFocusedInput('message')}
                                     onBlur={() => setFocusedInput(null)}
-                                    className="w-full min-h-[100px] lg:min-h-[120px] bg-transparent border-b border-[rgba(233,234,236,0.2)] pb-2 text-base lg:text-lg text-[#E9EAEC] font-medium focus:outline-none transition-colors resize-none peer placeholder-transparent relative z-20"
+                                    className="w-full min-h-[100px] lg:min-h-[120px] bg-transparent border-b border-[rgba(11,12,14,0.1)]/40 pb-2 text-base lg:text-lg text-[#0B0C0E] font-medium focus:outline-none transition-colors resize-none peer placeholder-transparent relative z-20"
                                     placeholder="Το μήνυμά σας..."
                                 />
                                 <label htmlFor="message" className="absolute left-0 text-base text-[#6D7278] font-medium transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:font-bold peer-focus:text-[#3F4CCB] z-10 top-0 text-xs uppercase tracking-widest font-bold">

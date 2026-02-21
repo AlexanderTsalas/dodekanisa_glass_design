@@ -137,7 +137,7 @@
 
 /* Button styles */
 .btn-primary {
-  @apply bg-[#3F4CCB] text-white px-6 py-3 font-medium transition-all duration-300;
+  @apply bg-[#3F4CCB] text-[#0B0C0E] px-6 py-3 font-medium transition-all duration-300;
 }
 
 .btn-primary:hover {
@@ -250,7 +250,7 @@ textarea {
 
 /* Mobile menu */
 .mobile-menu {
-  @apply fixed inset-0 bg-[#0B0C0E] z-50 flex flex-col items-center justify-center;
+  @apply fixed inset-0 bg-[#E9EAEC] z-50 flex flex-col items-center justify-center;
 }
 
 /* Reduced motion */
