@@ -90,6 +90,7 @@ function Navigation() {
           <span className="font-display font-bold text-xl tracking-wide mt-1">DG</span>
         </Link>
         <div className="hidden md:flex items-center gap-8">
+          <Link to="/" className={`link-underline text-sm font-medium ${location.pathname === '/' ? 'opacity-100' : 'opacity-70'}`}>Αρχική</Link>
           <Link to="/services" className={`link-underline text-sm font-medium ${location.pathname === '/services' ? 'opacity-100' : 'opacity-70'}`}>Υπηρεσίες</Link>
           <Link to="/projects" className={`link-underline text-sm font-medium ${location.pathname.startsWith('/projects') ? 'opacity-100' : 'opacity-70'}`}>Έργα</Link>
           <Link to="/process" className={`link-underline text-sm font-medium ${location.pathname === '/process' ? 'opacity-100' : 'opacity-70'}`}>Διαδικασία</Link>
@@ -151,7 +152,6 @@ function Footer() {
 }
 
 function App() {
-  const location = useLocation();
 
   return (
     <div className="relative min-h-screen flex flex-col">
