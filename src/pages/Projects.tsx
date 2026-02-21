@@ -1,0 +1,144 @@
+import { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { projectsData } from '../data/projectsData';
+
+export default function Projects() {
+    const [activeCategory, setActiveCategory] = useState<string>('Όλα');
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage = 6;
+
+    // Scroll to top when page mounts or pagination changes
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [currentPage]);
+
+    // Extract unique categories
+    const categories = ['Όλα', ...Array.from(new Set(projectsData.map(p => p.category)))];
+
+    // Filter projects
+    const filteredProjects = useMemo(() => {
+        if (activeCategory === 'Όλα') return projectsData;
+        return projectsData.filter(p => p.category === activeCategory);
+    }, [activeCategory]);
+
+    // Handle pagination
+    const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+    const paginatedProjects = filteredProjects.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const handleCategoryChange = (cat: string) => {
+        setActiveCategory(cat);
+        setCurrentPage(1); // Reset to first page
+    };
+
+    return (
+        <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-32 pb-32 text-[#0B0C0E]">
+
+            {/* Header */}
+            <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-16">
+                <h1 className="headline-xl text-[clamp(40px,8vw,96px)] mb-6 text-center lg:text-left">ΤΑ ΕΡΓΑ ΜΑΣ</h1>
+            </div>
+
+            {/* Filter Bar */}
+            <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-16">
+                <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+                    {categories.map(cat => (
+                        <button
+                            key={cat}
+                            onClick={() => handleCategoryChange(cat)}
+                            className={`px-6 py-2 rounded-full text-sm font-medium transition-colors border ${activeCategory === cat
+                                ? 'bg-[#3F4CCB] text-white border-[#3F4CCB]'
+                                : 'bg-transparent text-[#6D7278] border-[rgba(11,12,14,0.15)] hover:border-[#0B0C0E] hover:text-[#0B0C0E]'
+                                }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Project Grid */}
+            <div className="max-w-7xl mx-auto px-6 lg:px-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {paginatedProjects.map((project, idx) => (
+                        <Link
+                            to={`/projects/${project.id}`}
+                            key={project.id}
+                            className="group relative block aspect-[4/5] overflow-hidden rounded-2xl reveal-fade-in cursor-pointer bg-black"
+                            style={{ animationDelay: `${idx * 100}ms` }}
+                        >
+                            {/* Background Image */}
+                            <img
+                                src={project.coverImage}
+                                alt={project.title}
+                                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                            />
+
+                            {/* Dark Overlay gradient for text legibility */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+
+                            {/* Content */}
+                            <div className="absolute inset-0 p-8 flex flex-col justify-end text-[#E9EAEC]">
+                                <p className="text-xs uppercase tracking-widest text-[#3F4CCB] mb-2 font-bold translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                    {project.category}
+                                </p>
+                                <h3 className="headline-lg text-2xl mb-1 translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75">
+                                    {project.title}
+                                </h3>
+                                <p className="text-sm font-medium text-[rgba(233,234,236,0.7)] translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+                                    {project.location}
+                                </p>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+
+                {/* Empty State */}
+                {paginatedProjects.length === 0 && (
+                    <div className="py-32 text-center">
+                        <p className="text-[#6D7278] text-lg">Δεν βρέθηκαν έργα σε αυτή την κατηγορία.</p>
+                    </div>
+                )}
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <div className="mt-24 flex items-center justify-center gap-2">
+                        <button
+                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            disabled={currentPage === 1}
+                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.15)] text-[#0B0C0E] disabled:opacity-30 hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-colors"
+                        >
+                            &larr;
+                        </button>
+
+                        <div className="flex gap-2 mx-4">
+                            {Array.from({ length: totalPages }).map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${currentPage === i + 1
+                                        ? 'bg-[#3F4CCB] text-white'
+                                        : 'text-[#6D7278] hover:text-[#0B0C0E] bg-transparent'
+                                        }`}
+                                >
+                                    {i + 1}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            disabled={currentPage === totalPages}
+                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.15)] text-[#0B0C0E] disabled:opacity-30 hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-colors"
+                        >
+                            &rarr;
+                        </button>
+                    </div>
+                )}
+            </div>
+
+        </main>
+    );
+}

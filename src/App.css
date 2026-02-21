@@ -23,12 +23,15 @@ body {
 }
 
 /* Prevent horizontal scroll */
-html, body {
-  overflow-x: hidden;
+html,
+body {
+  overflow-x: clip;
 }
 
 /* Custom cursor for interactive elements */
-button, a, .service-card {
+button,
+a,
+.service-card {
   cursor: pointer;
 }
 
@@ -58,7 +61,7 @@ img {
   .section-pinned {
     min-height: 100svh;
   }
-  
+
   .headline-xl,
   .headline-lg {
     letter-spacing: -0.01em;
@@ -67,6 +70,7 @@ img {
 
 /* Print styles */
 @media print {
+
   .grain-overlay,
   nav,
   .fixed {

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+@import './hero.css';
 
 @tailwind base;
 @tailwind components;
@@ -55,15 +56,15 @@
   * {
     @apply border-border;
   }
-  
+
   html {
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
   }
-  
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 
@@ -129,7 +130,8 @@
 .section-pinned {
   width: 100vw;
   height: 100vh;
-  position: relative;
+  position: sticky;
+  top: 0;
   overflow: hidden;
 }
 
@@ -143,12 +145,15 @@
 }
 
 /* Form inputs */
-input, textarea {
-  @apply bg-transparent border-b border-[rgba(11,12,14,0.22)] py-3 px-0 focus:outline-none focus:border-[#3F4CCB] transition-colors;
+input,
+textarea {
+  @apply bg-transparent border-b py-3 px-0 focus:outline-none focus:border-[#3F4CCB] transition-colors;
+  border-color: rgba(11, 12, 14, 0.22);
 }
 
-.dark input, .dark textarea {
-  @apply border-[rgba(233,234,236,0.22)];
+.dark input,
+.dark textarea {
+  border-color: rgba(233, 234, 236, 0.22);
 }
 
 /* Scrollbar styling */
@@ -254,5 +259,25 @@ input, textarea {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Scroll reveal for images */
+.reveal-fade-in {
+  animation: reveal-fade-in both ease-out;
+  animation-timeline: view();
+  animation-range: entry 10% cover 40%;
+  will-change: opacity, filter;
+}
+
+@keyframes reveal-fade-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
   }
 }
