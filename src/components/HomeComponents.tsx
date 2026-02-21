@@ -3,24 +3,25 @@ import { ChevronRight, Clock, Mail, MapPin, Phone } from 'lucide-react';
 // Section 1: Hero
 export function HeroSection() {
     return (
-        <div data-theme="dark" className="hero-wrapper relative z-10 w-full bg-[#E9EAEC]">
-            <section className="masthead w-full">
-                <div className="hero-media relative flex items-center justify-center overflow-hidden w-[clamp(300px,60vw,1000px)] aspect-[21/9] rounded-2xl shadow-[0_20px_40px_rgba(11,12,14,0.15)] bg-[#E9EAEC]">
+        <div data-theme="dark" className="hero-wrapper relative z-10 w-full h-[150vh] bg-[#0B0C0E] masthead">
+            <section className="sticky top-0 w-full h-screen overflow-hidden">
+                <div className="absolute inset-0 w-full h-full">
                     <img
                         src="/frame_modern_interior.jpg"
                         alt="Modern glass interior"
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="w-full h-full object-cover"
                     />
-                    {/* Overlay Text */}
-                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center bg-black/20 pointer-events-none p-4">
-                        <h2 className="headline-xl text-white text-[clamp(24px,5vw,72px)] drop-shadow-lg mb-2">
-                            <span className="headline-line block">ΚΡΥΣΤΑΛΛΙΝΕΣ</span>
-                            <span className="headline-line block">ΛΥΣΕΙΣ</span>
-                        </h2>
-                        <p className="text-white drop-shadow-md text-sm lg:text-base font-medium opacity-90">
-                            Από την ιδέα έως την τοποθέτηση.
-                        </p>
-                    </div>
+                    <div className="absolute inset-0 bg-black/40" />
+                </div>
+                {/* Overlay Text */}
+                <div className="hero-text absolute top-1/2 left-1/2 z-20 flex flex-col items-center justify-center text-center pointer-events-none w-full px-4 text-white drop-shadow-lg">
+                    <h2 className="headline-xl text-[clamp(40px,8vw,120px)] mb-4">
+                        <span className="block">ΚΡΥΣΤΑΛΛΙΝΕΣ</span>
+                        <span className="block">ΛΥΣΕΙΣ</span>
+                    </h2>
+                    <p className="text-xl lg:text-3xl font-medium opacity-90 font-display tracking-widest drop-shadow-md">
+                        Από την ιδέα έως την τοποθέτηση.
+                    </p>
                 </div>
             </section>
         </div>
@@ -121,15 +122,17 @@ export function SplitSection({
     );
 }
 
+import { Link } from 'react-router-dom';
+
 // Section 9: Services
 export function ServicesSection() {
     const services = [
-        { image: '/service_partitions.jpg', title: 'Εσωτερικά χωρίσματα', desc: 'Διαφάνεια χωρίς απώλεια θερμότητας.' },
-        { image: '/service_doors.jpg', title: 'Πόρτες & εισόδους', desc: 'Σιωπηλά συρόμενα, περιστροφικά, αυτόματα.' },
-        { image: '/service_mirrors.jpg', title: 'Καθρέφτες & διακόσμηση', desc: 'Κομμένα στο μέτρο, με φινίρισμα που διαρκεί.' },
-        { image: '/service_exterior.jpg', title: 'Εξωτερικά ανοίγματα', desc: 'Θερμομονωτικά, ηχομονωτικά, ασφαλείας.' },
-        { image: '/service_railings.jpg', title: 'Κάγκελα & σκάλες', desc: 'Γυαλί με αντοχή σε κρούση και καιρό.' },
-        { image: '/service_special.jpg', title: 'Ειδικές κατασκευές', desc: 'Καμπύλα, έγχρωμα, τυπωμένα σχέδια.' },
+        { id: 'partitions', image: '/service_partitions.jpg', title: 'Εσωτερικά χωρίσματα', desc: 'Διαφάνεια χωρίς απώλεια θερμότητας.' },
+        { id: 'doors', image: '/service_doors.jpg', title: 'Πόρτες & εισόδους', desc: 'Σιωπηλά συρόμενα, περιστροφικά, αυτόματα.' },
+        { id: 'mirrors', image: '/service_mirrors.jpg', title: 'Καθρέφτες & διακόσμηση', desc: 'Κομμένα στο μέτρο, με φινίρισμα που διαρκεί.' },
+        { id: 'exterior', image: '/service_exterior.jpg', title: 'Εξωτερικά ανοίγματα', desc: 'Θερμομονωτικά, ηχομονωτικά, ασφαλείας.' },
+        { id: 'railings', image: '/service_railings.jpg', title: 'Κάγκελα & σκάλες', desc: 'Γυαλί με αντοχή σε κρούση και καιρό.' },
+        { id: 'special', image: '/service_special.jpg', title: 'Ειδικές κατασκευές', desc: 'Καμπύλα, έγχρωμα, τυπωμένα σχέδια.' },
     ];
 
     return (
@@ -144,17 +147,24 @@ export function ServicesSection() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     {services.map((service, i) => (
-                        <div key={i} className="service-card group cursor-pointer">
-                            <div className="overflow-hidden mb-4 rounded-xl">
+                        <Link to={`/services#${service.id}`} key={i} className="service-card group cursor-pointer block">
+                            <div className="overflow-hidden mb-4 rounded-xl relative">
+                                <div className="absolute inset-0 bg-[#0B0C0E] opacity-0 group-hover:opacity-10 transition-opacity duration-500 z-10" />
                                 <img
                                     src={service.image}
                                     alt={service.title}
-                                    className="service-card-image w-full h-48 lg:h-56 object-cover transition-transform duration-500 reveal-fade-in"
+                                    className="service-card-image w-full h-48 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-105 group-hover:rotate-1 reveal-fade-in"
                                 />
                             </div>
-                            <h3 className="font-display font-bold text-lg text-[#0B0C0E] mb-2">{service.title}</h3>
+                            <h3 className="font-display font-bold text-lg text-[#0B0C0E] mb-2 group-hover:text-[#3F4CCB] transition-colors duration-300 flex items-center gap-2">
+                                {service.title}
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                                    <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </h3>
                             <p className="text-sm text-[#6D7278] leading-relaxed">{service.desc}</p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
