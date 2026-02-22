@@ -104,8 +104,8 @@ export default function ProjectDetails() {
 
                     {/* Right: Technical Specs */}
                     <div className="lg:col-span-5 reveal-fade-in" style={{ animationDelay: '150ms' }}>
-                        <div className="bg-[#141518] border border-[rgba(11,12,14,0.1)]/40 rounded-2xl p-8 shadow-xl">
-                            <h4 className="text-xs uppercase tracking-[0.15em] text-[#6D7278] mb-6 border-b border-[rgba(11,12,14,0.1)]/40 pb-4">
+                        <div className="bg-white/40 backdrop-blur-xl border border-white/40 rounded-2xl p-8 shadow-[0_8px_32px_rgba(11,12,14,0.05)]">
+                            <h4 className="text-xs uppercase tracking-[0.15em] text-[#0B0C0E] font-bold mb-6 border-b border-[#0B0C0E]/20 pb-4">
                                 Τεχνικά Χαρακτηριστικά
                             </h4>
 
@@ -119,22 +119,12 @@ export default function ProjectDetails() {
                             </ul>
                         </div>
 
-                        {/* Request similar project CTA */}
-                        <div className="mt-8">
-                            <Link
-                                to="/contact"
-                                className="w-full flex items-center justify-center gap-2 py-4 shadow-sm hover:shadow-md transition-all duration-300 border border-[#0B0C0E] rounded-full font-display font-medium text-sm tracking-wide bg-white/20 backdrop-blur-md text-[#0B0C0E] hover:bg-[#0B0C0E] hover:text-[#E9EAEC]"
-                            >
-                                Συζητήστε το δικό σας έργο
-                            </Link>
-                        </div>
                     </div>
-
                 </div>
             </div>
 
             {/* Final CTA Strip */}
-            <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center reveal-fade-in">
+            <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center">
                 <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΘΕΛΕΤΕ ΚΑΤΙ ΑΝΤΙΣΤΟΙΧΟ ΓΙΑ ΤΟΝ ΧΩΡΟ ΣΑΣ;</h2>
                 <Link to="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
                     Ζητήστε προσφορά

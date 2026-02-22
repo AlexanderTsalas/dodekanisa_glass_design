@@ -79,7 +79,7 @@ function Navigation() {
     };
   }, [location.pathname]);
 
-  const navTextColor = isNavWhite ? 'text-[#0B0C0E]' : 'text-[#0B0C0E]';
+  const navTextColor = isNavWhite ? 'text-white' : 'text-[#0B0C0E]';
 
   return (
     <>
@@ -129,14 +129,14 @@ function Navigation() {
 // Standard Footer
 function Footer() {
   const bgColor = 'bg-[#000000]';
-  const textColor = 'text-[#0B0C0E]/70';
-  const linkColor = 'text-[#0B0C0E] hover:text-[#3F4CCB]';
+  const textColor = 'text-white/70';
+  const linkColor = 'text-white hover:text-[#3F4CCB]';
   const borderColor = 'border-white/10';
 
   return (
-    <footer className={`w-full ${bgColor} border-t ${borderColor} py-12 px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-8 text-sm font-medium mt-auto`}>
-      <div className="flex items-center gap-4 text-[#0B0C0E]">
-        <Logo className="h-7 w-auto" />
+    <footer className={`w-full ${bgColor} border-t ${borderColor} py-6 px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium mt-auto`}>
+      <div className="flex items-center gap-4 text-white">
+        <Logo className="h-6 w-auto" />
         <span className={`${textColor}`}>
           &copy; {new Date().getFullYear()} Dodekanisa Glass. All rights reserved.
         </span>
@@ -152,22 +152,25 @@ function Footer() {
 }
 
 function App() {
+  const location = useLocation();
 
   return (
     <div className="relative min-h-screen flex flex-col">
       {/* Global Navigation and UI that sits ON TOP of everything */}
       <Navigation />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/index.html" element={<Navigate to="/" replace />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:id" element={<ProjectDetails />} />
-        <Route path="/process" element={<Process />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <div key={location.pathname} className="flex-1 w-full flex flex-col animate-in fade-in duration-700 ease-out fill-mode-both">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/index.html" element={<Navigate to="/" replace />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProjectDetails />} />
+          <Route path="/process" element={<Process />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
 
       <Footer />
     </div>

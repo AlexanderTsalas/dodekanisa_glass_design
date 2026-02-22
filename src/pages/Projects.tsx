@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { projectsData } from '../data/projectsData';
 
 export default function Projects() {
-    const [activeCategory, setActiveCategory] = useState<string>('Όλα');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [activeCategory, setActiveCategory] = useState<string>(searchParams.get('category') || 'Όλα');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const itemsPerPage = 6;
+    const itemsPerPage = 16;
 
     // Scroll to top when page mounts or pagination changes
     useEffect(() => {
@@ -31,18 +32,19 @@ export default function Projects() {
     const handleCategoryChange = (cat: string) => {
         setActiveCategory(cat);
         setCurrentPage(1); // Reset to first page
+        setSearchParams(cat === 'Όλα' ? {} : { category: cat });
     };
 
     return (
         <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-32 pb-32 text-[#0B0C0E]">
 
             {/* Header */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-16">
+            <div className="max-w-[1600px] mx-auto px-6 lg:px-16 mb-16">
                 <h1 className="headline-xl text-[clamp(40px,8vw,96px)] mb-6 text-center lg:text-left">ΤΑ ΕΡΓΑ ΜΑΣ</h1>
             </div>
 
             {/* Filter Bar */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-16">
+            <div className="max-w-[1600px] mx-auto px-6 lg:px-16 mb-16">
                 <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
                     {categories.map(cat => (
                         <button
@@ -60,39 +62,54 @@ export default function Projects() {
             </div>
 
             {/* Project Grid */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {paginatedProjects.map((project, idx) => (
-                        <Link
-                            to={`/projects/${project.id}`}
-                            key={project.id}
-                            className="group relative block aspect-[4/5] overflow-hidden rounded-2xl reveal-fade-in cursor-pointer bg-black"
-                            style={{ animationDelay: `${idx * 100}ms` }}
-                        >
-                            {/* Background Image */}
-                            <img
-                                src={project.coverImage}
-                                alt={project.title}
-                                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-80 group-hover:opacity-100"
-                            />
+            <div className="max-w-[1600px] mx-auto px-6 lg:px-16">
+                <div key={activeCategory + currentPage} className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 auto-rows-[400px] lg:auto-rows-[350px] gap-6 grid-flow-dense">
+                    {paginatedProjects.map((project, idx) => {
+                        const p = idx % 8;
+                        let spanClass = 'col-span-1 row-span-1';
 
-                            {/* Dark Overlay gradient for text legibility */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                        // Creating the asymmetric pattern
+                        if (p === 0) spanClass = 'md:col-span-2 md:row-span-2';
+                        else if (p === 1) spanClass = 'md:col-span-2 md:row-span-1';
+                        else if (p === 2) spanClass = 'md:col-span-1 md:row-span-2';
+                        else if (p === 3) spanClass = 'md:col-span-1 md:row-span-2';
+                        else if (p === 4) spanClass = 'md:col-span-1 md:row-span-2';
+                        else if (p === 5) spanClass = 'col-span-1 row-span-1';
+                        else if (p === 6) spanClass = 'col-span-1 row-span-1';
+                        else if (p === 7) spanClass = 'md:col-span-2 md:row-span-1';
 
-                            {/* Content */}
-                            <div className="absolute inset-0 p-8 flex flex-col justify-end text-[#0B0C0E]">
-                                <p className="text-xs uppercase tracking-widest text-[#3F4CCB] mb-2 font-bold translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                                    {project.category}
-                                </p>
-                                <h3 className="headline-lg text-2xl mb-1 translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75">
-                                    {project.title}
-                                </h3>
-                                <p className="text-sm font-medium text-[rgba(233,234,236,0.7)] translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                                    {project.location}
-                                </p>
-                            </div>
-                        </Link>
-                    ))}
+                        return (
+                            <Link
+                                to={`/projects/${project.id}`}
+                                key={project.id}
+                                className={`group relative block overflow-hidden rounded-2xl animate-in fade-in zoom-in-95 duration-700 ease-out fill-mode-both cursor-pointer bg-black ${spanClass}`}
+                                style={{ animationDelay: `${(idx % 8) * 100}ms` }}
+                            >
+                                {/* Background Image */}
+                                <img
+                                    src={project.coverImage}
+                                    alt={project.title}
+                                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                                />
+
+                                {/* Dark Overlay gradient for text legibility */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+
+                                {/* Content */}
+                                <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
+                                    <p className="text-xs uppercase tracking-widest text-[#3F4CCB] mb-2 font-bold translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                        {project.category}
+                                    </p>
+                                    <h3 className="headline-lg text-2xl mb-1 translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75">
+                                        {project.title}
+                                    </h3>
+                                    <p className="text-sm font-medium text-[rgba(233,234,236,0.7)] translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+                                        {project.location}
+                                    </p>
+                                </div>
+                            </Link>
+                        );
+                    })}
                 </div>
 
                 {/* Empty State */}
@@ -140,7 +157,7 @@ export default function Projects() {
             </div>
 
             {/* Final CTA Strip */}
-            <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center reveal-fade-in">
+            <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center">
                 <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΘΕΛΕΤΕ ΚΑΤΙ ΑΝΤΙΣΤΟΙΧΟ ΓΙΑ ΤΟΝ ΧΩΡΟ ΣΑΣ;</h2>
                 <Link to="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
                     Ζητήστε προσφορά

@@ -157,7 +157,7 @@ export default function Services() {
                             </div>
 
                             {/* Cinematic Wide Image */}
-                            <div className="w-full aspect-[16/9] lg:aspect-[21/9] rounded-2xl overflow-hidden mb-12 shadow-2xl relative bg-[#edede9]">
+                            <div className="w-[calc(100%+48px)] -mx-6 lg:mx-0 lg:w-full aspect-[4/3] md:aspect-[16/9] lg:h-[65vh] rounded-none lg:rounded-[2rem] overflow-hidden mb-12 lg:mb-16 shadow-2xl relative bg-[#edede9]">
                                 <img
                                     src={service.image}
                                     alt={service.title}
@@ -222,6 +222,20 @@ export default function Services() {
                                 </div>
 
                             </div>
+
+                            {/* Service Journey CTA */}
+                            <div className="mt-12 lg:mt-16 flex justify-start">
+                                <Link
+                                    to={`/projects?category=${service.shortName}`}
+                                    className="group flex w-full lg:w-auto justify-center lg:justify-start items-center gap-4 px-10 py-5 bg-[#0B0C0E] text-white font-display font-medium text-base rounded-full hover:bg-[#3F4CCB] hover:scale-105 transition-all duration-300 shadow-xl"
+                                >
+                                    Δείτε Έργα: {service.shortName}
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
+                                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </Link>
+                            </div>
                         </article>
                     ))}
                 </div>
@@ -229,7 +243,7 @@ export default function Services() {
             </div>
 
             {/* Final CTA Strip */}
-            <div className="mt-12 mb-24 relative z-20 text-center flex flex-col items-center reveal-fade-in">
+            <div className="mt-12 mb-24 relative z-20 text-center flex flex-col items-center">
                 <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΕΧΕΤΕ ΚΑΠΟΙΟ ΕΡΓΟ ΣΤΟ ΜΥΑΛΟ ΣΑΣ;</h2>
                 <Link to="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
                     Επικοινωνήστε μαζί μας

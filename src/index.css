@@ -266,7 +266,7 @@ textarea {
 .reveal-fade-in {
   animation: reveal-fade-in both ease-out;
   animation-timeline: view();
-  animation-range: entry 10% cover 40%;
+  animation-range: entry 5% cover 20%;
   will-change: opacity, filter;
 }
 
@@ -280,4 +280,45 @@ textarea {
     opacity: 1;
     filter: blur(0);
   }
+}
+
+/* SVG Line Drawing Entrance Animation */
+@keyframes drawStroke {
+  0% {
+    stroke-dashoffset: 100;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.icon-box-container svg * {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+.icon-box-container.animate-draw-icon svg * {
+  animation: drawStroke 6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes expandWidth {
+  0% {
+    transform: scaleX(0);
+  }
+
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.separator-line {
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.separator-line.scroll-expand-line {
+  animation: expandWidth 4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: 0.2s;
 }

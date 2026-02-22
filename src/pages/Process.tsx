@@ -111,7 +111,7 @@ export default function Process() {
                 </div>
 
                 {/* Final CTA Strip */}
-                <div className="mt-12 mb-24 relative z-20 text-center flex flex-col items-center reveal-fade-in">
+                <div className="mt-12 mb-24 relative z-20 text-center flex flex-col items-center">
                     <h2 className="headline-lg text-[clamp(32px,5vw,64px)] text-[#0B0C0E] mb-8">ΕΤΟΙΜΟΙ ΝΑ ΞΕΚΙΝΗΣΟΥΜΕ;</h2>
                     <a href="/contact" className="group flex items-center gap-4 px-10 py-5 bg-[#0B0C0E] text-white font-display font-bold text-base lg:text-lg rounded-full hover:bg-[#3F4CCB] hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(11,12,14,0.15)]">
                         Επικοινωνήστε μαζί μας
