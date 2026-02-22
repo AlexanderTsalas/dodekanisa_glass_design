@@ -192,7 +192,7 @@ export default function Services() {
                                 {/* Specs Box */}
                                 <div className="lg:col-span-5 relative">
                                     <div className="bg-white/20 backdrop-blur-xl border border-[#0B0C0E] rounded-2xl p-6 lg:p-8 shadow-[0_8px_32px_rgba(11,12,14,0.05)]">
-                                        <h4 className="text-xs uppercase tracking-[0.15em] text-[#0B0C0E] font-bold mb-6 border-b border-[#0B0C0E]/20 pb-4">
+                                        <h4 className="text-xs uppercase tracking-[0.15em] text-[#0B0C0E] font-bold mb-6 border-b-2 border-[#0B0C0E]/20 pb-4">
                                             Τεχνικα Στοιχεια
                                         </h4>
 

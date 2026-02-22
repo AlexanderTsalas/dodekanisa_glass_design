@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { ReactLenis } from 'lenis/react';
 import './App.css';
 
 import Home from './pages/Home';
@@ -155,25 +156,27 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="relative min-h-screen flex flex-col">
-      {/* Global Navigation and UI that sits ON TOP of everything */}
-      <Navigation />
+    <ReactLenis root options={{ lerp: 0.05, wheelMultiplier: 1.5, smoothWheel: true }}>
+      <div className="relative min-h-screen flex flex-col">
+        {/* Global Navigation and UI that sits ON TOP of everything */}
+        <Navigation />
 
-      <div key={location.pathname} className="flex-1 w-full flex flex-col animate-in fade-in duration-700 ease-out fill-mode-both">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/index.html" element={<Navigate to="/" replace />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:id" element={<ProjectDetails />} />
-          <Route path="/process" element={<Process />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <div key={location.pathname} className="flex-1 w-full flex flex-col animate-in fade-in duration-700 ease-out fill-mode-both">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/index.html" element={<Navigate to="/" replace />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:id" element={<ProjectDetails />} />
+            <Route path="/process" element={<Process />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
+    </ReactLenis>
   );
 }
 

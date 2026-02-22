@@ -121,7 +121,7 @@ export function SplitSection({
                 {iconBoxes && iconBoxes.length > 0 && (
                     <div ref={ref} className={`hidden lg:flex flex-col w-full mt-12 icon-box-container ${isInView ? 'animate-draw-icon' : ''}`}>
                         {/* Scroll-Expanding Separator Line */}
-                        <div className={`h-px bg-[rgba(11,12,14,0.15)] w-full separator-line ${isInView ? 'scroll-expand-line' : ''}`} />
+                        <div className={`h-[2px] bg-[rgba(11,12,14,0.15)] w-full separator-line ${isInView ? 'scroll-expand-line' : ''}`} />
 
                         {/* Icon Boxes Array */}
                         <div className="flex flex-row items-start justify-start gap-24 pt-10">
