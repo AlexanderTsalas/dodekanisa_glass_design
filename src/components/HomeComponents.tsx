@@ -234,6 +234,33 @@ export function SplitSection({
                     )}
                 </div>
 
+                {/* Horizontal CTA Overlay for Last Section on the Image Side */}
+                {isLast && (
+                    <div
+                        className="absolute top-0 h-full w-1/2 flex items-center justify-center pointer-events-none p-6 lg:p-12"
+                        style={{ left: isLeftImage ? 0 : '50%', zIndex: 40 }}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                            className="bg-[#0B0C0E]/40 backdrop-blur-xl border border-white/10 p-8 lg:p-12 rounded-3xl flex flex-col items-center text-center shadow-2xl pointer-events-auto w-full max-w-[440px]"
+                        >
+                            <h3 className="text-2xl lg:text-[28px] leading-tight font-display font-bold text-white mb-4 drop-shadow-md">
+                                Ας σχεδιάσουμε το έργο σας.
+                            </h3>
+                            <p className="text-white/80 mb-8 drop-shadow font-medium leading-relaxed">
+                                Μιλήστε μας για τις ανάγκες σας. Το εξειδικευμένο τμήμα μας θα επικοινωνήσει μαζί σας για μια πλήρη κοστολόγηση.
+                            </p>
+                            <Link to="/contact" className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#3F4CCB] hover:bg-white text-white hover:text-[#0B0C0E] font-display font-bold text-base rounded-xl transition-all duration-300 shadow-[0_8px_24px_rgba(63,76,203,0.3)] hover:shadow-[0_8px_32px_rgba(255,255,255,0.4)] group w-full cursor-pointer">
+                                Επικοινωνία
+                                <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </motion.div>
+                    </div>
+                )}
+
                 {/* Vertical Divider */}
                 <div
                     className="absolute top-[10%] h-[80%] w-px bg-[#E9EAEC]/30"
