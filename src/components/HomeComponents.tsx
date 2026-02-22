@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
-import { useInView, motion, AnimatePresence } from 'framer-motion';
+import { ChevronRight, Sun, Moon } from 'lucide-react';
+import { useInView, motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useAppQuery } from '../hooks/useAppQuery';
 import type { ServiceItem } from '../types';
 
@@ -72,20 +72,61 @@ export function SplitSection({
     const isInteractive = iconBoxes?.some(box => !!box.detail);
     const [activeIndex, setActiveIndex] = useState(0);
 
-    // Auto rotate every 3 seconds if interactive
+    // Interactive slider logic for "Light" section (id === 'light')
+    const isLightSection = id === 'light';
+    const [isNightMode, setIsNightMode] = useState(false);
+    const lightLevel = useMotionValue(1); // 1 = Day, 0 = Night
+
     useEffect(() => {
-        if (!isInteractive || !iconBoxes || iconBoxes.length === 0) return;
+        if (!isLightSection) return;
+        animate(lightLevel, isNightMode ? 0 : 1, { duration: 0.8, ease: [0.16, 1, 0.3, 1] });
+    }, [isNightMode, isLightSection, lightLevel]);
+
+    // Theming transforms based on lightLevel
+    const bgOpacity = useTransform(lightLevel, [0, 1], [1, 0]); // Dark bg fades in as light goes to 0
+    const textOpacityDay = useTransform(lightLevel, [0, 1], [0, 1]); // Day text fades out
+    const textOpacityNight = useTransform(lightLevel, [0, 1], [1, 0]); // Night text fades in
+
+    // Night image overlay opacity
+    const nightImageOpacity = useTransform(lightLevel, [0.8, 0], [0, 1]);
+
+    // Helper theme classes for smooth CSS color transitions triggered by isNightMode
+    const isDark = isLightSection && isNightMode;
+    const themeAccentText = isDark ? 'text-[#C05621]' : 'text-[#3F4CCB]';
+    const themeHoverText = isDark ? 'group-hover:text-[#C05621]' : 'group-hover:text-[#3F4CCB]';
+    const themeInactiveBase = isDark ? 'text-[#E9EAEC]/20' : 'text-[#0B0C0E]/30';
+    const themeInnerInactiveBase = isDark ? 'text-[#E9EAEC]/10' : 'text-[#0B0C0E]/10';
+    const themeInnerHover = isDark ? 'group-hover:text-[#C05621]/50' : 'group-hover:text-[#3F4CCB]/50';
+    const themeInnerActive = isDark ? 'text-[#C05621]/50' : 'text-[#3F4CCB]/50';
+    const themeIconInactive = isDark ? 'text-[#E9EAEC]/70' : 'text-[#0B0C0E]';
+
+    // Auto rotate every 3 seconds if interactive (and not the light section)
+    useEffect(() => {
+        if (!isInteractive || !iconBoxes || iconBoxes.length === 0 || isLightSection) return;
 
         const interval = setInterval(() => {
             setActiveIndex(prev => (prev + 1) % iconBoxes.length);
         }, 3000);
 
         return () => clearInterval(interval);
-    }, [isInteractive, iconBoxes]);
+    }, [isInteractive, iconBoxes, isLightSection]);
+
+    // Reset light level when scrolled out of view
+    useEffect(() => {
+        if (!isInView && isLightSection) {
+            setIsNightMode(false);
+            lightLevel.set(1);
+        }
+    }, [isInView, isLightSection, lightLevel]);
 
     return (
         <>
-            <section id={id} data-theme="light" className="split-container sticky top-[1px] h-screen w-full overflow-hidden bg-[#E9EAEC] flex shadow-[0_-8px_32px_rgba(11,12,14,0.15)] rounded-t-3xl" style={{ zIndex }}>
+            <motion.section
+                id={id}
+                data-theme={isLightSection ? (isNightMode ? 'dark' : 'light') : 'light'}
+                className="split-container sticky top-[1px] h-screen w-full overflow-hidden bg-[#E9EAEC] flex shadow-[0_-8px_32px_rgba(11,12,14,0.15)] rounded-t-3xl"
+                style={{ zIndex }}
+            >
                 {/* Image Panel */}
                 <div
                     className="absolute top-0 h-full w-1/2"
@@ -96,13 +137,32 @@ export function SplitSection({
                         alt="Glass installation"
                         className="w-full h-full object-cover reveal-fade-in"
                     />
+                    {isLightSection && (
+                        <motion.img
+                            src="/split_light_01_night.png"
+                            alt="Glass installation at night"
+                            className="absolute inset-0 w-full h-full object-cover"
+                            style={{ opacity: nightImageOpacity }}
+                        />
+                    )}
                 </div>
 
-                {/* Text Panel */}
+                {/* Text Panel Base (Day) */}
                 <div
                     className="absolute top-0 h-full w-1/2 bg-[#E9EAEC]"
                     style={{ left: isLeftImage ? '50%' : 0 }}
                 />
+
+                {/* Text Panel Overlay (Night Theme) */}
+                {isLightSection && (
+                    <motion.div
+                        className="absolute top-0 h-full w-1/2 bg-[#0C0C0E]"
+                        style={{ left: isLeftImage ? '50%' : 0, opacity: bgOpacity }}
+                    >
+                        {/* Subtle fiery lightsource gradient */}
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_50%,rgba(192,86,33,0.12),transparent_65%)] pointer-events-none" />
+                    </motion.div>
+                )}
 
                 {/* Content */}
                 <div
@@ -114,19 +174,49 @@ export function SplitSection({
                         width: '40%',
                     }}
                 >
-                    <div>
-                        <h2 className="headline-lg text-[#0B0C0E] text-[clamp(28px,4vw,56px)]">
+                    <div className="relative">
+                        {/* Day Headline */}
+                        <motion.h2
+                            className="headline-lg text-[#0B0C0E] text-[clamp(28px,4vw,56px)]"
+                            style={isLightSection ? { opacity: textOpacityDay } : {}}
+                        >
                             {headline.map((line, i) => (
                                 <span key={i} className="headline-line block">{line}</span>
                             ))}
-                        </h2>
+                        </motion.h2>
+
+                        {/* Night Headline */}
+                        {isLightSection && (
+                            <motion.h2
+                                className="headline-lg text-white text-[clamp(28px,4vw,56px)] absolute top-0 left-0"
+                                style={{ opacity: textOpacityNight }}
+                            >
+                                {headline.map((line, i) => (
+                                    <span key={i} className="headline-line block">{line}</span>
+                                ))}
+                            </motion.h2>
+                        )}
                     </div>
 
-                    <p
-                        className="mt-8 text-[#0B0C0E] text-sm lg:text-base leading-relaxed opacity-80"
-                    >
-                        {body}
-                    </p>
+                    <div className="relative mt-8">
+                        {/* Day Body */}
+                        <motion.p
+                            className="text-[#0B0C0E] text-sm lg:text-base leading-relaxed opacity-80"
+                            style={isLightSection ? { opacity: textOpacityDay } : {}}
+                        >
+                            {body}
+                        </motion.p>
+
+                        {/* Night Body */}
+                        {isLightSection && (
+                            <motion.p
+                                className="text-[#E9EAEC]/70 text-sm lg:text-base leading-relaxed absolute top-0 left-0"
+                                style={{ opacity: textOpacityNight }}
+                            >
+                                {body}
+                            </motion.p>
+                        )}
+                    </div>
 
                     {hasFeatureList && features.length > 0 && (
                         <div className="mt-8 space-y-2">
@@ -141,7 +231,7 @@ export function SplitSection({
                     {iconBoxes && iconBoxes.length > 0 && (
                         <div ref={ref} className={`hidden lg:flex flex-col w-full mt-12 icon-box-container ${isInView ? 'animate-draw-icon' : ''}`}>
                             {/* Scroll-Expanding Separator Line */}
-                            <div className={`h-[2px] bg-[rgba(11,12,14,0.15)] w-full separator-line ${isInView ? 'scroll-expand-line' : ''}`} />
+                            <div className={`h-[2px] w-full separator-line transition-colors duration-500 ${isDark ? 'bg-[#C05621]/30' : 'bg-[rgba(11,12,14,0.15)]'} ${isInView ? 'scroll-expand-line' : ''}`} />
 
                             {/* Icon Boxes Array */}
                             <div className={`grid ${iconBoxes.length === 3 ? 'grid-cols-3' : 'grid-cols-2 lg:grid-cols-3'} items-start justify-start gap-x-6 gap-y-10 xl:gap-x-12 pt-8`}>
@@ -160,22 +250,37 @@ export function SplitSection({
                                         <Wrapper key={i} {...(wrapperProps as any)}>
                                             <div className={`relative w-20 h-20 flex items-center justify-center -rotate-45 transition-transform duration-500 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
                                                 {/* Outer Rhombus Box SVG */}
-                                                <svg className={`absolute inset-0 w-full h-full transition-colors duration-500 ${isActive ? 'text-[#3F4CCB]' : 'text-[#0B0C0E]/30 group-hover:text-[#3F4CCB]'}`} viewBox="0 0 24 24" fill="none">
+                                                <svg className={`absolute inset-0 w-full h-full transition-colors duration-500 ${isActive ? themeAccentText : `${themeInactiveBase} ${themeHoverText}`}`} viewBox="0 0 24 24" fill="none">
                                                     <rect x="0.25" y="0.25" width="23.5" height="23.5" stroke="currentColor" strokeWidth="0.5" />
                                                 </svg>
                                                 {/* Inner Rhombus Box SVG */}
-                                                <svg className={`absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] transition-colors duration-500 ${isActive ? 'text-[#3F4CCB]/50' : 'text-[#0B0C0E]/10 group-hover:text-[#3F4CCB]/50'}`} viewBox="0 0 24 24" fill="none">
+                                                <svg className={`absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] transition-colors duration-500 ${isActive ? themeInnerActive : `${themeInnerInactiveBase} ${themeInnerHover}`}`} viewBox="0 0 24 24" fill="none">
                                                     <rect x="0.25" y="0.25" width="23.5" height="23.5" stroke="currentColor" strokeWidth="0.5" />
                                                 </svg>
 
-                                                <div className={`rotate-45 transition-colors duration-500 z-10 ${isActive ? 'text-[#3F4CCB]' : 'text-[#0B0C0E] group-hover:text-[#3F4CCB]'}`}>
+                                                <div className={`rotate-45 transition-colors duration-500 z-10 ${isActive ? themeAccentText : `${themeIconInactive} ${themeHoverText}`}`}>
                                                     <Icon className="w-8 h-8" strokeWidth={1} />
                                                 </div>
                                             </div>
                                             <div className="relative h-10 w-full overflow-hidden flex items-center justify-center mt-2 px-1">
-                                                <span className={`absolute flex items-center justify-center w-full h-full text-[11px] lg:text-xs font-bold tracking-wider uppercase text-center transition-all duration-300 leading-tight ${box.link && !isInteractive ? 'group-hover:-translate-y-full group-hover:opacity-0' : ''} ${isActive ? 'text-[#3F4CCB] opacity-100' : 'text-[#0B0C0E] opacity-80'}`}>
+                                                {/* Day Icon Text */}
+                                                <motion.span
+                                                    className={`absolute flex items-center justify-center w-full h-full text-[11px] lg:text-xs font-bold tracking-wider uppercase text-center transition-all duration-300 leading-tight ${box.link && !isInteractive ? 'group-hover:-translate-y-full group-hover:opacity-0' : ''} ${isActive ? 'text-[#3F4CCB] opacity-100' : 'text-[#0B0C0E] opacity-80'}`}
+                                                    style={isLightSection ? { opacity: textOpacityDay } : {}}
+                                                >
                                                     {box.text}
-                                                </span>
+                                                </motion.span>
+
+                                                {/* Night Icon Text */}
+                                                {isLightSection && (
+                                                    <motion.span
+                                                        className={`absolute flex items-center justify-center w-full h-full text-[11px] lg:text-xs font-bold tracking-wider uppercase text-center transition-all duration-300 leading-tight ${isActive ? themeAccentText : 'text-[#E9EAEC]/90'}`}
+                                                        style={{ opacity: textOpacityNight }}
+                                                    >
+                                                        {box.text}
+                                                    </motion.span>
+                                                )}
+
                                                 {box.link && !isInteractive && (
                                                     <span className="absolute flex items-center justify-center w-full h-full text-[11px] lg:text-xs font-bold tracking-wider uppercase text-[#3F4CCB] opacity-0 translate-y-full group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 leading-tight gap-1">
                                                         Έργα <ChevronRight size={14} className="mb-[1px]" />
@@ -188,7 +293,7 @@ export function SplitSection({
                             </div>
 
                             {/* Detail Text rendering */}
-                            {isInteractive && iconBoxes && (
+                            {isInteractive && iconBoxes && !isLightSection && (
                                 <div className="mt-8 relative min-h-[160px]">
                                     <AnimatePresence mode="wait">
                                         {iconBoxes[activeIndex]?.detail && (
@@ -222,6 +327,36 @@ export function SplitSection({
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
+                                </div>
+                            )}
+
+                            {/* Light Switch for Light Section */}
+                            {isLightSection && (
+                                <div className="mt-12 relative w-full pointer-events-auto flex flex-col items-start">
+                                    <motion.p
+                                        className="text-xs font-display font-medium tracking-widest uppercase mb-4 transition-colors duration-500"
+                                        style={{ color: isDark ? 'rgba(233,234,236,0.3)' : 'rgba(11,12,14,0.5)' }}
+                                    >
+                                        Ελεγχος Φωτισμου
+                                    </motion.p>
+
+                                    <div className={`inline-flex items-center p-1.5 rounded-full relative z-10 transition-colors duration-500 ${isDark ? 'bg-white/5 border border-white/10' : 'bg-[#0B0C0E]/5'}`}>
+                                        <button
+                                            onClick={() => setIsNightMode(false)}
+                                            className={`relative z-20 flex items-center gap-2 px-6 py-2.5 rounded-full transition-all duration-300 ${!isDark ? 'text-[#3F4CCB] bg-white shadow-md' : 'text-[#E9EAEC]/40 hover:text-[#E9EAEC]/70'}`}
+                                        >
+                                            <Sun className="w-4 h-4" />
+                                            <span className="text-xs font-bold tracking-widest uppercase">Ημερα</span>
+                                        </button>
+
+                                        <button
+                                            onClick={() => setIsNightMode(true)}
+                                            className={`relative z-20 flex items-center gap-2 px-6 py-2.5 rounded-full transition-all duration-300 ${isDark ? 'text-[#C05621] bg-[#1A1A1D] shadow-[0_2px_8px_rgba(0,0,0,0.5)]' : 'text-[#0B0C0E]/40 hover:text-[#0B0C0E]/70'}`}
+                                        >
+                                            <Moon className="w-4 h-4" />
+                                            <span className="text-xs font-bold tracking-widest uppercase">Νυχτα</span>
+                                        </button>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -266,7 +401,7 @@ export function SplitSection({
                     className="absolute top-[10%] h-[80%] w-px bg-[#E9EAEC]/30"
                     style={{ left: '50%' }}
                 />
-            </section>
+            </motion.section>
 
             {/* Subtle Scroll Buffer */}
             {!isLast && <div className="w-full h-[10vh] pointer-events-none" />}
