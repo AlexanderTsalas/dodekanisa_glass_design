@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { ReactLenis } from 'lenis/react';
+import { useAppQuery } from './hooks/useAppQuery';
+import type { NavigationItem, SiteSettings } from './types';
 import './App.css';
 
 import Home from './pages/Home';
 import Services from './pages/Services';
-import Process from './pages/Process';
 import Contact from './pages/Contact';
 import Projects from './pages/Projects';
 import ProjectDetails from './pages/ProjectDetails';
@@ -25,6 +26,7 @@ function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const [isNavWhite, setIsNavWhite] = useState(false);
+  const { data: navItems } = useAppQuery<NavigationItem[]>('global_navigation');
 
   useEffect(() => {
     let ticking = false;
@@ -91,11 +93,23 @@ function Navigation() {
           <span className="font-display font-bold text-xl tracking-wide mt-1">DG</span>
         </Link>
         <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className={`link-underline text-sm font-medium ${location.pathname === '/' ? 'opacity-100' : 'opacity-70'}`}>Αρχική</Link>
-          <Link to="/services" className={`link-underline text-sm font-medium ${location.pathname === '/services' ? 'opacity-100' : 'opacity-70'}`}>Υπηρεσίες</Link>
-          <Link to="/projects" className={`link-underline text-sm font-medium ${location.pathname.startsWith('/projects') ? 'opacity-100' : 'opacity-70'}`}>Έργα</Link>
-          <Link to="/process" className={`link-underline text-sm font-medium ${location.pathname === '/process' ? 'opacity-100' : 'opacity-70'}`}>Διαδικασία</Link>
-          <Link to="/contact" className={`link-underline text-sm font-medium ${location.pathname === '/contact' ? 'opacity-100' : 'opacity-70'}`}>Επικοινωνία</Link>
+          {navItems ? navItems.map(item => {
+            const isActive = item.path === '/'
+              ? location.pathname === '/'
+              : location.pathname.startsWith(item.path);
+            return (
+              <Link key={item.path} to={item.path} className={`link-underline text-sm font-medium ${isActive ? 'opacity-100' : 'opacity-70'}`}>
+                {item.label}
+              </Link>
+            );
+          }) : (
+            // Loading fallback
+            <div className="flex gap-8 opacity-50">
+              <span className="w-16 h-4 bg-gray-200/20 rounded animate-pulse"></span>
+              <span className="w-16 h-4 bg-gray-200/20 rounded animate-pulse"></span>
+              <span className="w-16 h-4 bg-gray-200/20 rounded animate-pulse"></span>
+            </div>
+          )}
         </div>
         <button
           className="md:hidden"
@@ -115,11 +129,11 @@ function Navigation() {
             <X size={28} />
           </button>
           <div className="flex flex-col items-center gap-8 text-[#0B0C0E]">
-            <Link to="/" onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">Αρχική</Link>
-            <Link to="/services" onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">Υπηρεσίες</Link>
-            <Link to="/projects" onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">Έργα</Link>
-            <Link to="/process" onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">Διαδικασία</Link>
-            <Link to="/contact" onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">Επικοινωνία</Link>
+            {navItems?.map(item => (
+              <Link key={item.path} to={item.path} onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       )}
@@ -129,6 +143,8 @@ function Navigation() {
 
 // Standard Footer
 function Footer() {
+  const { data: settings } = useAppQuery<SiteSettings>('global_settings');
+
   const bgColor = 'bg-[#000000]';
   const textColor = 'text-white/70';
   const linkColor = 'text-white hover:text-[#3F4CCB]';
@@ -139,7 +155,7 @@ function Footer() {
       <div className="flex items-center gap-4 text-white">
         <Logo className="h-6 w-auto" />
         <span className={`${textColor}`}>
-          &copy; {new Date().getFullYear()} Dodekanisa Glass. All rights reserved.
+          &copy; {new Date().getFullYear()} {settings?.companyName || 'Dodekanisa Glass'}. All rights reserved.
         </span>
       </div>
       <div className={`${textColor}`}>
@@ -168,7 +184,6 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/projects/:id" element={<ProjectDetails />} />
-            <Route path="/process" element={<Process />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

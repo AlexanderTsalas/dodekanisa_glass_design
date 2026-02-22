@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
+import { useAppQuery } from '../hooks/useAppQuery';
+import type { ContactMethod } from '../types';
 
 export default function Contact() {
+    const { data: methods, isLoading: methodsLoading, error: methodsError } = useAppQuery<ContactMethod[]>('contact_methods');
+    const { data: heroData, isLoading: heroLoading, error: heroError } = useAppQuery<any>('contact_hero');
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -9,12 +14,22 @@ export default function Contact() {
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
     const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
-    const contactMethods = [
-        { id: 1, icon: Mail, title: 'Email', value: 'hello@dodekanisaglass.gr', link: 'mailto:hello@dodekanisaglass.gr' },
-        { id: 2, icon: Phone, title: 'Τηλέφωνο', value: '+30 22410 00000', link: 'tel:+302241000000' },
-        { id: 3, icon: MapPin, title: 'Έδρα', value: '85100, Ρόδος', link: null },
-        { id: 4, icon: Clock, title: 'Ωράριο', value: '09:00 - 18:00', link: null },
-    ];
+    if (methodsLoading || heroLoading) {
+        return (
+            <main data-theme="light" className="bg-[#E9EAEC] min-h-screen lg:h-screen pt-24 lg:pt-32 pb-12 flex flex-col items-center justify-center text-[#0B0C0E]">
+                <div className="w-12 h-12 border-4 border-[#3F4CCB]/30 border-t-[#3F4CCB] rounded-full animate-spin mb-6"></div>
+                <p className="text-[#6D7278] font-display uppercase tracking-widest text-sm animate-pulse">ΦΟΡΤΩΣΗ ΕΠΙΚΟΙΝΩΝΙΑΣ...</p>
+            </main>
+        );
+    }
+
+    if (methodsError || heroError || !methods || !heroData) {
+        return (
+            <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-48 pb-32 flex items-center justify-center">
+                <p className="text-red-500 font-display">Σφάλμα φόρτωσης δεδομένων επικοινωνίας.</p>
+            </main>
+        );
+    }
 
     return (
         <main data-theme="light" className="bg-[#E9EAEC] min-h-screen lg:h-screen pt-24 lg:pt-32 pb-12 flex items-center relative lg:overflow-hidden text-[#0B0C0E] selection:bg-[#3F4CCB] selection:text-[#0B0C0E] z-0">
@@ -26,36 +41,39 @@ export default function Contact() {
                     <div className="mb-8 lg:mb-12">
                         <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[rgba(11,12,14,0.1)]/40 bg-[#E9EAEC]/30 backdrop-blur-sm mb-6 lg:mb-8">
                             <span className="w-2 h-2 rounded-full bg-[#3F4CCB] animate-ping"></span>
-                            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#0B0C0E]">Διαθεσιμοι για νεα εργα</span>
+                            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#0B0C0E]">{heroData.badge}</span>
                         </div>
                         <h1 className="headline-xl text-[clamp(28px,3.8vw,52px)] leading-[1.05] tracking-tight mb-4 lg:mb-6 pr-4">
-                            Ας δημιουργήσουμε<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3F4CCB] to-[#0B0C0E]">κάτι κορυφαίο.</span>
+                            {heroData.titleLine1}<br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3F4CCB] to-[#0B0C0E]">{heroData.titleLine2}</span>
                         </h1>
                         <p className="text-[#6D7278] text-sm lg:text-xl font-medium leading-relaxed max-w-lg">
-                            Έχετε ένα όραμα; Είμαστε εδώ για να του δώσουμε μορφή με κρύσταλλο. Επικοινωνήστε απευθείας με την ομάδα μας.
+                            {heroData.desc}
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {contactMethods.map((method, i) => (
-                            <div
-                                key={method.id}
-                                onMouseEnter={() => setHoveredCard(method.id)}
-                                onMouseLeave={() => setHoveredCard(null)}
-                                className={`group relative p-5 lg:p-6 rounded-2xl border transition-all duration-500 overflow-hidden ${hoveredCard === method.id ? 'border-[#3F4CCB] bg-[#E9EAEC]/30 shadow-[0_0_30px_rgba(63,76,203,0.15)] transform lg:-translate-y-1' : 'border-[rgba(11,12,14,0.1)]/40 bg-[#E9EAEC]/30'}`}
-                                style={{ animationDelay: `${i * 100}ms` }}
-                            >
-                                <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#3F4CCB] to-transparent transform -translate-x-full transition-transform duration-700 ${hoveredCard === method.id ? 'translate-x-full' : ''}`}></div>
-                                <method.icon className={`mb-3 transition-colors duration-300 ${hoveredCard === method.id ? 'text-[#3F4CCB]' : 'text-[#6D7278]'}`} size={24} />
-                                <p className="text-[10px] lg:text-xs font-bold uppercase tracking-widest text-[#6D7278] mb-1">{method.title}</p>
-                                {method.link ? (
-                                    <a href={method.link} className="block text-[#0B0C0E] font-display font-medium text-sm lg:text-base hover:text-[#3F4CCB] transition-colors truncate">{method.value}</a>
-                                ) : (
-                                    <p className="block text-[#0B0C0E] font-display font-medium text-sm lg:text-base truncate">{method.value}</p>
-                                )}
-                            </div>
-                        ))}
+                        {methods.map((method, i) => {
+                            const IconComponent = method.icon;
+                            return (
+                                <div
+                                    key={method.id}
+                                    onMouseEnter={() => setHoveredCard(method.id)}
+                                    onMouseLeave={() => setHoveredCard(null)}
+                                    className={`group relative p-5 lg:p-6 rounded-2xl border transition-all duration-500 overflow-hidden ${hoveredCard === method.id ? 'border-[#3F4CCB] bg-[#E9EAEC]/30 shadow-[0_0_30px_rgba(63,76,203,0.15)] transform lg:-translate-y-1' : 'border-[rgba(11,12,14,0.1)]/40 bg-[#E9EAEC]/30'}`}
+                                    style={{ animationDelay: `${i * 100}ms` }}
+                                >
+                                    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#3F4CCB] to-transparent transform -translate-x-full transition-transform duration-700 ${hoveredCard === method.id ? 'translate-x-full' : ''}`}></div>
+                                    <IconComponent className={`mb-3 transition-colors duration-300 ${hoveredCard === method.id ? 'text-[#3F4CCB]' : 'text-[#6D7278]'}`} size={24} />
+                                    <p className="text-[10px] lg:text-xs font-bold uppercase tracking-widest text-[#6D7278] mb-1">{method.title}</p>
+                                    {method.link ? (
+                                        <a href={method.link} className="block text-[#0B0C0E] font-display font-medium text-sm lg:text-base hover:text-[#3F4CCB] transition-colors truncate">{method.value}</a>
+                                    ) : (
+                                        <p className="block text-[#0B0C0E] font-display font-medium text-sm lg:text-base truncate">{method.value}</p>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -75,10 +93,10 @@ export default function Contact() {
                                         onFocus={() => setFocusedInput('name')}
                                         onBlur={() => setFocusedInput(null)}
                                         className="w-full bg-transparent border-b border-[rgba(11,12,14,0.1)]/40 pb-2 text-base lg:text-lg text-[#0B0C0E] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
-                                        placeholder="Ονοματεπώνυμο"
+                                        placeholder={heroData.formPlaceholders.name}
                                     />
                                     <label htmlFor="name" className="absolute left-0 text-base text-[#6D7278] font-medium transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:font-bold peer-focus:text-[#3F4CCB] z-10 top-0 text-xs uppercase tracking-widest font-bold">
-                                        Ονοματεπώνυμο
+                                        {heroData.formPlaceholders.name}
                                     </label>
                                     <div className={`absolute bottom-0 left-0 h-[2px] bg-[#3F4CCB] transition-all duration-300 z-30 ${focusedInput === 'name' ? 'w-full' : 'w-0'}`}></div>
                                 </div>
@@ -89,10 +107,10 @@ export default function Contact() {
                                         onFocus={() => setFocusedInput('phone')}
                                         onBlur={() => setFocusedInput(null)}
                                         className="w-full bg-transparent border-b border-[rgba(11,12,14,0.1)]/40 pb-2 text-base lg:text-lg text-[#0B0C0E] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
-                                        placeholder="Τηλέφωνο"
+                                        placeholder={heroData.formPlaceholders.phone}
                                     />
                                     <label htmlFor="phone" className="absolute left-0 text-base text-[#6D7278] font-medium transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:font-bold peer-focus:text-[#3F4CCB] z-10 top-0 text-xs uppercase tracking-widest font-bold">
-                                        Τηλέφωνο
+                                        {heroData.formPlaceholders.phone}
                                     </label>
                                     <div className={`absolute bottom-0 left-0 h-[2px] bg-[#3F4CCB] transition-all duration-300 z-30 ${focusedInput === 'phone' ? 'w-full' : 'w-0'}`}></div>
                                 </div>
@@ -105,10 +123,10 @@ export default function Contact() {
                                     onFocus={() => setFocusedInput('email')}
                                     onBlur={() => setFocusedInput(null)}
                                     className="w-full bg-transparent border-b border-[rgba(11,12,14,0.1)]/40 pb-2 text-base lg:text-lg text-[#0B0C0E] font-medium focus:outline-none transition-colors peer placeholder-transparent relative z-20"
-                                    placeholder="Email"
+                                    placeholder={heroData.formPlaceholders.email}
                                 />
                                 <label htmlFor="email" className="absolute left-0 text-base text-[#6D7278] font-medium transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:font-bold peer-focus:text-[#3F4CCB] z-10 top-0 text-xs uppercase tracking-widest font-bold">
-                                    Διεύθυνση Email
+                                    {heroData.formPlaceholders.email}
                                 </label>
                                 <div className={`absolute bottom-0 left-0 h-[2px] bg-[#3F4CCB] transition-all duration-300 z-30 ${focusedInput === 'email' ? 'w-full' : 'w-0'}`}></div>
                             </div>
@@ -119,17 +137,17 @@ export default function Contact() {
                                     onFocus={() => setFocusedInput('message')}
                                     onBlur={() => setFocusedInput(null)}
                                     className="w-full min-h-[100px] lg:min-h-[120px] bg-transparent border-b border-[rgba(11,12,14,0.1)]/40 pb-2 text-base lg:text-lg text-[#0B0C0E] font-medium focus:outline-none transition-colors resize-none peer placeholder-transparent relative z-20"
-                                    placeholder="Το μήνυμά σας..."
+                                    placeholder={heroData.formPlaceholders.message}
                                 />
                                 <label htmlFor="message" className="absolute left-0 text-base text-[#6D7278] font-medium transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:font-bold peer-focus:text-[#3F4CCB] z-10 top-0 text-xs uppercase tracking-widest font-bold">
-                                    Λεπτομέρειες Έργου
+                                    {heroData.formPlaceholders.message}
                                 </label>
                                 <div className={`absolute bottom-0 left-0 h-[2px] bg-[#3F4CCB] transition-all duration-300 z-30 ${focusedInput === 'message' ? 'w-full' : 'w-0'}`}></div>
                             </div>
 
                             <div className="pt-4 lg:pt-6">
                                 <button type="button" className="group relative w-full flex items-center justify-center gap-3 lg:gap-4 px-6 py-4 lg:py-5 bg-[#E9EAEC] text-[#0B0C0E] font-bold text-xs lg:text-sm uppercase tracking-[0.2em] rounded-xl overflow-hidden hover:shadow-[0_0_30px_rgba(233,234,236,0.4)] transition-all duration-500">
-                                    <span className="relative z-10">Αποστολη Μηνυματος</span>
+                                    <span className="relative z-10">{heroData.formPlaceholders.button}</span>
                                     <Send size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
                                     <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-0"></div>
                                 </button>

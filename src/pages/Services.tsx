@@ -1,64 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-const servicesData = [
-    {
-        id: 'partitions',
-        title: 'ΕΣΩΤΕΡΙΚΑ ΧΩΡΙΣΜΑΤΑ',
-        shortName: 'Χωρίσματα',
-        image: '/service_partitions.jpg',
-        desc: 'Σχεδιάζουμε εσωτερικά χωρίσματα που διατηρούν την οπτική επαφή και το φυσικό φως, προσφέροντας ταυτόχρονα την απαραίτητη ηχομόνωση και εργονομία. Ιδανικά για γραφεία, σύγχρονες κατοικίες και επαγγελματικούς χώρους.',
-        features: ['Κρύσταλλα Securit/Triplex', 'Απόλυτη ηχομόνωση', 'Κρυφά προφίλ αλουμινίου', 'Προσαρμοσμένες αμμοβολές'],
-        specs: { thickness: '10mm - 12mm', type: 'Tempered / Laminated', acoustic: 'Έως 42dB' }
-    },
-    {
-        id: 'doors',
-        title: 'ΠΟΡΤΕΣ & ΕΙΣΟΔΟΙ',
-        shortName: 'Πόρτες',
-        image: '/service_doors.jpg',
-        desc: 'Από εντυπωσιακές κύριες εισόδους μέχρι συρόμενες πόρτες εξοικονόμησης χώρου. Όλες οι πόρτες μας κατασκευάζονται με γνώμονα την ασφάλεια, την ομαλή λειτουργία και τον ελάχιστο σχεδιασμό.',
-        features: ['Περιστροφικές (Pivot)', 'Αυτόματες συρόμενες πόρτες', 'Σιωπηλοί μηχανισμοί απόσβεσης', 'Συστήματα Access Control'],
-        specs: { thickness: '10mm', type: 'Securit', hardware: 'Ανοξείδωτο Ατσάλι 316' }
-    },
-    {
-        id: 'mirrors',
-        title: 'ΚΑΘΡΕΦΤΕΣ & ΔΙΑΚΟΣΜΗΣΗ',
-        shortName: 'Καθρέφτες',
-        image: '/service_mirrors.jpg',
-        desc: 'Ο καθρέφτης είναι το εργαλείο μας για να πολλαπλασιάζουμε τον χώρο και το φως. Κομμένοι με ψηφιακή ακρίβεια σε κάθε σχήμα, με φινιρίσματα που περιλαμβάνουν ρεζουλί, μπιζουτέ και ειδικές αποχρώσεις.',
-        features: ['Μεγάλης κλίμακας επενδύσεις', 'Ενσωματωμένοι φωτισμοί LED', 'Αντιοξειδωτική προστασία (Copper-free)', 'Φιμέ & Μπρονζέ αποχρώσεις'],
-        specs: { thickness: '4mm - 6mm', type: 'Αντιδιαβρωτικοί', edge: 'Ρεζουλί / Μπιζουτέ' }
-    },
-    {
-        id: 'exterior',
-        title: 'ΕΞΩΤΕΡΙΚΑ ΑΝΟΙΓΜΑΤΑ',
-        shortName: 'Εξωτερικά',
-        image: '/service_exterior.jpg',
-        desc: 'Οι προσόψεις ορίζουν τον χαρακτήρα του κτιρίου. Τοποθετούμε ενεργειακά κρύσταλλα μεγάλων διαστάσεων που προσφέρουν κορυφαία θερμομόνωση χωρίς να στερούν την ανεμπόδιστη θέα.',
-        features: ['Ενεργειακά κρύσταλλα Low-E (4 εποχών)', 'Υαλοπετάσματα αλουμινίου', 'Αντοχή σε έντονη ανεμοπίεση', 'Διπλά & Τριπλά κρύσταλλα'],
-        specs: { thickness: 'Ανάλογα τη μελέτη', type: 'Low-E Argon', thermal: 'Ug έως 1.0 W/m²K' }
-    },
-    {
-        id: 'railings',
-        title: 'ΚΑΓΚΕΛΑ & ΣΚΑΛΕΣ',
-        shortName: 'Κάγκελα',
-        image: '/service_railings.jpg',
-        desc: 'Συστήματα κάγκελων χωρίς εμφανή στηρίγματα που παρέχουν απόλυτη ασφάλεια. Χρησιμοποιούμε ειδικά κρύσταλλα με ενισχυμένες μεμβράνες EVA/SentryGlas ιδανικά για μπαλκόνια δίπλα στη θάλασσα.',
-        features: ['Frameless καθαρός σχεδιασμός', 'Απόλυτη αντοχή σε κρούση', 'Προφίλ βαρέως τύπου ανοδιωμένου αλουμινίου', 'Αόρατη στερέωση'],
-        specs: { thickness: '8+8mm / 10+10mm', type: 'Triplex Securit', film: 'PVB / EVA / SGP' }
-    },
-    {
-        id: 'special',
-        title: 'ΕΙΔΙΚΕΣ ΚΑΤΑΣΚΕΥΕΣ',
-        shortName: 'Ειδικές',
-        image: '/service_special.jpg',
-        desc: 'Οι προκλήσεις είναι η ειδικότητά μας. Πατάρια από δομικό γυαλί, καμπύλα κρύσταλλα για απαιτητικές αρχιτεκτονικές λεπτομέρειες και custom έγχρωμα σχέδια (ψηφιακή εκτύπωση).',
-        features: ['Γυάλινα δάπεδα & πατάρια', 'Καμπύλα (κουρμπαριστά) γυαλιά μεγάλων διαστάσεων', 'Ψηφιακές εκτυπώσεις & αμμοβολές σε γυαλί', 'Βιτρίνες κοσμηματοπωλείων'],
-        specs: { thickness: 'Έως 12+12+12mm', type: 'Structural Glass', load: 'Έως 500kg/m²' }
-    },
-];
+import { useAppQuery } from '../hooks/useAppQuery';
+import type { ServiceItem } from '../types';
 
 export default function Services() {
-    const [activeSection, setActiveSection] = useState(servicesData[0].id);
+    const { data: servicesData, isLoading, error } = useAppQuery<ServiceItem[]>('services');
+    const [activeSection, setActiveSection] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (servicesData && servicesData.length > 0 && !activeSection) {
+            setActiveSection(servicesData[0].id);
+        }
+    }, [servicesData, activeSection]);
     const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
     // Scroll to top on mount
@@ -97,6 +50,23 @@ export default function Services() {
             window.scrollTo({ top: y, behavior: 'smooth' });
         }
     };
+
+    if (isLoading) {
+        return (
+            <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-48 pb-32 flex flex-col items-center justify-center">
+                <div className="w-12 h-12 border-4 border-[#3F4CCB]/30 border-t-[#3F4CCB] rounded-full animate-spin mb-6"></div>
+                <p className="text-[#6D7278] font-display uppercase tracking-widest text-sm animate-pulse">ΦΟΡΤΩΣΗ ΔΕΔΟΜΕΝΩΝ...</p>
+            </main>
+        );
+    }
+
+    if (error || !servicesData) {
+        return (
+            <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-48 pb-32 flex items-center justify-center">
+                <p className="text-red-500 font-display">Σφάλμα φόρτωσης δεδομένων.</p>
+            </main>
+        );
+    }
 
     return (
         <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-32 pb-32 text-[#0B0C0E]">

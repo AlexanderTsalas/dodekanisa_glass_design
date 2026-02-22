@@ -13,13 +13,16 @@ export default function Projects() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
 
-    // Extract unique categories
-    const categories = ['Όλα', ...Array.from(new Set(projectsData.map(p => p.category)))];
+    // Extract unique categories from both project type and client space
+    const categories = ['Όλα', ...Array.from(new Set([
+        ...projectsData.map(p => p.category),
+        ...projectsData.map(p => p.clientCategory)
+    ]))];
 
     // Filter projects
     const filteredProjects = useMemo(() => {
         if (activeCategory === 'Όλα') return projectsData;
-        return projectsData.filter(p => p.category === activeCategory);
+        return projectsData.filter(p => p.category === activeCategory || p.clientCategory === activeCategory);
     }, [activeCategory]);
 
     // Handle pagination
