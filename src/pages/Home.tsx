@@ -39,8 +39,15 @@ export default function Home() {
                 imagePosition="left"
                 headline={['ΑΡΜΟΝΙΚΟ ΣΧΕΔΙΟ']}
                 body="Χωρίσματα που αφήνουν το φως να κινείται. Πόρτες που κλείνουν σιωπηλά. Καθρέφτες που μεγαλώνουν το δωμάτιο."
-                caption="Εσωτερικά χωρίσματα — Πόρτες — Καθρέφτες"
-                iconBoxes={[{ icon: SplitSquareHorizontal, text: 'Εσωτερικά χωρίσματα' }, { icon: DoorOpen, text: 'Πόρτες' }, { icon: Frame, text: 'Καθρέφτες' }]}
+                caption="Όλες οι υπηρεσίες μας για κάθε αρχιτεκτονική ανάγκη"
+                iconBoxes={[
+                    { icon: SplitSquareHorizontal, text: 'Εσωτερικά χωρίσματα', link: '/projects?category=Χωρίσματα' },
+                    { icon: DoorOpen, text: 'Πόρτες', link: '/projects?category=Πόρτες' },
+                    { icon: Frame, text: 'Καθρέφτες', link: '/projects?category=Καθρέφτες' },
+                    { icon: ShieldCheck, text: 'Εξωτερικά ανοίγματα', link: '/projects?category=Εξωτερικά' },
+                    { icon: Layers, text: 'Κάγκελα & σκάλες', link: '/projects?category=Κάγκελα' },
+                    { icon: Diamond, text: 'Ειδικές κατασκευές', link: '/projects?category=Ειδικές' }
+                ]}
                 zIndex={50}
             />
 

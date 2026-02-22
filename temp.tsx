@@ -58,131 +58,114 @@ export function SplitSection({
     zIndex: number;
     hasFeatureList?: boolean;
     features?: string[];
-    iconBoxes?: { icon: React.ElementType, text: string, link?: string }[];
+    iconBoxes?: { icon: React.ElementType, text: string }[];
 }) {
     const isLeftImage = imagePosition === 'left';
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "0px 0px -20% 0px" });
 
     return (
-        <>
-            <section id={id} data-theme="light" className="split-container sticky top-[1px] h-screen w-full overflow-hidden bg-[#E9EAEC] flex shadow-[0_-8px_32px_rgba(11,12,14,0.15)] rounded-t-3xl" style={{ zIndex }}>
-                {/* Image Panel */}
-                <div
-                    className="absolute top-0 h-full w-1/2"
-                    style={{ left: isLeftImage ? 0 : '50%' }}
-                >
-                    <img
-                        src={imageSrc}
-                        alt="Glass installation"
-                        className="w-full h-full object-cover reveal-fade-in"
-                    />
+        <section id={id} data-theme="light" className="split-container sticky top-[1px] h-screen w-full overflow-hidden bg-[#E9EAEC] flex shadow-[0_-8px_32px_rgba(11,12,14,0.15)] rounded-t-3xl" style={{ zIndex }}>
+            {/* Image Panel */}
+            <div
+                className="absolute top-0 h-full w-1/2"
+                style={{ left: isLeftImage ? 0 : '50%' }}
+            >
+                <img
+                    src={imageSrc}
+                    alt="Glass installation"
+                    className="w-full h-full object-cover reveal-fade-in"
+                />
+            </div>
+
+            {/* Text Panel */}
+            <div
+                className="absolute top-0 h-full w-1/2 bg-[#E9EAEC]"
+                style={{ left: isLeftImage ? '50%' : 0 }}
+            />
+
+            {/* Content */}
+            <div
+                className="absolute z-10"
+                style={{
+                    left: isLeftImage ? '56%' : '8%',
+                    top: '46%',
+                    transform: 'translateY(-50%)',
+                    width: '40%',
+                }}
+            >
+                <div>
+                    <h2 className="headline-lg text-[#0B0C0E] text-[clamp(28px,4vw,56px)]">
+                        {headline.map((line, i) => (
+                            <span key={i} className="headline-line block">{line}</span>
+                        ))}
+                    </h2>
                 </div>
 
-                {/* Text Panel */}
-                <div
-                    className="absolute top-0 h-full w-1/2 bg-[#E9EAEC]"
-                    style={{ left: isLeftImage ? '50%' : 0 }}
-                />
-
-                {/* Content */}
-                <div
-                    className="absolute z-10"
-                    style={{
-                        left: isLeftImage ? '56%' : '8%',
-                        top: '46%',
-                        transform: 'translateY(-50%)',
-                        width: '40%',
-                    }}
+                <p
+                    className="mt-8 text-[#0B0C0E] text-sm lg:text-base leading-relaxed opacity-80"
                 >
-                    <div>
-                        <h2 className="headline-lg text-[#0B0C0E] text-[clamp(28px,4vw,56px)]">
-                            {headline.map((line, i) => (
-                                <span key={i} className="headline-line block">{line}</span>
-                            ))}
-                        </h2>
+                    {body}
+                </p>
+
+                {hasFeatureList && features.length > 0 && (
+                    <div className="mt-8 space-y-2">
+                        {features.map((feature, i) => (
+                            <p key={i} className="feature-item text-[#0B0C0E] text-sm font-medium opacity-70">
+                                {feature}
+                            </p>
+                        ))}
                     </div>
+                )}
 
-                    <p
-                        className="mt-8 text-[#0B0C0E] text-sm lg:text-base leading-relaxed opacity-80"
-                    >
-                        {body}
-                    </p>
+                {iconBoxes && iconBoxes.length > 0 && (
+                    <div ref={ref} className={`hidden lg:flex flex-col w-full mt-12 icon-box-container ${isInView ? 'animate-draw-icon' : ''}`}>
+                        {/* Scroll-Expanding Separator Line */}
+                        <div className={`h-px bg-[rgba(11,12,14,0.15)] w-full separator-line ${isInView ? 'scroll-expand-line' : ''}`} />
 
-                    {hasFeatureList && features.length > 0 && (
-                        <div className="mt-8 space-y-2">
-                            {features.map((feature, i) => (
-                                <p key={i} className="feature-item text-[#0B0C0E] text-sm font-medium opacity-70">
-                                    {feature}
-                                </p>
-                            ))}
-                        </div>
-                    )}
+                        {/* Icon Boxes Array */}
+                        <div className="flex flex-row items-start justify-start gap-24 pt-10">
+                            {iconBoxes.map((box, i) => {
+                                const Icon = box.icon;
+                                return (
+                                    <div key={i} className="group relative flex flex-col items-center gap-6 w-[140px]">
+                                        <div className="relative w-24 h-24 flex items-center justify-center -rotate-45 group-hover:scale-110 transition-transform duration-500">
+                                            {/* Outer Rhombus Box SVG */}
+                                            <svg className="absolute inset-0 w-full h-full text-[#0B0C0E]/30 group-hover:text-[#3F4CCB] transition-colors duration-500" viewBox="0 0 24 24" fill="none">
+                                                <rect x="0.25" y="0.25" width="23.5" height="23.5" stroke="currentColor" strokeWidth="0.5" />
+                                            </svg>
+                                            {/* Inner Rhombus Box SVG */}
+                                            <svg className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] text-[#0B0C0E]/10 group-hover:text-[#3F4CCB]/50 transition-colors duration-500" viewBox="0 0 24 24" fill="none">
+                                                <rect x="0.25" y="0.25" width="23.5" height="23.5" stroke="currentColor" strokeWidth="0.5" />
+                                            </svg>
 
-                    {iconBoxes && iconBoxes.length > 0 && (
-                        <div ref={ref} className={`hidden lg:flex flex-col w-full mt-12 icon-box-container ${isInView ? 'animate-draw-icon' : ''}`}>
-                            {/* Scroll-Expanding Separator Line */}
-                            <div className={`h-[2px] bg-[rgba(11,12,14,0.15)] w-full separator-line ${isInView ? 'scroll-expand-line' : ''}`} />
-
-                            {/* Icon Boxes Array */}
-                            <div className="grid grid-cols-2 lg:grid-cols-3 items-start justify-start gap-x-6 gap-y-10 xl:gap-x-12 pt-8">
-                                {iconBoxes.map((box, i) => {
-                                    const Icon = box.icon;
-                                    const Wrapper = box.link ? Link : 'div';
-                                    const wrapperProps = box.link
-                                        ? { to: box.link, className: "group relative flex flex-col items-center gap-6 w-[120px] cursor-pointer" }
-                                        : { className: "group relative flex flex-col items-center gap-6 w-[120px]" };
-
-                                    return (
-                                        <Wrapper key={i} {...(wrapperProps as any)}>
-                                            <div className="relative w-20 h-20 flex items-center justify-center -rotate-45 group-hover:scale-110 transition-transform duration-500">
-                                                {/* Outer Rhombus Box SVG */}
-                                                <svg className="absolute inset-0 w-full h-full text-[#0B0C0E]/30 group-hover:text-[#3F4CCB] transition-colors duration-500" viewBox="0 0 24 24" fill="none">
-                                                    <rect x="0.25" y="0.25" width="23.5" height="23.5" stroke="currentColor" strokeWidth="0.5" />
-                                                </svg>
-                                                {/* Inner Rhombus Box SVG */}
-                                                <svg className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] text-[#0B0C0E]/10 group-hover:text-[#3F4CCB]/50 transition-colors duration-500" viewBox="0 0 24 24" fill="none">
-                                                    <rect x="0.25" y="0.25" width="23.5" height="23.5" stroke="currentColor" strokeWidth="0.5" />
-                                                </svg>
-
-                                                <div className="rotate-45 text-[#0B0C0E] group-hover:text-[#3F4CCB] transition-colors duration-500 z-10">
-                                                    <Icon className="w-8 h-8" strokeWidth={1} />
-                                                </div>
+                                            <div className="rotate-45 text-[#0B0C0E] group-hover:text-[#3F4CCB] transition-colors duration-500 z-10">
+                                                <Icon className="w-10 h-10" strokeWidth={1} />
                                             </div>
-                                            <div className="relative h-10 w-full overflow-hidden flex items-center justify-center mt-2 px-1">
-                                                <span className={`absolute flex items-center justify-center w-full h-full text-[11px] lg:text-xs font-bold tracking-wider uppercase text-[#0B0C0E] text-center opacity-80 transition-all duration-300 leading-tight ${box.link ? 'group-hover:-translate-y-full group-hover:opacity-0' : ''}`}>
-                                                    {box.text}
-                                                </span>
-                                                {box.link && (
-                                                    <span className="absolute flex items-center justify-center w-full h-full text-[11px] lg:text-xs font-bold tracking-wider uppercase text-[#3F4CCB] opacity-0 translate-y-full group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 leading-tight gap-1">
-                                                        Έργα <ChevronRight size={14} className="mb-[1px]" />
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </Wrapper>
-                                    );
-                                })}
-                            </div>
+                                        </div>
+                                        <span className="text-[11px] lg:text-xs font-bold tracking-wider uppercase text-[#0B0C0E] text-center opacity-80 group-hover:opacity-100 transition-opacity duration-300 leading-relaxed">
+                                            {box.text}
+                                        </span>
+                                    </div>
+                                );
+                            })}
                         </div>
-                    )}
+                    </div>
+                )}
 
-                    {caption && (
-                        <div className={`mt-6 pt-6 border-t border-[rgba(11,12,14,0.1)]/40 ${iconBoxes && iconBoxes.length > 0 ? 'lg:hidden' : ''}`}>
-                            <span className="label-micro opacity-60 text-[#0B0C0E]">{caption}</span>
-                        </div>
-                    )}
-                </div>
+                {caption && (
+                    <div className={`mt-6 pt-6 border-t border-[rgba(11,12,14,0.1)]/40 ${iconBoxes && iconBoxes.length > 0 ? 'lg:hidden' : ''}`}>
+                        <span className="label-micro opacity-60 text-[#0B0C0E]">{caption}</span>
+                    </div>
+                )}
+            </div>
 
-                {/* Vertical Divider */}
-                <div
-                    className="absolute top-[10%] h-[80%] w-px bg-[#E9EAEC]/30"
-                    style={{ left: '50%' }}
-                />
-            </section>
-
-            {/* Subtle Scroll Buffer */}
-            <div className="w-full h-[10vh] pointer-events-none" />
-        </>
+            {/* Vertical Divider */}
+            <div
+                className="absolute top-[10%] h-[80%] w-px bg-[#E9EAEC]/30"
+                style={{ left: '50%' }}
+            />
+        </section>
     );
 }
 
