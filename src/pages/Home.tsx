@@ -1,4 +1,4 @@
-import { HeroSection, SplitSection, HomeContactSection } from '../components/HomeComponents';
+import { HeroSection, SplitSection } from '../components/HomeComponents';
 import { useAppQuery } from '../hooks/useAppQuery';
 import type { HomeSplit } from '../types';
 
@@ -38,10 +38,9 @@ export default function Home() {
                     caption={split.caption}
                     iconBoxes={split.iconBoxes}
                     zIndex={30 + (index * 10)}
+                    isLast={index === (splits.length - 1)}
                 />
             ))}
-
-            <HomeContactSection />
         </main>
     );
 }

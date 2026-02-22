@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { useAppQuery } from '../hooks/useAppQuery';
-import type { ServiceItem, ContactMethod } from '../types';
+import type { ServiceItem } from '../types';
 
 // Section 1: Hero
 export function HeroSection() {
@@ -50,6 +50,7 @@ export function SplitSection({
     hasFeatureList = false,
     features = [],
     iconBoxes = [],
+    isLast = false,
 }: {
     id: string;
     imageSrc: string;
@@ -61,6 +62,7 @@ export function SplitSection({
     hasFeatureList?: boolean;
     features?: string[];
     iconBoxes?: { icon: React.ElementType, text: string, link?: string, detail?: string }[];
+    isLast?: boolean;
 }) {
     const isLeftImage = imagePosition === 'left';
     const ref = useRef(null);
@@ -240,7 +242,7 @@ export function SplitSection({
             </section>
 
             {/* Subtle Scroll Buffer */}
-            <div className="w-full h-[10vh] pointer-events-none" />
+            {!isLast && <div className="w-full h-[10vh] pointer-events-none" />}
         </>
     );
 }
@@ -297,76 +299,3 @@ export function ServicesSection() {
     );
 }
 
-export function HomeContactSection() {
-    const { data: methods } = useAppQuery<ContactMethod[]>('contact_methods');
-
-    return (
-        <section id="contact" className="relative bg-[#0B0C0E] py-24 lg:py-32 px-6 lg:px-16 min-h-screen overflow-hidden flex items-center">
-            {/* Ambient Glass Glows */}
-            <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#3F4CCB]/20 blur-[120px] rounded-full pointer-events-none" />
-            <div className="absolute bottom-[-20%] right-[-10%] w-[40vw] h-[40vw] bg-[#3F4CCB]/10 blur-[120px] rounded-full pointer-events-none" />
-
-            <div className="max-w-7xl mx-auto w-full relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-                    {/* Left - Context & Info */}
-                    <div className="text-white">
-                        <h2 className="headline-lg text-[clamp(40px,6vw,80px)] mb-6">Ας<br />μιλήσουμε.</h2>
-                        <p className="text-white/70 text-lg lg:text-xl font-medium mb-16 max-w-md leading-relaxed">
-                            Περιγράψτε μας το έργο σας. Το εξειδικευμένο τμήμα μας θα επικοινωνήσει μαζί σας εντός 24 ωρών για μια πλήρη κοστολόγηση.
-                        </p>
-
-                        <div className="space-y-10">
-                            {methods?.slice(0, 3).map((method) => {
-                                const IconComponent = method.icon;
-                                return (
-                                    <div key={method.id} className="flex items-start gap-5">
-                                        <div className="p-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center">
-                                            <IconComponent className="text-[#3F4CCB] w-6 h-6" />
-                                        </div>
-                                        <div>
-                                            <p className="label-micro text-white/50 mb-1">{method.title}</p>
-                                            <p className="text-xl font-medium tracking-wide">{method.value}</p>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Right - Glassmorphism Form */}
-                    <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] p-8 lg:p-12 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="label-micro text-white/50 block mb-3">Όνομα</label>
-                                    <input type="text" className="w-full bg-white/5 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-[#3F4CCB]/50 transition-colors" placeholder="Το όνομά σας" />
-                                </div>
-                                <div>
-                                    <label className="label-micro text-white/50 block mb-3">Τηλέφωνο</label>
-                                    <input type="tel" className="w-full bg-white/5 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-[#3F4CCB]/50 transition-colors" placeholder="+30 69..." />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="label-micro text-white/50 block mb-3">Email</label>
-                                <input type="email" className="w-full bg-white/5 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-[#3F4CCB]/50 transition-colors" placeholder="your@email.com" />
-                            </div>
-
-                            <div>
-                                <label className="label-micro text-white/50 block mb-3">Μήνυμα / Έργο</label>
-                                <textarea className="w-full bg-white/5 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-[#3F4CCB]/50 transition-colors resize-none" rows={4} placeholder="Περιγράψτε το έργο σας..." />
-                            </div>
-
-                            <button type="submit" className="w-full mt-4 flex items-center justify-center gap-3 px-8 py-5 bg-[#3F4CCB] hover:bg-white text-white hover:text-[#0B0C0E] font-display font-bold text-lg rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(63,76,203,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]">
-                                Αποστολή Μηνύματος
-                                <ChevronRight size={20} />
-                            </button>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-    );
-}
