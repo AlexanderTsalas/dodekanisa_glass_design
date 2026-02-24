@@ -1,11 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Filter, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { projectsData } from '../data/projectsData';
 
 export default function Projects() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [activeCategory, setActiveCategory] = useState<string>(searchParams.get('category') || 'Όλα');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const itemsPerPage = 16;
 
     // Scroll to top when page mounts or pagination changes
@@ -46,9 +50,9 @@ export default function Projects() {
                 <h1 className="headline-xl text-[clamp(40px,8vw,96px)] mb-6 text-center lg:text-left">ΤΑ ΕΡΓΑ ΜΑΣ</h1>
             </div>
 
-            {/* Filter Bar */}
-            <div className="max-w-[1600px] mx-auto px-6 lg:px-16 mb-16">
-                <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+            {/* Desktop Filter Bar (Hidden on Mobile) */}
+            <div className="max-w-[1600px] mx-auto px-6 lg:px-16 mb-16 hidden lg:block">
+                <div className="flex flex-wrap gap-4 justify-start">
                     {categories.map(cat => (
                         <button
                             key={cat}
@@ -170,6 +174,50 @@ export default function Projects() {
                     </svg>
                 </Link>
             </div>
+
+            {/* Mobile Floating Filter Drawer via Portal */}
+            {typeof document !== 'undefined' && createPortal(
+                <div className="lg:hidden fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none">
+                    <AnimatePresence>
+                        {isMobileFilterOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, x: 20, scale: 0.95 }}
+                                animate={{ opacity: 1, x: 0, scale: 1 }}
+                                exit={{ opacity: 0, x: 20, scale: 0.95 }}
+                                transition={{ duration: 0.2 }}
+                                className="mb-4 bg-white/95 backdrop-blur-xl border border-[#0B0C0E]/10 rounded-2xl shadow-[0_8px_32px_rgba(11,12,14,0.15)] p-5 w-64 max-h-[60vh] overflow-y-auto pointer-events-auto origin-bottom-right"
+                            >
+                                <h3 className="text-[10px] uppercase tracking-[0.2em] text-[#6D7278] border-b border-[#0B0C0E]/10 pb-3 mb-4 font-bold">Φιλτραρισμα Εργων</h3>
+                                <div className="flex flex-col gap-2">
+                                    {categories.map(cat => (
+                                        <button
+                                            key={cat}
+                                            onClick={() => {
+                                                handleCategoryChange(cat);
+                                                setIsMobileFilterOpen(false);
+                                            }}
+                                            className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors text-left border ${activeCategory === cat
+                                                ? 'bg-[#3F4CCB] text-[#E9EAEC] border-[#3F4CCB]'
+                                                : 'bg-transparent text-[#6D7278] border-[rgba(11,12,14,0.1)] hover:bg-[#E9EAEC] hover:text-[#0B0C0E]'
+                                                }`}
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <button
+                        onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+                        className="w-14 h-14 bg-[#0B0C0E] text-white rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(11,12,14,0.3)] hover:bg-[#3F4CCB] transition-colors pointer-events-auto"
+                    >
+                        {isMobileFilterOpen ? <X size={24} /> : <Filter size={24} />}
+                    </button>
+                </div>,
+                document.body
+            )}
 
         </main>
     );

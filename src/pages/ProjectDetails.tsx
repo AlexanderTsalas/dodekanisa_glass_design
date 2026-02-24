@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Link, useNavigate, Navigate } from 'react-router-dom';
-import { ChevronLeft, MapPin, Calendar, Building2 } from 'lucide-react';
+import { ChevronLeft, MapPin, Calendar, Building2, X, ZoomIn } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { projectsData } from '../data/projectsData';
 
 export default function ProjectDetails() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [activeImage, setActiveImage] = useState<string>('');
+    const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
 
     const project = projectsData.find((p) => p.id === id);
 
@@ -55,14 +58,24 @@ export default function ProjectDetails() {
             <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-24">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[60vh] lg:h-[75vh]">
                     {/* Primary Large Image */}
-                    <div className="lg:col-span-9 rounded-2xl overflow-hidden bg-[#edede9] relative border border-[rgba(11,12,14,0.1)]/40 shadow-2xl reveal-fade-in group">
+                    <button
+                        onClick={() => setIsLightboxOpen(true)}
+                        className="lg:col-span-9 rounded-2xl overflow-hidden bg-[#edede9] relative border border-[rgba(11,12,14,0.1)]/40 shadow-2xl reveal-fade-in group cursor-zoom-in text-left focus:outline-none"
+                    >
                         <img
                             src={activeImage}
                             alt={project.title}
                             className="w-full h-full object-cover transition-opacity duration-500"
                         />
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center pointer-events-none">
+                            <div className="bg-white/90 backdrop-blur-sm text-[#0B0C0E] px-6 py-3 rounded-full flex items-center gap-2 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 shadow-xl font-medium text-sm">
+                                <ZoomIn size={18} />
+                                Μεγέθυνση
+                            </div>
+                        </div>
                         <div className="absolute inset-0 bg-noise opacity-[0.15] mix-blend-overlay pointer-events-none"></div>
-                    </div>
+                    </button>
 
                     {/* Thumbnail Strip */}
                     <div className="lg:col-span-3 flex lg:flex-col gap-4 overflow-x-auto lg:overflow-y-auto pb-4 lg:pb-0 scrollbar-hide">
@@ -134,6 +147,41 @@ export default function ProjectDetails() {
                     </svg>
                 </Link>
             </div>
+
+            {/* Lightbox Modal via Portal */}
+            {typeof document !== 'undefined' && createPortal(
+                <AnimatePresence>
+                    {isLightboxOpen && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0B0C0E]/95 backdrop-blur-xl p-4 lg:p-12 cursor-zoom-out overscroll-none"
+                            onClick={() => setIsLightboxOpen(false)}
+                        >
+                            <button
+                                onClick={() => setIsLightboxOpen(false)}
+                                className="absolute top-6 right-6 lg:top-10 lg:right-10 text-white/50 hover:text-white transition-colors z-[210] p-2 bg-black/20 hover:bg-black/50 rounded-full"
+                            >
+                                <X size={28} />
+                            </button>
+
+                            <motion.img
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                transition={{ type: 'spring', damping: 25, stiffness: 300, delay: 0.1 }}
+                                src={activeImage}
+                                alt={project.title}
+                                className="w-full h-full object-contain max-h-[90dvh] max-w-[95vw] shadow-2xl rounded-lg cursor-default"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
 
         </main>
     );

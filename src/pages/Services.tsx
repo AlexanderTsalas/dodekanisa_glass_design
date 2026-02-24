@@ -1,11 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAppQuery } from '../hooks/useAppQuery';
 import type { ServiceItem } from '../types';
 
 export default function Services() {
     const { data: servicesData, isLoading, error } = useAppQuery<ServiceItem[]>('services');
     const [activeSection, setActiveSection] = useState<string | null>(null);
+    const [isMobileTocOpen, setIsMobileTocOpen] = useState(false);
 
     useEffect(() => {
         if (servicesData && servicesData.length > 0 && !activeSection) {
@@ -244,6 +248,52 @@ export default function Services() {
                     </svg>
                 </Link>
             </div>
+
+            {/* Mobile Floating TOC via Portal to escape parent transforms */}
+            {typeof document !== 'undefined' && createPortal(
+                <div className="lg:hidden fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none">
+                    <AnimatePresence>
+                        {isMobileTocOpen && servicesData && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                                transition={{ duration: 0.2 }}
+                                className="mb-4 bg-white/95 backdrop-blur-xl border border-[#0B0C0E]/10 rounded-2xl shadow-[0_8px_32px_rgba(11,12,14,0.15)] p-5 w-64 max-h-[60vh] overflow-y-auto pointer-events-auto origin-bottom-right"
+                            >
+                                <h3 className="text-[10px] uppercase tracking-[0.2em] text-[#6D7278] border-b border-[#0B0C0E]/10 pb-3 mb-4 font-bold">Εξειδικευσεις</h3>
+                                <ul className="space-y-4">
+                                    {servicesData.map((service, idx) => {
+                                        const isActive = activeSection === service.id;
+                                        return (
+                                            <li key={service.id}>
+                                                <button
+                                                    onClick={() => {
+                                                        scrollToService(service.id);
+                                                        setIsMobileTocOpen(false);
+                                                    }}
+                                                    className={`w-full text-left font-display font-medium text-sm transition-all duration-300 flex items-center ${isActive ? 'text-[#3F4CCB] translate-x-1' : 'text-[#6D7278]'}`}
+                                                >
+                                                    <span className={`text-[10px] w-6 font-mono ${isActive ? 'opacity-100' : 'opacity-50'}`}>0{idx + 1}</span>
+                                                    {service.shortName}
+                                                </button>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <button
+                        onClick={() => setIsMobileTocOpen(!isMobileTocOpen)}
+                        className="w-14 h-14 bg-[#0B0C0E] text-white rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(11,12,14,0.3)] hover:bg-[#3F4CCB] transition-colors pointer-events-auto"
+                    >
+                        {isMobileTocOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                </div>,
+                document.body
+            )}
 
         </main>
     );
