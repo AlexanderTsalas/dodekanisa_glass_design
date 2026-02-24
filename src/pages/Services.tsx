@@ -23,6 +23,9 @@ export default function Services() {
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
+                // If we are artificially scrolling, don't let intersection observer override the active state
+                if (isScrolling.current) return;
+
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         setActiveSection(entry.target.id);
@@ -35,19 +38,37 @@ export default function Services() {
             }
         );
 
-        sectionRefs.current.forEach((ref) => {
+        // Store current ref value to avoid stale closure issues on unmount
+        const elements = sectionRefs.current;
+        elements.forEach((ref) => {
             if (ref) observer.observe(ref);
         });
 
-        return () => observer.disconnect();
-    }, []);
+        return () => {
+            elements.forEach((ref) => {
+                if (ref) observer.unobserve(ref);
+            });
+            observer.disconnect();
+        };
+    }, [servicesData]); // Re-run when data loads to ensure elements exist
+
+    // Added a ref to prevent intersection observer from firing while we programmatically scroll
+    const isScrolling = useRef(false);
 
     const scrollToService = (id: string) => {
         const element = document.getElementById(id);
         if (element) {
+            isScrolling.current = true;
+            setActiveSection(id); // Optimistically set active
+
             const yOffset = -120; // offset for the fixed header
             const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
             window.scrollTo({ top: y, behavior: 'smooth' });
+
+            // Re-enable observer after animation finishes (approx 800ms for smooth scroll)
+            setTimeout(() => {
+                isScrolling.current = false;
+            }, 800);
         }
     };
 

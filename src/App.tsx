@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import { ReactLenis } from 'lenis/react';
+import { ReactLenis, useLenis } from 'lenis/react';
 import { useAppQuery } from './hooks/useAppQuery';
 import type { NavigationItem, SiteSettings } from './types';
 import './App.css';
@@ -168,12 +168,28 @@ function Footer() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  const lenis = useLenis();
+
+  useLayoutEffect(() => {
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true, force: true });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [pathname, lenis]);
+
+  return null;
+}
+
 function App() {
   const location = useLocation();
 
   return (
     <ReactLenis root options={{ lerp: 0.05, wheelMultiplier: 1.5, smoothWheel: true }}>
       <div className="relative min-h-screen flex flex-col">
+        <ScrollToTop />
         {/* Global Navigation and UI that sits ON TOP of everything */}
         <Navigation />
 
