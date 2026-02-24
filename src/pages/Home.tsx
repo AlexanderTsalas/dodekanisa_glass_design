@@ -37,7 +37,7 @@ export default function Home() {
                     body={split.body}
                     caption={split.caption}
                     iconBoxes={split.iconBoxes}
-                    zIndex={30 + (index * 10)}
+                    zIndex={15 + index}
                     isLast={index === (splits.length - 1)}
                 />
             ))}

@@ -2,6 +2,7 @@ import { useState, useEffect, useLayoutEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { ReactLenis, useLenis } from 'lenis/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAppQuery } from './hooks/useAppQuery';
 import type { NavigationItem, SiteSettings } from './types';
 import './App.css';
@@ -120,23 +121,38 @@ function Navigation() {
       </nav>
 
       {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="mobile-menu">
-          <button
-            className="absolute top-6 right-6 text-[#0B0C0E]"
-            onClick={() => setMenuOpen(false)}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="mobile-menu fixed inset-0 bg-[#E9EAEC] z-50 flex flex-col items-center justify-center"
           >
-            <X size={28} />
-          </button>
-          <div className="flex flex-col items-center gap-8 text-[#0B0C0E]">
-            {navItems?.map(item => (
-              <Link key={item.path} to={item.path} onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+            <button
+              className="absolute top-6 right-6 text-[#0B0C0E]"
+              onClick={() => setMenuOpen(false)}
+            >
+              <X size={28} />
+            </button>
+            <div className="flex flex-col items-center gap-8 text-[#0B0C0E]">
+              {navItems?.map((item, index) => (
+                <motion.div
+                  key={item.path}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + index * 0.1, duration: 0.3 }}
+                >
+                  <Link to={item.path} onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
@@ -151,8 +167,8 @@ function Footer() {
   const borderColor = 'border-white/10';
 
   return (
-    <footer className={`w-full ${bgColor} border-t ${borderColor} py-6 px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium mt-auto`}>
-      <div className="flex items-center gap-4 text-white">
+    <footer className={`w-full ${bgColor} border-t ${borderColor} py-8 px-6 lg:px-10 flex flex-col md:flex-row justify-center md:justify-between items-center text-center md:text-left gap-4 md:gap-4 text-sm font-medium mt-auto`}>
+      <div className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-4 text-white">
         <Logo className="h-6 w-auto" />
         <span className={`${textColor}`}>
           &copy; {new Date().getFullYear()} {settings?.companyName || 'Dodekanisa Glass'}. All rights reserved.

@@ -322,3 +322,48 @@ textarea {
   animation: expandWidth 4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   animation-delay: 0.2s;
 }
+
+/* Split Section strictly enforced Desktop Overrides generated to bypass potential Tailwind JIT issues */
+@media (min-width: 1024px) {
+  .split-section-desktop {
+    display: block !important;
+  }
+
+  .split-image-desktop {
+    position: absolute !important;
+    top: 0 !important;
+    height: 100% !important;
+    width: 50% !important;
+  }
+
+  .split-pos-left {
+    left: 0 !important;
+  }
+
+  .split-pos-right {
+    left: 50% !important;
+  }
+
+  .split-content-desktop {
+    position: absolute !important;
+    top: 46% !important;
+    transform: translateY(-50%) !important;
+    width: 40% !important;
+    height: auto !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .split-content-pos-left {
+    left: 8% !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  .split-content-pos-right {
+    left: 56% !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+}
