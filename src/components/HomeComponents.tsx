@@ -161,11 +161,14 @@ export function SplitSection({
                 <div
                     className={`relative top-0 h-[45svh] w-full flex-shrink-0 split-image-desktop ${isLeftImage ? 'split-pos-left' : 'split-pos-right'}`}
                 >
-                    <img
-                        src={imageSrc}
-                        alt="Glass installation"
-                        className="w-full h-full object-cover reveal-fade-in"
-                    />
+                    <picture>
+                        <source srcSet={imageSrc.replace('.jpg', '.webp')} type="image/webp" />
+                        <img
+                            src={imageSrc}
+                            alt="Glass installation"
+                            className="w-full h-full object-cover reveal-fade-in"
+                        />
+                    </picture>
                     {isLightSection && (
                         <motion.img
                             src="/split_light_01_night.png"

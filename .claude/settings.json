@@ -5,7 +5,11 @@
       "Bash(npx vite build)",
       "Bash(ls -la \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\frame_modern_interior\"*)",
       "Bash(npx --yes sharp-cli --help)",
-      "Bash(npx sharp-cli -i \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\frame_modern_interior.jpg\" -o \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\frame_modern_interior.webp\" --format webp --quality 80)"
+      "Bash(npx sharp-cli -i \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\frame_modern_interior.jpg\" -o \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\frame_modern_interior.webp\" --format webp --quality 80)",
+      "Bash(ls \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\split_\"*.jpg)",
+      "Bash(ls -la c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/public/split_*.jpg)",
+      "Read(//c/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/**)",
+      "Bash(ls -la c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/public/split_light_01_night*.png)"
     ]
   }
 }
