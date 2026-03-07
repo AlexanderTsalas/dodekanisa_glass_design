@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { ReactLenis, useLenis } from 'lenis/react';
@@ -7,11 +7,12 @@ import { useAppQuery } from './hooks/useAppQuery';
 import type { NavigationItem, SiteSettings } from './types';
 import './App.css';
 
-import Home from './pages/Home';
-import Services from './pages/Services';
-import Contact from './pages/Contact';
-import Projects from './pages/Projects';
-import ProjectDetails from './pages/ProjectDetails';
+// Route-level code splitting — each page loads only when navigated to
+const Home = lazy(() => import('./pages/Home'));
+const Services = lazy(() => import('./pages/Services'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Projects = lazy(() => import('./pages/Projects'));
+const ProjectDetails = lazy(() => import('./pages/ProjectDetails'));
 
 function Logo({ className = "w-8 h-8" }: { className?: string }) {
   return (
@@ -30,57 +31,38 @@ function Navigation() {
   const { data: navItems } = useAppQuery<NavigationItem[]>('global_navigation');
 
   useEffect(() => {
-    let ticking = false;
+    const sections = document.querySelectorAll('[data-theme]');
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const navEl = document.getElementById('main-nav');
-          let prevPointerEvents = '';
-          if (navEl) {
-            prevPointerEvents = navEl.style.pointerEvents;
-            navEl.style.pointerEvents = 'none'; // Temporarily disable pointer events to "look" through the nav
-          }
-
-          // Probe the absolute center of the navigation bar area (40px down)
-          const elements = document.elementsFromPoint(window.innerWidth / 2, 40);
-
-          if (navEl) {
-            navEl.style.pointerEvents = prevPointerEvents;
-          }
-
-          let foundTheme = null;
-          for (const el of elements) {
-            const theme = el.getAttribute('data-theme');
-            if (theme) {
-              foundTheme = theme;
-              break;
-            }
-          }
-
-          if (foundTheme) {
-            setIsNavWhite(foundTheme === 'dark');
-          } else {
-            // Fallbacks for initial DOM paint before scroll/hydrate
-            if (location.pathname === '/' || location.pathname === '/contact' || location.pathname === '/services' || (location.pathname.startsWith('/projects/') && location.pathname !== '/projects')) {
-              setIsNavWhite(true);
-            } else {
-              setIsNavWhite(false);
-            }
-          }
-          ticking = false;
-        });
-        ticking = true;
+    if (!sections.length) {
+      // Fallback for pages without data-theme sections
+      if (location.pathname === '/' || location.pathname === '/contact' || location.pathname === '/services' || (location.pathname.startsWith('/projects/') && location.pathname !== '/projects')) {
+        setIsNavWhite(true);
+      } else {
+        setIsNavWhite(false);
       }
-    };
+      return;
+    }
 
-    handleScroll(); // Trigger immediately to set initial state
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
+    // Use IntersectionObserver to detect which themed section occupies the nav bar area.
+    // rootMargin '-95%' bottom means only the top ~5% strip of the viewport triggers intersection,
+    // which corresponds to where the navigation bar sits.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const theme = entry.target.getAttribute('data-theme');
+            setIsNavWhite(theme === 'dark');
+          }
+        }
+      },
+      {
+        rootMargin: '0px 0px -95% 0px',
+        threshold: 0,
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, [location.pathname]);
 
   const navTextColor = isNavWhite ? 'text-white' : 'text-[#0B0C0E]';
@@ -115,6 +97,7 @@ function Navigation() {
         <button
           className="md:hidden"
           onClick={() => setMenuOpen(true)}
+          aria-label="Άνοιγμα μενού"
         >
           <Menu size={24} />
         </button>
@@ -133,6 +116,7 @@ function Navigation() {
             <button
               className="absolute top-6 right-6 text-[#0B0C0E]"
               onClick={() => setMenuOpen(false)}
+              aria-label="Κλείσιμο μενού"
             >
               <X size={28} />
             </button>
@@ -210,15 +194,17 @@ function App() {
         <Navigation />
 
         <div key={location.pathname} className="flex-1 w-full flex flex-col animate-in fade-in duration-700 ease-out fill-mode-both">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/index.html" element={<Navigate to="/" replace />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/projects/:id" element={<ProjectDetails />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <Suspense>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/index.html" element={<Navigate to="/" replace />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/:id" element={<ProjectDetails />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
         </div>
 
         <Footer />

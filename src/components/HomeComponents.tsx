@@ -10,11 +10,14 @@ export function HeroSection() {
     return (
         <div data-theme="dark" className="hero-wrapper relative z-10 w-full h-[100svh] min-h-[100svh] lg:h-screen lg:min-h-screen bg-[#0B0C0E] masthead overflow-hidden">
             <div className="absolute -inset-[2%] w-[104%] h-[104%]">
-                <img
-                    src="/frame_modern_interior.jpg"
-                    alt="Modern glass interior"
-                    className="w-full h-full object-cover"
-                />
+                <picture>
+                    <source srcSet="/frame_modern_interior.webp" type="image/webp" />
+                    <img
+                        src="/frame_modern_interior.jpg"
+                        alt="Modern glass interior"
+                        className="w-full h-full object-cover"
+                    />
+                </picture>
             </div>
             {/* Overlay Text */}
             <div className="hero-text absolute top-1/2 left-1/2 z-20 flex flex-col items-center justify-center text-center pointer-events-none w-full px-4 text-white drop-shadow-lg">
@@ -325,9 +328,9 @@ export function SplitSection({
                                                 className="p-5 lg:p-6 bg-white/50 backdrop-blur-sm rounded-2xl border border-[rgba(11,12,14,0.05)] relative overflow-hidden"
                                             >
                                                 <div className="flex flex-col">
-                                                    <h4 className="font-display font-bold text-[#3F4CCB] text-sm lg:text-base xl:text-lg mb-3 pl-1">
+                                                    <h3 className="font-display font-bold text-[#3F4CCB] text-sm lg:text-base xl:text-lg mb-3 pl-1">
                                                         {iconBoxes[activeIndex].text}
-                                                    </h4>
+                                                    </h3>
                                                     <div className="flex items-center w-full mb-3">
                                                         <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full border border-[#3F4CCB]/50 flex items-center justify-center text-[#3F4CCB] font-display font-bold text-xs lg:text-sm shrink-0 bg-transparent relative z-10">
                                                             {activeIndex + 1}
@@ -354,7 +357,7 @@ export function SplitSection({
                                 <div className="mt-8 lg:mt-12 relative w-full pointer-events-auto flex flex-col items-center lg:items-start pb-8 lg:pb-0">
                                     <motion.p
                                         className="text-[10px] lg:text-xs font-display font-medium tracking-widest uppercase mb-3 lg:mb-4 transition-colors duration-500"
-                                        style={{ color: isDark ? 'rgba(233,234,236,0.3)' : 'rgba(11,12,14,0.5)' }}
+                                        style={{ color: isDark ? 'rgba(233,234,236,0.6)' : 'rgba(11,12,14,0.75)' }}
                                     >
                                         Ελεγχος Φωτισμου
                                     </motion.p>
@@ -362,7 +365,7 @@ export function SplitSection({
                                     <div className={`inline-flex items-center p-1 lg:p-1.5 rounded-full relative z-10 transition-colors duration-500 ${isDark ? 'bg-white/5 border border-white/10' : 'bg-[#0B0C0E]/5'}`}>
                                         <button
                                             onClick={() => setIsNightMode(false)}
-                                            className={`relative z-20 flex items-center gap-1 lg:gap-2 px-4 lg:px-6 py-2 lg:py-2.5 rounded-full transition-all duration-300 ${!isDark ? 'text-[#3F4CCB] bg-white shadow-md' : 'text-[#E9EAEC]/40 hover:text-[#E9EAEC]/70'}`}
+                                            className={`relative z-20 flex items-center gap-1 lg:gap-2 px-4 lg:px-6 py-2 lg:py-2.5 rounded-full transition-all duration-300 ${!isDark ? 'text-[#3F4CCB] bg-white shadow-md' : 'text-[#E9EAEC]/70 hover:text-[#E9EAEC]/90'}`}
                                         >
                                             <Sun className="w-3 h-3 lg:w-4 lg:h-4" />
                                             <span className="text-[10px] lg:text-xs font-bold tracking-widest uppercase">Ημερα</span>
@@ -370,7 +373,7 @@ export function SplitSection({
 
                                         <button
                                             onClick={() => setIsNightMode(true)}
-                                            className={`relative z-20 flex items-center gap-1 lg:gap-2 px-4 lg:px-6 py-2 lg:py-2.5 rounded-full transition-all duration-300 ${isDark ? 'text-[#C05621] bg-[#1A1A1D] shadow-[0_2px_8px_rgba(0,0,0,0.5)]' : 'text-[#0B0C0E]/40 hover:text-[#0B0C0E]/70'}`}
+                                            className={`relative z-20 flex items-center gap-1 lg:gap-2 px-4 lg:px-6 py-2 lg:py-2.5 rounded-full transition-all duration-300 ${isDark ? 'text-[#C05621] bg-[#1A1A1D] shadow-[0_2px_8px_rgba(0,0,0,0.5)]' : 'text-[#0B0C0E]/70 hover:text-[#0B0C0E]/90'}`}
                                         >
                                             <Moon className="w-3 h-3 lg:w-4 lg:h-4" />
                                             <span className="text-[10px] lg:text-xs font-bold tracking-widest uppercase">Νυχτα</span>

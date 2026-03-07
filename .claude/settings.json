@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx vite build)",
+      "Bash(ls -la \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\frame_modern_interior\"*)",
+      "Bash(npx --yes sharp-cli --help)",
+      "Bash(npx sharp-cli -i \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\frame_modern_interior.jpg\" -o \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\frame_modern_interior.webp\" --format webp --quality 80)"
+    ]
+  }
+}
