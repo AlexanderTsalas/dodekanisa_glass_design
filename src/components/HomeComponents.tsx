@@ -16,6 +16,7 @@ export function HeroSection() {
                         src="/frame_modern_interior.jpg"
                         alt="Modern glass interior"
                         className="w-full h-full object-cover"
+                        fetchPriority="high"
                     />
                 </picture>
             </div>

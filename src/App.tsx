@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { ReactLenis, useLenis } from 'lenis/react';
@@ -7,8 +7,10 @@ import { useAppQuery } from './hooks/useAppQuery';
 import type { NavigationItem, SiteSettings } from './types';
 import './App.css';
 
-// Route-level code splitting — each page loads only when navigated to
-const Home = lazy(() => import('./pages/Home'));
+// Home is eagerly loaded (landing page, always the first paint)
+import Home from './pages/Home';
+
+// Other pages are lazy-loaded — only fetched when navigated to
 const Services = lazy(() => import('./pages/Services'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Projects = lazy(() => import('./pages/Projects'));
@@ -185,6 +187,17 @@ function ScrollToTop() {
 
 function App() {
   const location = useLocation();
+  const hasNavigated = useRef(false);
+
+  // Skip the fade-in animation on initial page load to avoid LCP delay.
+  // Only apply it on subsequent navigations.
+  useEffect(() => {
+    hasNavigated.current = true;
+  }, []);
+
+  const pageTransitionClass = hasNavigated.current
+    ? 'animate-in fade-in duration-500 ease-out fill-mode-both'
+    : '';
 
   return (
     <ReactLenis root options={{ lerp: 0.05, wheelMultiplier: 1.5, smoothWheel: true }}>
@@ -193,8 +206,8 @@ function App() {
         {/* Global Navigation and UI that sits ON TOP of everything */}
         <Navigation />
 
-        <div key={location.pathname} className="flex-1 w-full flex flex-col animate-in fade-in duration-700 ease-out fill-mode-both">
-          <Suspense>
+        <div key={location.pathname} className={`flex-1 w-full flex flex-col ${pageTransitionClass}`}>
+          <Suspense fallback={<div className="min-h-screen" />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/index.html" element={<Navigate to="/" replace />} />

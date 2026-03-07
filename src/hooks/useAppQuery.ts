@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { siteSettings, navigationData, socialLinks } from '../data/globalData';
 import { servicesData } from '../data/servicesData';
 import { contactMethods, contactHero } from '../data/contactData';
@@ -23,50 +22,27 @@ interface AppQueryResponse<T> {
 }
 
 /**
- * useAppQuery 
- * A generic hook that simulates an asynchronous database fetch (like Supabase).
- * 
+ * useAppQuery
+ * Returns local data synchronously to avoid layout shifts and render delays.
+ *
  * Future Supabase Migration:
- * Replace the setTimeout logic below with:
+ * Replace with async fetch using useState/useEffect:
  * const { data, error } = await supabase.from(tableName).select();
  */
 export function useAppQuery<T = any>(tableName: string): AppQueryResponse<T> {
-    const [data, setData] = useState<T | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<Error | null>(null);
+    const result = localDatabaseMap[tableName];
 
-    useEffect(() => {
-        let isMounted = true;
-
-        const fetchData = async () => {
-            setIsLoading(true);
-            try {
-                // Simulate network latency (250ms)
-                await new Promise(resolve => setTimeout(resolve, 250));
-
-                const result = localDatabaseMap[tableName];
-                if (!result) throw new Error(`Table ${tableName} not found in database.`);
-
-                if (isMounted) {
-                    setData(result as T);
-                }
-            } catch (err) {
-                if (isMounted) {
-                    setError(err instanceof Error ? err : new Error('Unknown error occurred'));
-                }
-            } finally {
-                if (isMounted) {
-                    setIsLoading(false);
-                }
-            }
+    if (!result) {
+        return {
+            data: null,
+            isLoading: false,
+            error: new Error(`Table ${tableName} not found in database.`),
         };
+    }
 
-        fetchData();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [tableName]);
-
-    return { data, isLoading, error };
+    return {
+        data: result as T,
+        isLoading: false,
+        error: null,
+    };
 }

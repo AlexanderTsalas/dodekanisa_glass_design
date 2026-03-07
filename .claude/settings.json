@@ -9,7 +9,12 @@
       "Bash(ls \"c:\\\\Users\\\\dimitris\\\\Documents\\\\GitHub\\\\dodekanisa_glass_design\\\\public\\\\split_\"*.jpg)",
       "Bash(ls -la c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/public/split_*.jpg)",
       "Read(//c/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/**)",
-      "Bash(ls -la c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/public/split_light_01_night*.png)"
+      "Bash(ls -la c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/public/split_light_01_night*.png)",
+      "Bash(npx lighthouse http://localhost:4174/ --output=json --output=html --output-path=c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/lighthouse-report --chrome-flags=\"--headless --no-sandbox\" --only-categories=performance,accessibility,best-practices,seo)",
+      "Bash(node -e \":*)",
+      "Bash(npx lighthouse http://localhost:4174/ --output=json --output-path=c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/lighthouse-report2 --chrome-flags=\"--headless --no-sandbox\" --only-categories=performance,accessibility,best-practices,seo)",
+      "Bash(ls c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/lighthouse-report2*)",
+      "Bash(npx lighthouse http://localhost:4174/ --output=json --output-path=c:/Users/dimitris/Documents/GitHub/dodekanisa_glass_design/lighthouse-report4 --chrome-flags=\"--headless --no-sandbox\" --only-categories=performance,accessibility,best-practices,seo)"
     ]
   }
 }
