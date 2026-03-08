@@ -1,17 +1,18 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import { Menu } from 'lucide-react';
 import { useAppQuery } from '../hooks/useAppQuery';
 import type { ServiceItem } from '../types';
+import { LoadingScreen, ErrorScreen } from '../components/LoadingScreen';
+import { CTASection } from '../components/CTASection';
+import { MobileDrawer } from '../components/MobileDrawer';
 
 export default function Services() {
     const { data: servicesData, isLoading, error } = useAppQuery<ServiceItem[]>('services');
     const [activeSection, setActiveSection] = useState<string | null>(null);
-    const [isMobileTocOpen, setIsMobileTocOpen] = useState(false);
 
     useEffect(() => {
         if (servicesData && servicesData.length > 0 && !activeSection) {
@@ -19,11 +20,6 @@ export default function Services() {
         }
     }, [servicesData, activeSection]);
     const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-
-    // Scroll to top on mount
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
 
     // Intersection Observer for scrollspy
     useEffect(() => {
@@ -79,20 +75,11 @@ export default function Services() {
     };
 
     if (isLoading) {
-        return (
-            <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-48 pb-32 flex flex-col items-center justify-center">
-                <div className="w-12 h-12 border-4 border-[#3F4CCB]/30 border-t-[#3F4CCB] rounded-full animate-spin mb-6"></div>
-                <p className="text-[#6D7278] font-display uppercase tracking-widest text-sm animate-pulse">ΦΟΡΤΩΣΗ ΔΕΔΟΜΕΝΩΝ...</p>
-            </main>
-        );
+        return <main data-theme="light" className="bg-brand-light"><LoadingScreen message="ΦΟΡΤΩΣΗ ΔΕΔΟΜΕΝΩΝ..." /></main>;
     }
 
     if (error || !servicesData) {
-        return (
-            <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-48 pb-32 flex items-center justify-center">
-                <p className="text-red-500 font-display">Σφάλμα φόρτωσης δεδομένων.</p>
-            </main>
-        );
+        return <main data-theme="light" className="bg-brand-light"><ErrorScreen /></main>;
     }
 
     return (
@@ -101,7 +88,7 @@ export default function Services() {
             {/* Intro Header */}
             <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-24 lg:mb-32">
                 <h1 className="headline-xl text-[clamp(40px,8vw,96px)] mb-6">ΥΠΗΡΕΣΙΕΣ</h1>
-                <p className="text-[#6D7278] text-lg lg:text-3xl max-w-4xl font-medium leading-relaxed">
+                <p className="text-brand-muted text-lg lg:text-3xl max-w-4xl font-medium leading-relaxed">
                     Δεν τοποθετούμε απλώς γυαλί. Διαχειριζόμαστε το φως, την ασφάλεια και την αισθητική του χώρου σας με απόλυτη τεχνική ευφυΐα.
                 </p>
             </div>
@@ -111,7 +98,7 @@ export default function Services() {
                 {/* Left Sticky Navigation */}
                 <aside className="hidden lg:block w-1/4 relative">
                     <div className="sticky top-40 space-y-4">
-                        <h3 className="text-xs uppercase tracking-[0.2em] text-[#6D7278] mb-8">Εξειδικευσεις</h3>
+                        <h3 className="text-xs uppercase tracking-[0.2em] text-brand-muted mb-8">Εξειδικευσεις</h3>
                         <ul className="space-y-4 border-l border-[rgba(11,12,14,0.1)]/40 pl-6">
                             {servicesData.map((service, idx) => {
                                 const isActive = activeSection === service.id;
@@ -123,7 +110,7 @@ export default function Services() {
                                         />
                                         <button
                                             onClick={() => scrollToService(service.id)}
-                                            className={`text-left font-display font-medium text-lg transition-all duration-300 ${isActive ? 'text-[#0B0C0E] translate-x-2' : 'text-[#6D7278] hover:text-[#0B0C0E]'
+                                            className={`text-left font-display font-medium text-lg transition-all duration-300 ${isActive ? 'text-[#0B0C0E] translate-x-2' : 'text-brand-muted hover:text-[#0B0C0E]'
                                                 }`}
                                         >
                                             <span className="text-xs opacity-50 mr-3 font-mono">0{idx + 1}</span>
@@ -155,10 +142,13 @@ export default function Services() {
 
                             {/* Cinematic Wide Image */}
                             <div className="w-[calc(100%+48px)] -mx-6 lg:mx-0 lg:w-full aspect-[4/3] md:aspect-[16/9] lg:h-[65vh] rounded-none lg:rounded-[2rem] overflow-hidden mb-12 lg:mb-16 shadow-2xl relative bg-[#edede9]">
-                                <img
+                                <Image
                                     src={service.image}
                                     alt={service.title}
-                                    className="w-full h-full object-cover reveal-fade-in"
+                                    fill
+                                    sizes="(max-width: 1024px) 100vw, 75vw"
+                                    priority={index === 0}
+                                    className="object-cover reveal-fade-in"
                                 />
                                 {/* Noise overlay purely for texture */}
                                 <div className="absolute inset-0 bg-noise opacity-[0.15] mix-blend-overlay pointer-events-none"></div>
@@ -180,7 +170,7 @@ export default function Services() {
                                                 <div className="w-5 h-5 rounded-full border border-[#3F4CCB] flex items-center justify-center shrink-0 mt-0.5">
                                                     <div className="w-2 h-2 rounded-full bg-[#3F4CCB]"></div>
                                                 </div>
-                                                <span className="text-sm text-[#6D7278]">{feature}</span>
+                                                <span className="text-sm text-brand-muted">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -189,9 +179,9 @@ export default function Services() {
                                 {/* Specs Box */}
                                 <div className="lg:col-span-5 relative">
                                     <div className="bg-white/20 backdrop-blur-xl border border-[#0B0C0E] rounded-2xl p-6 lg:p-8 shadow-[0_8px_32px_rgba(11,12,14,0.05)]">
-                                        <h4 className="text-xs uppercase tracking-[0.15em] text-[#0B0C0E] font-bold mb-6 border-b-2 border-[#0B0C0E]/20 pb-4">
+                                        <h3 className="text-xs uppercase tracking-[0.15em] text-[#0B0C0E] font-bold mb-6 border-b-2 border-[#0B0C0E]/20 pb-4">
                                             Τεχνικα Στοιχεια
-                                        </h4>
+                                        </h3>
 
                                         <ul className="space-y-5">
                                             {Object.entries(service.specs).map(([key, value], i) => {
@@ -209,7 +199,7 @@ export default function Services() {
 
                                                 return (
                                                     <li key={i} className="flex flex-col gap-1">
-                                                        <span className="text-xs text-[#6D7278] uppercase">{labels[key]}</span>
+                                                        <span className="text-xs text-brand-muted uppercase">{labels[key]}</span>
                                                         <span className="font-medium text-[#0B0C0E]">{value as string}</span>
                                                     </li>
                                                 );
@@ -239,63 +229,26 @@ export default function Services() {
 
             </div>
 
-            {/* Final CTA Strip */}
-            <div className="mt-12 mb-24 relative z-20 text-center flex flex-col items-center">
-                <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΕΧΕΤΕ ΚΑΠΟΙΟ ΕΡΓΟ ΣΤΟ ΜΥΑΛΟ ΣΑΣ;</h2>
-                <Link href="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
-                    Επικοινωνήστε μαζί μας
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
-                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </Link>
-            </div>
+            <CTASection heading="ΕΧΕΤΕ ΚΑΠΟΙΟ ΕΡΓΟ ΣΤΟ ΜΥΑΛΟ ΣΑΣ;" buttonText="Επικοινωνήστε μαζί μας" />
 
-            {/* Mobile Floating TOC via Portal to escape parent transforms */}
-            {typeof document !== 'undefined' && createPortal(
-                <div className="lg:hidden fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none">
-                    <AnimatePresence>
-                        {isMobileTocOpen && servicesData && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                                transition={{ duration: 0.2 }}
-                                className="mb-4 bg-white/95 backdrop-blur-xl border border-[#0B0C0E]/10 rounded-2xl shadow-[0_8px_32px_rgba(11,12,14,0.15)] p-5 w-64 max-h-[60vh] overflow-y-auto pointer-events-auto origin-bottom-right"
-                            >
-                                <h3 className="text-[10px] uppercase tracking-[0.2em] text-[#6D7278] border-b border-[#0B0C0E]/10 pb-3 mb-4 font-bold">Εξειδικευσεις</h3>
-                                <ul className="space-y-4">
-                                    {servicesData.map((service, idx) => {
-                                        const isActive = activeSection === service.id;
-                                        return (
-                                            <li key={service.id}>
-                                                <button
-                                                    onClick={() => {
-                                                        scrollToService(service.id);
-                                                        setIsMobileTocOpen(false);
-                                                    }}
-                                                    className={`w-full text-left font-display font-medium text-sm transition-all duration-300 flex items-center ${isActive ? 'text-[#3F4CCB] translate-x-1' : 'text-[#6D7278]'}`}
-                                                >
-                                                    <span className={`text-[10px] w-6 font-mono ${isActive ? 'opacity-100' : 'opacity-50'}`}>0{idx + 1}</span>
-                                                    {service.shortName}
-                                                </button>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    <button
-                        onClick={() => setIsMobileTocOpen(!isMobileTocOpen)}
-                        className="w-14 h-14 bg-[#0B0C0E] text-white rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(11,12,14,0.3)] hover:bg-[#3F4CCB] transition-colors pointer-events-auto"
-                    >
-                        {isMobileTocOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
-                </div>,
-                document.body
-            )}
+            <MobileDrawer icon={Menu} title="Εξειδικευσεις">
+                <ul className="space-y-4">
+                    {servicesData.map((service, idx) => {
+                        const isActive = activeSection === service.id;
+                        return (
+                            <li key={service.id}>
+                                <button
+                                    onClick={() => scrollToService(service.id)}
+                                    className={`w-full text-left font-display font-medium text-sm transition-all duration-300 flex items-center ${isActive ? 'text-brand-accent translate-x-1' : 'text-brand-muted'}`}
+                                >
+                                    <span className={`text-[10px] w-6 font-mono ${isActive ? 'opacity-100' : 'opacity-50'}`}>0{idx + 1}</span>
+                                    {service.shortName}
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </MobileDrawer>
 
         </main>
     );

@@ -8,14 +8,14 @@ import './globals.css';
 
 const inter = Inter({
   subsets: ['latin', 'greek'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-inter',
   display: 'swap',
 });
 
 const montserrat = Montserrat({
   subsets: ['latin', 'latin-ext'],
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['500', '600', '700', '800'],
   variable: '--font-montserrat',
   display: 'swap',
 });

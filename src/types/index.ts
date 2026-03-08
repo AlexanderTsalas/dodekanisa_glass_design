@@ -7,9 +7,19 @@ export interface SiteSettings {
     designerUrl: string;
 }
 
-export interface SocialLink {
-    platform: string;
-    url: string;
+export interface ContactHero {
+    badge: string;
+    titleLine1: string;
+    titleLine2: string;
+    desc: string;
+    formPlaceholders: {
+        name: string;
+        phone: string;
+        email: string;
+        subject: string;
+        message: string;
+        button: string;
+    };
 }
 
 export interface ContactMethod {
@@ -23,7 +33,6 @@ export interface ContactMethod {
 export interface NavigationItem {
     label: string;
     path: string;
-    exact?: boolean;
 }
 
 export interface ServiceItem {
@@ -36,13 +45,6 @@ export interface ServiceItem {
     specs: {
         [key: string]: string;
     };
-}
-
-export interface ProcessStep {
-    num: string;
-    title: string;
-    desc: string;
-    detail: string;
 }
 
 export interface IconBox {

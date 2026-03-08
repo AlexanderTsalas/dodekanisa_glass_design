@@ -27,28 +27,6 @@
     --ring: 233 60% 52%;
     --radius: 0px;
   }
-
-  .dark {
-    --background: 220 14% 4%;
-    --foreground: 220 7% 92%;
-    --card: 220 14% 4%;
-    --card-foreground: 220 7% 92%;
-    --popover: 220 14% 4%;
-    --popover-foreground: 220 7% 92%;
-    --primary: 233 60% 52%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 5% 20%;
-    --secondary-foreground: 220 7% 92%;
-    --muted: 220 5% 15%;
-    --muted-foreground: 220 5% 60%;
-    --accent: 233 60% 52%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 220 5% 20%;
-    --input: 220 5% 20%;
-    --ring: 233 60% 52%;
-  }
 }
 
 @layer base {
@@ -128,15 +106,7 @@
   background-color: rgba(233, 234, 236, 0.22);
 }
 
-/* Section base */
-.section-pinned {
-  width: 100%;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  overflow: hidden;
-  will-change: transform;
-}
+
 
 /* Button styles */
 .btn-primary {
@@ -205,20 +175,6 @@ textarea {
   transform-origin: left;
 }
 
-/* Image frame */
-.image-frame {
-  position: relative;
-}
-
-.image-frame::before {
-  content: '';
-  position: absolute;
-  inset: 10px;
-  border: 1px solid rgba(11, 12, 14, 0.12);
-  pointer-events: none;
-  z-index: 1;
-}
-
 /* Service card hover */
 .service-card {
   @apply transition-all duration-500;
@@ -230,25 +186,6 @@ textarea {
 
 .service-card:hover .service-card-image {
   @apply scale-105;
-}
-
-/* Process step */
-.process-step {
-  @apply relative;
-}
-
-.process-step::before {
-  content: '';
-  position: absolute;
-  left: 15px;
-  top: 40px;
-  width: 1px;
-  height: calc(100% - 40px);
-  background: rgba(11, 12, 14, 0.12);
-}
-
-.process-step:last-child::before {
-  display: none;
 }
 
 /* Mobile menu */
@@ -278,12 +215,7 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
-/* Animation performance */
-.headline-line,
-.service-card,
-.process-step {
-  will-change: transform, opacity;
-}
+
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
@@ -357,9 +289,6 @@ textarea:focus-visible {
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
-  .section-pinned {
-    min-height: 100svh;
-  }
 
   .headline-xl,
   .headline-lg {
@@ -414,6 +343,7 @@ textarea:focus-visible {
 
 /* Print styles */
 @media print {
+
   .grain-overlay,
   nav,
   .fixed {

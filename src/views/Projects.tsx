@@ -1,25 +1,29 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { createPortal } from 'react-dom';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Filter, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { projectsData } from '../data/projectsData';
+import { Filter } from 'lucide-react';
+import { useAppQuery } from '../hooks/useAppQuery';
+import { CTASection } from '../components/CTASection';
+import { MobileDrawer } from '../components/MobileDrawer';
+import type { Project } from '../data/projectsData';
 
 export default function Projects() {
+    const { data: projectsData } = useAppQuery<Project[]>('projects');
     const searchParams = useSearchParams();
     const router = useRouter();
     const [activeCategory, setActiveCategory] = useState<string>(searchParams?.get('category') || 'Όλα');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const itemsPerPage = 16;
 
-    // Scroll to top when page mounts or pagination changes
+    // Scroll to top when pagination changes (not on first mount)
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (currentPage > 1) window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
+
+    if (!projectsData) return null;
 
     // Extract unique categories from both project type and client space
     const categories = ['Όλα', ...Array.from(new Set([
@@ -28,10 +32,9 @@ export default function Projects() {
     ]))];
 
     // Filter projects
-    const filteredProjects = useMemo(() => {
-        if (activeCategory === 'Όλα') return projectsData;
-        return projectsData.filter(p => p.category === activeCategory || p.clientCategory === activeCategory);
-    }, [activeCategory]);
+    const filteredProjects = activeCategory === 'Όλα'
+        ? projectsData
+        : projectsData.filter(p => p.category === activeCategory || p.clientCategory === activeCategory);
 
     // Handle pagination
     const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
@@ -49,7 +52,7 @@ export default function Projects() {
     };
 
     return (
-        <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-32 pb-32 text-[#0B0C0E]">
+        <main data-theme="light" className="bg-brand-light min-h-screen pt-32 pb-32 text-brand-dark">
 
             {/* Header */}
             <div className="max-w-[1600px] mx-auto px-6 lg:px-16 mb-16">
@@ -64,8 +67,8 @@ export default function Projects() {
                             key={cat}
                             onClick={() => handleCategoryChange(cat)}
                             className={`px-6 py-2 rounded-full text-sm font-medium transition-colors border ${activeCategory === cat
-                                ? 'bg-[#3F4CCB] text-[#0B0C0E] border-[#3F4CCB]'
-                                : 'bg-transparent text-[#6D7278] border-[rgba(11,12,14,0.1)]/40 hover:border-[rgba(11,12,14,0.1)] hover:text-[#0B0C0E]'
+                                ? 'bg-brand-accent text-brand-dark border-brand-accent'
+                                : 'bg-transparent text-brand-muted border-[rgba(11,12,14,0.1)]/40 hover:border-[rgba(11,12,14,0.1)] hover:text-brand-dark'
                                 }`}
                         >
                             {cat}
@@ -81,7 +84,6 @@ export default function Projects() {
                         const p = idx % 8;
                         let spanClass = 'col-span-1 row-span-1';
 
-                        // Creating the asymmetric pattern
                         if (p === 0) spanClass = 'md:col-span-2 md:row-span-2';
                         else if (p === 1) spanClass = 'md:col-span-2 md:row-span-1';
                         else if (p === 2) spanClass = 'md:col-span-1 md:row-span-2';
@@ -98,25 +100,23 @@ export default function Projects() {
                                 className={`group relative block overflow-hidden rounded-2xl animate-in fade-in zoom-in-95 duration-700 ease-out fill-mode-both cursor-pointer bg-black ${spanClass}`}
                                 style={{ animationDelay: `${(idx % 8) * 100}ms` }}
                             >
-                                {/* Background Image */}
-                                <img
+                                <Image
                                     src={project.coverImage}
                                     alt={project.title}
-                                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
+                                    priority={idx < 4}
+                                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-80 group-hover:opacity-100"
                                 />
-
-                                {/* Dark Overlay gradient for text legibility */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-
-                                {/* Content */}
                                 <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
-                                    <p className="text-xs uppercase tracking-widest text-[#3F4CCB] mb-2 font-bold translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                    <p className="text-xs uppercase tracking-widest text-brand-accent mb-2 font-bold translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                                         {project.category}
                                     </p>
-                                    <h3 className="headline-lg text-2xl mb-1 translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75">
+                                    <h2 className="headline-lg text-2xl mb-1 translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75">
                                         {project.title}
-                                    </h3>
-                                    <p className="text-sm font-medium text-[rgba(233,234,236,0.7)] translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+                                    </h2>
+                                    <p className="text-sm font-medium text-brand-light/70 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
                                         {project.location}
                                     </p>
                                 </div>
@@ -125,43 +125,39 @@ export default function Projects() {
                     })}
                 </div>
 
-                {/* Empty State */}
                 {paginatedProjects.length === 0 && (
                     <div className="py-32 text-center">
-                        <p className="text-[#6D7278] text-lg">Δεν βρέθηκαν έργα σε αυτή την κατηγορία.</p>
+                        <p className="text-brand-muted text-lg">Δεν βρέθηκαν έργα σε αυτή την κατηγορία.</p>
                     </div>
                 )}
 
-                {/* Pagination Controls */}
                 {totalPages > 1 && (
                     <div className="mt-24 flex items-center justify-center gap-2">
                         <button
                             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                             disabled={currentPage === 1}
-                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.1)]/40 text-[#0B0C0E] disabled:opacity-30 hover:bg-[#E9EAEC] hover:text-[#0B0C0E] transition-colors"
+                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.1)]/40 text-brand-dark disabled:opacity-30 hover:bg-brand-light transition-colors"
                         >
                             &larr;
                         </button>
-
                         <div className="flex gap-2 mx-4">
                             {Array.from({ length: totalPages }).map((_, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setCurrentPage(i + 1)}
                                     className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${currentPage === i + 1
-                                        ? 'bg-[#3F4CCB] text-[#0B0C0E]'
-                                        : 'text-[#6D7278] hover:text-[#0B0C0E] bg-transparent'
+                                        ? 'bg-brand-accent text-brand-dark'
+                                        : 'text-brand-muted hover:text-brand-dark bg-transparent'
                                         }`}
                                 >
                                     {i + 1}
                                 </button>
                             ))}
                         </div>
-
                         <button
                             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                             disabled={currentPage === totalPages}
-                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.1)]/40 text-[#0B0C0E] disabled:opacity-30 hover:bg-[#E9EAEC] hover:text-[#0B0C0E] transition-colors"
+                            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(11,12,14,0.1)]/40 text-brand-dark disabled:opacity-30 hover:bg-brand-light transition-colors"
                         >
                             &rarr;
                         </button>
@@ -169,61 +165,24 @@ export default function Projects() {
                 )}
             </div>
 
-            {/* Final CTA Strip */}
-            <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center">
-                <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΘΕΛΕΤΕ ΚΑΤΙ ΑΝΤΙΣΤΟΙΧΟ ΓΙΑ ΤΟΝ ΧΩΡΟ ΣΑΣ;</h2>
-                <Link href="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
-                    Ζητήστε προσφορά
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
-                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </Link>
-            </div>
+            <CTASection heading="ΘΕΛΕΤΕ ΚΑΤΙ ΑΝΤΙΣΤΟΙΧΟ ΓΙΑ ΤΟΝ ΧΩΡΟ ΣΑΣ;" buttonText="Ζητήστε προσφορά" />
 
-            {/* Mobile Floating Filter Drawer via Portal */}
-            {typeof document !== 'undefined' && createPortal(
-                <div className="lg:hidden fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none">
-                    <AnimatePresence>
-                        {isMobileFilterOpen && (
-                            <motion.div
-                                initial={{ opacity: 0, x: 20, scale: 0.95 }}
-                                animate={{ opacity: 1, x: 0, scale: 1 }}
-                                exit={{ opacity: 0, x: 20, scale: 0.95 }}
-                                transition={{ duration: 0.2 }}
-                                className="mb-4 bg-white/95 backdrop-blur-xl border border-[#0B0C0E]/10 rounded-2xl shadow-[0_8px_32px_rgba(11,12,14,0.15)] p-5 w-64 max-h-[60vh] overflow-y-auto pointer-events-auto origin-bottom-right"
-                            >
-                                <h3 className="text-[10px] uppercase tracking-[0.2em] text-[#6D7278] border-b border-[#0B0C0E]/10 pb-3 mb-4 font-bold">Φιλτραρισμα Εργων</h3>
-                                <div className="flex flex-col gap-2">
-                                    {categories.map(cat => (
-                                        <button
-                                            key={cat}
-                                            onClick={() => {
-                                                handleCategoryChange(cat);
-                                                setIsMobileFilterOpen(false);
-                                            }}
-                                            className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors text-left border ${activeCategory === cat
-                                                ? 'bg-[#3F4CCB] text-[#E9EAEC] border-[#3F4CCB]'
-                                                : 'bg-transparent text-[#6D7278] border-[rgba(11,12,14,0.1)] hover:bg-[#E9EAEC] hover:text-[#0B0C0E]'
-                                                }`}
-                                        >
-                                            {cat}
-                                        </button>
-                                    ))}
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    <button
-                        onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-                        className="w-14 h-14 bg-[#0B0C0E] text-white rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(11,12,14,0.3)] hover:bg-[#3F4CCB] transition-colors pointer-events-auto"
-                    >
-                        {isMobileFilterOpen ? <X size={24} /> : <Filter size={24} />}
-                    </button>
-                </div>,
-                document.body
-            )}
+            <MobileDrawer icon={Filter} title="Φιλτραρισμα Εργων">
+                <div className="flex flex-col gap-2">
+                    {categories.map(cat => (
+                        <button
+                            key={cat}
+                            onClick={() => handleCategoryChange(cat)}
+                            className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors text-left border ${activeCategory === cat
+                                ? 'bg-brand-accent text-brand-light border-brand-accent'
+                                : 'bg-transparent text-brand-muted border-[rgba(11,12,14,0.1)] hover:bg-brand-light hover:text-brand-dark'
+                                }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+            </MobileDrawer>
 
         </main>
     );

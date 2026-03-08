@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAppQuery } from '../hooks/useAppQuery';
 import type { NavigationItem } from '../types';
 import { Logo } from './Logo';
@@ -47,6 +46,11 @@ export function Navigation() {
     return () => observer.disconnect();
   }, [pathname]);
 
+  // Close menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
   const navTextColor = isNavWhite ? 'text-white' : 'text-[#0B0C0E]';
 
   return (
@@ -85,39 +89,32 @@ export function Navigation() {
       </nav>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="mobile-menu fixed inset-0 bg-[#E9EAEC] z-50 flex flex-col items-center justify-center"
+      {menuOpen && (
+        <div
+          className="mobile-menu fixed inset-0 bg-[#E9EAEC] z-50 flex flex-col items-center justify-center animate-in fade-in slide-in-from-top-5 duration-300"
+        >
+          <button
+            className="absolute top-6 right-6 text-[#0B0C0E]"
+            onClick={() => setMenuOpen(false)}
+            aria-label="Κλείσιμο μενού"
           >
-            <button
-              className="absolute top-6 right-6 text-[#0B0C0E]"
-              onClick={() => setMenuOpen(false)}
-              aria-label="Κλείσιμο μενού"
-            >
-              <X size={28} />
-            </button>
-            <div className="flex flex-col items-center gap-8 text-[#0B0C0E]">
-              {navItems?.map((item, index) => (
-                <motion.div
-                  key={item.path}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.1, duration: 0.3 }}
-                >
-                  <Link href={item.path} onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <X size={28} />
+          </button>
+          <div className="flex flex-col items-center gap-8 text-[#0B0C0E]">
+            {navItems?.map((item, index) => (
+              <div
+                key={item.path}
+                className="animate-in fade-in slide-in-from-bottom-5 duration-300 fill-mode-both"
+                style={{ animationDelay: `${100 + index * 100}ms` }}
+              >
+                <Link href={item.path} onClick={() => setMenuOpen(false)} className="text-2xl font-display font-bold">
+                  {item.label}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }

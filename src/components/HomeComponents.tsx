@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Sun, Moon } from 'lucide-react';
 import { useInView, motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useAppQuery } from '../hooks/useAppQuery';
@@ -12,15 +13,14 @@ export function HeroSection() {
     return (
         <div data-theme="dark" className="hero-wrapper relative z-10 w-full h-[100svh] min-h-[100svh] lg:h-screen lg:min-h-screen bg-[#0B0C0E] masthead overflow-hidden">
             <div className="absolute -inset-[2%] w-[104%] h-[104%]">
-                <picture>
-                    <source srcSet="/frame_modern_interior.webp" type="image/webp" />
-                    <img
-                        src="/frame_modern_interior.jpg"
-                        alt="Modern glass interior"
-                        className="w-full h-full object-cover"
-                        fetchPriority="high"
-                    />
-                </picture>
+                <Image
+                    src="/frame_modern_interior.jpg"
+                    alt="Modern glass interior"
+                    fill
+                    sizes="100vw"
+                    priority
+                    className="object-cover"
+                />
             </div>
             {/* Overlay Text */}
             <div className="hero-text absolute top-1/2 left-1/2 z-20 flex flex-col items-center justify-center text-center pointer-events-none w-full px-4 text-white drop-shadow-lg">
@@ -164,14 +164,13 @@ export function SplitSection({
                 <div
                     className={`relative top-0 h-[45svh] w-full flex-shrink-0 split-image-desktop ${isLeftImage ? 'split-pos-left' : 'split-pos-right'}`}
                 >
-                    <picture>
-                        <source srcSet={imageSrc.replace('.jpg', '.webp')} type="image/webp" />
-                        <img
-                            src={imageSrc}
-                            alt="Glass installation"
-                            className="w-full h-full object-cover reveal-fade-in"
-                        />
-                    </picture>
+                    <Image
+                        src={imageSrc}
+                        alt="Glass installation"
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover reveal-fade-in"
+                    />
                     {isLightSection && (
                         <motion.img
                             src="/split_light_01_night.png"
@@ -457,7 +456,7 @@ export function ServicesSection() {
             <div className="px-6 lg:px-16 max-w-7xl mx-auto">
                 <div className="mb-16">
                     <h2 className="headline-lg text-[#0B0C0E] text-[clamp(32px,5vw,64px)]">Τι κατασκευάζουμε</h2>
-                    <p className="mt-4 text-[#6D7278] text-base max-w-xl">
+                    <p className="mt-4 text-brand-muted text-base max-w-xl">
                         Από μικρές επισκευές έως μεγάλα έργα, προσφέρουμε ολοκληρωμένες λύσεις γυαλιού για κάθε ανάγκη.
                     </p>
                 </div>
@@ -467,9 +466,11 @@ export function ServicesSection() {
                         <Link href={`/services#${service.id}`} key={service.id} className="service-card group cursor-pointer block">
                             <div className="overflow-hidden mb-4 rounded-xl relative">
                                 <div className="absolute inset-0 bg-[#E9EAEC] opacity-0 group-hover:opacity-10 transition-opacity duration-500 z-10" />
-                                <img
+                                <Image
                                     src={service.image}
                                     alt={service.shortName}
+                                    width={600}
+                                    height={224}
                                     className="service-card-image w-full h-48 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-105 group-hover:rotate-1 reveal-fade-in"
                                 />
                             </div>
@@ -480,7 +481,7 @@ export function ServicesSection() {
                                     <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </h3>
-                            <p className="text-sm text-[#6D7278] leading-relaxed line-clamp-2">{service.desc}</p>
+                            <p className="text-sm text-brand-muted leading-relaxed line-clamp-2">{service.desc}</p>
                         </Link>
                     ))}
                 </div>

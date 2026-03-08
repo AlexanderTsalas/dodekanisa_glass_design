@@ -1,8 +1,15 @@
 'use client';
 
-import { HeroSection, SplitSection } from '../components/HomeComponents';
+import dynamic from 'next/dynamic';
+import { HeroSection } from '../components/HomeComponents';
 import { useAppQuery } from '../hooks/useAppQuery';
+import { LoadingScreen, ErrorScreen } from '../components/LoadingScreen';
 import type { HomeSplit } from '../types';
+
+const SplitSection = dynamic(
+    () => import('../components/HomeComponents').then(mod => mod.SplitSection),
+    { ssr: false }
+);
 
 export default function Home() {
     const { data: splits, isLoading, error } = useAppQuery<HomeSplit[]>('home_splits');
@@ -15,17 +22,15 @@ export default function Home() {
             {/* Pinned Sections */}
             <HeroSection />
 
-            {/* Split Manifesto Sections */}
             {isLoading && (
-                <div className="h-screen w-full flex flex-col items-center justify-center bg-[#E9EAEC] relative z-20">
-                    <div className="w-12 h-12 border-4 border-[#3F4CCB]/30 border-t-[#3F4CCB] rounded-full animate-spin mb-6"></div>
-                    <p className="text-[#6D7278] font-display uppercase tracking-widest text-sm animate-pulse">ΦΟΡΤΩΣΗ ΕΜΠΕΙΡΙΑΣ...</p>
+                <div className="relative z-20 bg-brand-light">
+                    <LoadingScreen message="ΦΟΡΤΩΣΗ ΕΜΠΕΙΡΙΑΣ..." />
                 </div>
             )}
 
             {error && (
-                <div className="h-[50vh] w-full flex items-center justify-center bg-[#E9EAEC] relative z-20">
-                    <p className="text-red-500 font-display">Σφάλμα φόρτωσης αρχικής σελίδας.</p>
+                <div className="relative z-20 bg-brand-light">
+                    <ErrorScreen message="Σφάλμα φόρτωσης αρχικής σελίδας." />
                 </div>
             )}
 
