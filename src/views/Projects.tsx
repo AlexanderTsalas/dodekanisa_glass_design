@@ -1,13 +1,17 @@
+'use client';
+
 import { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Filter, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { projectsData } from '../data/projectsData';
 
 export default function Projects() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [activeCategory, setActiveCategory] = useState<string>(searchParams.get('category') || 'Όλα');
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const [activeCategory, setActiveCategory] = useState<string>(searchParams?.get('category') || 'Όλα');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const itemsPerPage = 16;
@@ -38,8 +42,10 @@ export default function Projects() {
 
     const handleCategoryChange = (cat: string) => {
         setActiveCategory(cat);
-        setCurrentPage(1); // Reset to first page
-        setSearchParams(cat === 'Όλα' ? {} : { category: cat });
+        setCurrentPage(1);
+        const params = new URLSearchParams();
+        if (cat !== 'Όλα') params.set('category', cat);
+        router.push(`/projects${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
     };
 
     return (
@@ -87,7 +93,7 @@ export default function Projects() {
 
                         return (
                             <Link
-                                to={`/projects/${project.id}`}
+                                href={`/projects/${project.id}`}
                                 key={project.id}
                                 className={`group relative block overflow-hidden rounded-2xl animate-in fade-in zoom-in-95 duration-700 ease-out fill-mode-both cursor-pointer bg-black ${spanClass}`}
                                 style={{ animationDelay: `${(idx % 8) * 100}ms` }}
@@ -166,7 +172,7 @@ export default function Projects() {
             {/* Final CTA Strip */}
             <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center">
                 <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΘΕΛΕΤΕ ΚΑΤΙ ΑΝΤΙΣΤΟΙΧΟ ΓΙΑ ΤΟΝ ΧΩΡΟ ΣΑΣ;</h2>
-                <Link to="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
+                <Link href="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
                     Ζητήστε προσφορά
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
                         <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

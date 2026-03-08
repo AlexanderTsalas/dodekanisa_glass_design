@@ -1,3 +1,5 @@
+'use client';
+
 import { HeroSection, SplitSection } from '../components/HomeComponents';
 import { useAppQuery } from '../hooks/useAppQuery';
 import type { HomeSplit } from '../types';

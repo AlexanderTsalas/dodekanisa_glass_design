@@ -1,5 +1,7 @@
+'use client';
+
 import { useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ChevronRight, Sun, Moon } from 'lucide-react';
 import { useInView, motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useAppQuery } from '../hooks/useAppQuery';
@@ -31,7 +33,7 @@ export function HeroSection() {
                 </p>
             </div>
             {/* Stationary Hero CTA - embedded in sticky section */}
-            <Link to="/contact" className="hero-cta absolute bottom-12 md:bottom-24 left-1/2 -translate-x-1/2 pointer-events-auto flex items-center gap-4 px-6 md:px-10 py-5 bg-white/10 backdrop-blur-md border border-white/30 text-white font-display font-medium text-sm lg:text-base whitespace-nowrap rounded-full hover:bg-white hover:text-[#0B0C0E] transition-all duration-300 shadow-[0_8px_32px_rgba(255,255,255,0.05)] z-30">
+            <Link href="/contact" className="hero-cta absolute bottom-12 md:bottom-24 left-1/2 -translate-x-1/2 pointer-events-auto flex items-center gap-4 px-6 md:px-10 py-5 bg-white/10 backdrop-blur-md border border-white/30 text-white font-display font-medium text-sm lg:text-base whitespace-nowrap rounded-full hover:bg-white hover:text-[#0B0C0E] transition-all duration-300 shadow-[0_8px_32px_rgba(255,255,255,0.05)] z-30">
                 Ξεκινήστε το έργο σας
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
                     <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -269,7 +271,7 @@ export function SplitSection({
                                     const wrapperProps = isInteractive
                                         ? { onClick: () => setActiveIndex(i), className: `group relative flex flex-col items-center gap-4 lg:gap-6 w-24 lg:w-[120px] cursor-pointer ${iconBoxes.length === 3 && i === 2 ? 'col-span-2 justify-self-center lg:col-span-1 lg:justify-self-start' : ''}` }
                                         : box.link
-                                            ? { to: box.link, className: `group relative flex flex-col items-center gap-4 lg:gap-6 w-24 lg:w-[120px] cursor-pointer ${iconBoxes.length === 3 && i === 2 ? 'col-span-2 justify-self-center lg:col-span-1 lg:justify-self-start' : ''}` }
+                                            ? { href: box.link, className: `group relative flex flex-col items-center gap-4 lg:gap-6 w-24 lg:w-[120px] cursor-pointer ${iconBoxes.length === 3 && i === 2 ? 'col-span-2 justify-self-center lg:col-span-1 lg:justify-self-start' : ''}` }
                                             : { className: `group relative flex flex-col items-center gap-4 lg:gap-6 w-24 lg:w-[120px] ${iconBoxes.length === 3 && i === 2 ? 'col-span-2 justify-self-center lg:col-span-1 lg:justify-self-start' : ''}` };
 
                                     return (
@@ -332,11 +334,11 @@ export function SplitSection({
                                                 className="p-5 lg:p-6 bg-white/50 backdrop-blur-sm rounded-2xl border border-[rgba(11,12,14,0.05)] relative overflow-hidden"
                                             >
                                                 <div className="flex flex-col">
-                                                    <h3 className="font-display font-bold text-[#3F4CCB] text-sm lg:text-base xl:text-lg mb-3 pl-1">
+                                                    <h3 className="font-display font-bold text-[#2D3A9E] text-sm lg:text-base xl:text-lg mb-3 pl-1">
                                                         {iconBoxes[activeIndex].text}
                                                     </h3>
                                                     <div className="flex items-center w-full mb-3">
-                                                        <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full border border-[#3F4CCB]/50 flex items-center justify-center text-[#3F4CCB] font-display font-bold text-xs lg:text-sm shrink-0 bg-transparent relative z-10">
+                                                        <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full border border-[#2D3A9E]/50 flex items-center justify-center text-[#2D3A9E] font-display font-bold text-xs lg:text-sm shrink-0 bg-transparent relative z-10">
                                                             {activeIndex + 1}
                                                         </div>
                                                         <motion.div
@@ -346,7 +348,7 @@ export function SplitSection({
                                                             className="h-[1px] bg-gradient-to-r from-[#3F4CCB]/40 to-transparent flex-1 origin-left -ml-[1px]"
                                                         />
                                                     </div>
-                                                    <p className="text-xs lg:text-sm text-[#0B0C0E]/80 leading-relaxed pl-1">
+                                                    <p className="text-xs lg:text-sm text-[#0B0C0E] leading-relaxed pl-1">
                                                         {iconBoxes[activeIndex].detail}
                                                     </p>
                                                 </div>
@@ -414,7 +416,7 @@ export function SplitSection({
                             <p className="text-white/80 text-sm lg:text-base mb-6 lg:mb-8 drop-shadow font-medium leading-relaxed">
                                 Μιλήστε μας για τις ανάγκες σας. Το εξειδικευμένο τμήμα μας θα επικοινωνήσει μαζί σας για μια πλήρη κοστολόγηση.
                             </p>
-                            <Link to="/contact" className="inline-flex items-center justify-center gap-2 lg:gap-3 px-6 py-3 lg:px-8 lg:py-4 bg-[#3F4CCB] hover:bg-white text-white hover:text-[#0B0C0E] font-display font-bold text-sm lg:text-base rounded-xl transition-all duration-300 shadow-[0_8px_24px_rgba(63,76,203,0.3)] hover:shadow-[0_8px_32px_rgba(255,255,255,0.4)] group w-full cursor-pointer">
+                            <Link href="/contact" className="inline-flex items-center justify-center gap-2 lg:gap-3 px-6 py-3 lg:px-8 lg:py-4 bg-[#3F4CCB] hover:bg-white text-white hover:text-[#0B0C0E] font-display font-bold text-sm lg:text-base rounded-xl transition-all duration-300 shadow-[0_8px_24px_rgba(63,76,203,0.3)] hover:shadow-[0_8px_32px_rgba(255,255,255,0.4)] group w-full cursor-pointer">
                                 Επικοινωνία
                                 <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform lg:w-5 lg:h-5" />
                             </Link>
@@ -462,7 +464,7 @@ export function ServicesSection() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     {services.map((service) => (
-                        <Link to={`/services#${service.id}`} key={service.id} className="service-card group cursor-pointer block">
+                        <Link href={`/services#${service.id}`} key={service.id} className="service-card group cursor-pointer block">
                             <div className="overflow-hidden mb-4 rounded-xl relative">
                                 <div className="absolute inset-0 bg-[#E9EAEC] opacity-0 group-hover:opacity-10 transition-opacity duration-500 z-10" />
                                 <img

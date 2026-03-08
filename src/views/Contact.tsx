@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { Send } from 'lucide-react';
 import { useAppQuery } from '../hooks/useAppQuery';

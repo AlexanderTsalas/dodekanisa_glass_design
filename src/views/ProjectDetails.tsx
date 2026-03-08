@@ -1,13 +1,16 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useParams, Link, useNavigate, Navigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ChevronLeft, MapPin, Calendar, Building2, X, ZoomIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { projectsData } from '../data/projectsData';
+import { notFound } from 'next/navigation';
 
-export default function ProjectDetails() {
-    const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
+export default function ProjectDetails({ id }: { id: string }) {
+    const router = useRouter();
     const [activeImage, setActiveImage] = useState<string>('');
     const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
 
@@ -21,7 +24,8 @@ export default function ProjectDetails() {
     }, [project]);
 
     if (!project) {
-        return <Navigate to="/projects" replace />;
+        notFound();
+        return null;
     }
 
     return (
@@ -30,7 +34,7 @@ export default function ProjectDetails() {
             {/* Back Button */}
             <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-8">
                 <button
-                    onClick={() => navigate('/projects')}
+                    onClick={() => router.push('/projects')}
                     className="inline-flex items-center gap-2 text-[#6D7278] hover:text-[#0B0C0E] transition-colors font-medium text-sm group"
                 >
                     <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -139,7 +143,7 @@ export default function ProjectDetails() {
             {/* Final CTA Strip */}
             <div className="mt-24 mb-24 relative z-20 text-center flex flex-col items-center">
                 <h2 className="headline-lg text-[clamp(28px,4vw,56px)] text-[#0B0C0E] mb-8">ΘΕΛΕΤΕ ΚΑΤΙ ΑΝΤΙΣΤΟΙΧΟ ΓΙΑ ΤΟΝ ΧΩΡΟ ΣΑΣ;</h2>
-                <Link to="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
+                <Link href="/contact" className="group flex items-center gap-4 px-10 py-5 bg-white/20 backdrop-blur-lg border border-[#0B0C0E] text-[#0B0C0E] font-display font-medium text-base lg:text-lg rounded-full hover:bg-[#0B0C0E] hover:text-[#E9EAEC] transition-all duration-300 shadow-[0_8px_32px_rgba(11,12,14,0.08)]">
                     Ζητήστε προσφορά
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:translate-x-1 transition-transform">
                         <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
