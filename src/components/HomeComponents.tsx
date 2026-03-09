@@ -186,12 +186,20 @@ export function SplitSection({
                 ref={sectionRef}
                 id={id}
                 data-theme={isLightSection ? (isNightMode ? 'dark' : 'light') : 'light'}
-                className="split-container sticky min-h-[100svh] h-auto lg:h-screen w-full overflow-hidden bg-[#E9EAEC] flex flex-col split-section-desktop shadow-[0_-8px_32px_rgba(11,12,14,0.15)] rounded-t-3xl"
-                style={{ zIndex, top: stickyTop }}
+                className="split-container sticky min-h-[100svh] h-auto lg:h-screen w-full flex flex-col split-section-desktop rounded-t-3xl"
+                style={{
+                    zIndex,
+                    top: stickyTop,
+                    WebkitTransform: 'translate3d(0,0,0)', /* Force specific hardware layer */
+                    transform: 'translate3d(0,0,0)'
+                }}
             >
+                {/* Inner wrapper for overflow clipping without breaking sticky parent */}
+                <div className="absolute inset-0 w-full h-full overflow-hidden rounded-t-3xl bg-[#E9EAEC] shadow-[0_-8px_32px_rgba(11,12,14,0.15)] pointer-events-none" />
+
                 {/* Image Panel */}
                 <div
-                    className={`relative top-0 h-[45svh] w-full flex-shrink-0 split-image-desktop ${isLeftImage ? 'split-pos-left' : 'split-pos-right'}`}
+                    className={`relative top-0 h-[45svh] w-full flex-shrink-0 overflow-hidden rounded-t-3xl lg:rounded-t-none split-image-desktop ${isLeftImage ? 'split-pos-left' : 'split-pos-right'}`}
                 >
                     <Image
                         src={imageSrc}
@@ -204,7 +212,7 @@ export function SplitSection({
                         <motion.img
                             src="/split_light_01_night.png"
                             alt="Glass installation at night"
-                            className="absolute inset-0 w-full h-full object-cover"
+                            className="absolute inset-0 w-full h-full object-cover rounded-t-3xl lg:rounded-t-none"
                             style={{ opacity: nightImageOpacity }}
                         />
                     )}
@@ -212,14 +220,15 @@ export function SplitSection({
 
                 {/* Text Panel Base (Day) */}
                 <div
-                    className={`absolute bottom-0 top-[45svh] h-auto w-full bg-[#E9EAEC] split-image-desktop ${isLeftImage ? 'split-pos-right' : 'split-pos-left'}`}
+                    className={`absolute bottom-0 top-[45svh] h-[55svh] w-full bg-[#E9EAEC] split-image-desktop ${isLeftImage ? 'split-pos-right' : 'split-pos-left'}`}
+                    style={{ WebkitTransform: 'translate3d(0,0,0)', transform: 'translate3d(0,0,0)' }}
                 />
 
                 {/* Text Panel Overlay (Night Theme) */}
                 {isLightSection && (
                     <motion.div
-                        className={`absolute bottom-0 top-[45svh] h-auto w-full bg-[#0C0C0E] split-image-desktop ${isLeftImage ? 'split-pos-right' : 'split-pos-left'}`}
-                        style={{ opacity: bgOpacity }}
+                        className={`absolute bottom-0 top-[45svh] h-[55svh] w-full bg-[#0C0C0E] split-image-desktop ${isLeftImage ? 'split-pos-right' : 'split-pos-left'}`}
+                        style={{ opacity: bgOpacity, WebkitTransform: 'translate3d(0,0,0)', transform: 'translate3d(0,0,0)' }}
                     >
                         {/* Subtle fiery lightsource gradient */}
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_50%,rgba(192,86,33,0.12),transparent_65%)] pointer-events-none" />
@@ -229,7 +238,7 @@ export function SplitSection({
                 {/* Content */}
                 <div
                     className={`relative z-10 w-full h-auto min-h-[55svh] px-6 py-8 pb-12 flex flex-col items-center text-center lg:items-start lg:text-left split-content-desktop ${isLeftImage ? 'split-content-pos-right' : 'split-content-pos-left'}`}
-                    style={{ WebkitFontSmoothing: 'antialiased', WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+                    style={{ WebkitFontSmoothing: 'antialiased', WebkitTransform: 'translate3d(0,0,0)', transform: 'translate3d(0,0,0)', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
                 >
                     <div className="relative">
                         {/* Day Headline */}
