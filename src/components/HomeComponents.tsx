@@ -200,6 +200,7 @@ export function SplitSection({
                 {/* Content */}
                 <div
                     className={`relative z-10 w-full h-auto min-h-[55svh] px-6 py-8 pb-12 flex flex-col items-center text-center lg:items-start lg:text-left split-content-desktop ${isLeftImage ? 'split-content-pos-right' : 'split-content-pos-left'}`}
+                    style={{ WebkitFontSmoothing: 'antialiased', WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
                 >
                     <div className="relative">
                         {/* Day Headline */}

@@ -44,7 +44,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    transform: translateZ(0);
     overflow-x: clip;
   }
 }
@@ -265,14 +264,6 @@ textarea:focus-visible {
   stroke-dashoffset: 100;
 }
 
-.split-container {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  perspective: 1000px;
-  -webkit-perspective: 1000px;
-}
 
 .icon-box-container.animate-draw-icon svg * {
   animation: drawStroke 6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
