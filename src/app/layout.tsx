@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="el" className={`${inter.variable} ${montserrat.variable}`}>
       <body style={{ background: '#0B0C0E' }}>
         <Providers>
-          <div className="relative min-h-screen flex flex-col overflow-x-hidden">
+          <div className="relative min-h-screen flex flex-col">
             <Navigation />
             <div className="flex-1 min-h-screen w-full flex flex-col">
               <PageTransition>{children}</PageTransition>

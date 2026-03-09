@@ -182,47 +182,29 @@ export function SplitSection({
 
     return (
         <>
-            <section
+            <motion.section
                 ref={sectionRef}
                 id={id}
                 data-theme={isLightSection ? (isNightMode ? 'dark' : 'light') : 'light'}
-                className="split-container sticky min-h-[100vh] h-auto lg:h-screen w-full flex flex-col split-section-desktop rounded-t-3xl border-t border-[rgba(11,12,14,0.03)] lg:border-none"
-                style={{
-                    zIndex,
-                    top: stickyTop,
-                    isolation: 'isolate', /* Strictly enforce completely unique render contexts per section */
-                    WebkitTransform: 'translate3d(0,0,0)', /* Force specific hardware layer */
-                    transform: 'translate3d(0,0,0)'
-                }}
+                className="split-container sticky min-h-[100svh] h-auto lg:h-screen w-full overflow-hidden bg-[#E9EAEC] flex flex-col split-section-desktop shadow-[0_-8px_32px_rgba(11,12,14,0.15)] rounded-t-3xl"
+                style={{ zIndex, top: stickyTop }}
             >
-                {/* Inner wrapper for overflow clipping without breaking sticky parent */}
-                <div className="absolute inset-0 w-full h-full overflow-hidden rounded-t-3xl bg-[#E9EAEC] hidden lg:block shadow-[0_-8px_32px_rgba(11,12,14,0.15)] pointer-events-none" />
-                <div className="absolute inset-0 w-full h-full rounded-t-3xl bg-[#E9EAEC] lg:hidden shadow-[0_-2px_10px_rgba(11,12,14,0.05)] pointer-events-none" />
-
                 {/* Image Panel */}
                 <div
-                    className={`relative top-0 h-[45vh] w-full flex-shrink-0 overflow-hidden rounded-t-3xl lg:rounded-t-none split-image-desktop ${isLeftImage ? 'split-pos-left' : 'split-pos-right'}`}
+                    className={`relative top-0 h-[45svh] w-full flex-shrink-0 split-image-desktop ${isLeftImage ? 'split-pos-left' : 'split-pos-right'}`}
                 >
-                    <motion.div
-                        initial={{ opacity: 0, filter: 'blur(8px)' }}
-                        whileInView={{ opacity: 1, filter: 'blur(0px)' }}
-                        viewport={{ once: true, margin: "-10%" }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="absolute inset-0 w-full h-full"
-                    >
-                        <Image
-                            src={imageSrc}
-                            alt="Glass installation"
-                            fill
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                            className="object-cover"
-                        />
-                    </motion.div>
+                    <Image
+                        src={imageSrc}
+                        alt="Glass installation"
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover reveal-fade-in"
+                    />
                     {isLightSection && (
                         <motion.img
                             src="/split_light_01_night.png"
                             alt="Glass installation at night"
-                            className="absolute inset-0 w-full h-full object-cover rounded-t-3xl lg:rounded-t-none"
+                            className="absolute inset-0 w-full h-full object-cover"
                             style={{ opacity: nightImageOpacity }}
                         />
                     )}
@@ -230,15 +212,14 @@ export function SplitSection({
 
                 {/* Text Panel Base (Day) */}
                 <div
-                    className={`absolute bottom-0 top-[45vh] h-[55vh] w-full bg-[#E9EAEC] split-image-desktop ${isLeftImage ? 'split-pos-right' : 'split-pos-left'}`}
-                    style={{ WebkitTransform: 'translate3d(0,0,0)', transform: 'translate3d(0,0,0)' }}
+                    className={`absolute bottom-0 top-[45svh] h-auto w-full bg-[#E9EAEC] split-image-desktop ${isLeftImage ? 'split-pos-right' : 'split-pos-left'}`}
                 />
 
                 {/* Text Panel Overlay (Night Theme) */}
                 {isLightSection && (
                     <motion.div
-                        className={`absolute bottom-0 top-[45vh] h-[55vh] w-full bg-[#0C0C0E] split-image-desktop ${isLeftImage ? 'split-pos-right' : 'split-pos-left'}`}
-                        style={{ opacity: bgOpacity, WebkitTransform: 'translate3d(0,0,0)', transform: 'translate3d(0,0,0)' }}
+                        className={`absolute bottom-0 top-[45svh] h-auto w-full bg-[#0C0C0E] split-image-desktop ${isLeftImage ? 'split-pos-right' : 'split-pos-left'}`}
+                        style={{ opacity: bgOpacity }}
                     >
                         {/* Subtle fiery lightsource gradient */}
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_50%,rgba(192,86,33,0.12),transparent_65%)] pointer-events-none" />
@@ -247,8 +228,8 @@ export function SplitSection({
 
                 {/* Content */}
                 <div
-                    className={`relative z-10 w-full h-auto min-h-[55vh] px-6 py-8 pb-12 flex flex-col items-center text-center lg:items-start lg:text-left split-content-desktop ${isLeftImage ? 'split-content-pos-right' : 'split-content-pos-left'}`}
-                    style={{ WebkitFontSmoothing: 'antialiased', WebkitTransform: 'translate3d(0,0,0)', transform: 'translate3d(0,0,0)', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+                    className={`relative z-10 w-full h-auto min-h-[55svh] px-6 py-8 pb-12 flex flex-col items-center text-center lg:items-start lg:text-left split-content-desktop ${isLeftImage ? 'split-content-pos-right' : 'split-content-pos-left'}`}
+                    style={{ WebkitFontSmoothing: 'antialiased', WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
                 >
                     <div className="relative">
                         {/* Day Headline */}
@@ -448,7 +429,7 @@ export function SplitSection({
                 {/* Horizontal CTA Overlay for Last Section on the Image Side */}
                 {isLast && (
                     <div
-                        className={`absolute top-0 h-[45vh] w-full flex items-center justify-center pointer-events-none p-6 lg:p-12 split-image-desktop ${isLeftImage ? 'split-pos-left' : 'split-pos-right'}`}
+                        className={`absolute top-0 h-[45svh] w-full flex items-center justify-center pointer-events-none p-6 lg:p-12 split-image-desktop ${isLeftImage ? 'split-pos-left' : 'split-pos-right'}`}
                         style={{ zIndex: 40 }}
                     >
                         <motion.div
@@ -477,7 +458,7 @@ export function SplitSection({
                     className="hidden lg:block absolute top-[10%] h-[80%] w-px bg-[#E9EAEC]/30"
                     style={{ left: '50%' }}
                 />
-            </section>
+            </motion.section>
 
             {/* Subtle Scroll Buffer */}
             {!isLast && <div className="w-full h-[10vh] pointer-events-none" />}
