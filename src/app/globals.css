@@ -36,6 +36,28 @@
 
   html {
     scroll-behavior: smooth;
+    overscroll-behavior-y: none;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
   }
 
   body {
@@ -44,8 +66,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    transform-style: preserve-3d;
-    overflow-x: clip;
+    overscroll-behavior-y: none;
+    overflow-x: hidden;
   }
 }
 
@@ -265,8 +287,6 @@ textarea:focus-visible {
 }
 
 .split-container {
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
   will-change: transform;
 }
 
