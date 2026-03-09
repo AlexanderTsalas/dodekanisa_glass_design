@@ -1,7 +1,7 @@
 import type { SiteSettings, NavigationItem } from '../types';
 
 export const siteSettings: SiteSettings = {
-    companyName: 'Dodekanisa Glass',
+    companyName: 'Diamond Glass',
     copyrightYear: new Date().getFullYear(),
     designerName: 'Distarter',
     designerUrl: 'https://distarter.com',

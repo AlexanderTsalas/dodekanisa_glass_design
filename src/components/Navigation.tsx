@@ -59,7 +59,7 @@ export function Navigation() {
       <nav id="main-nav" className={`fixed top-0 left-0 right-0 z-40 px-6 lg:px-10 py-6 flex justify-between items-center transition-colors duration-500 ${navTextColor}`}>
         <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
           <Logo className="h-9 w-auto" />
-          <span className="font-display font-bold text-xl tracking-wide mt-1">DG</span>
+          <span className="font-display font-bold text-xl tracking-wide mt-1">Diamond Glass</span>
         </Link>
         <div className="hidden md:flex items-center gap-8">
           {navItems ? navItems.map(item => {

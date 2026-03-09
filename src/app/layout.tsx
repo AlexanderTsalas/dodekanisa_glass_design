@@ -21,8 +21,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: 'δωδεκανησα glass',
-  description: 'Δωδεκάνησα Glass — Κατασκευή και τοποθέτηση γυάλινων συστημάτων, κουφωμάτων αλουμινίου και ενεργειακών υαλοπινάκων στα Δωδεκάνησα.',
+  title: 'Diamond Glass',
+  description: 'Diamond Glass — Κατασκευή και τοποθέτηση γυάλινων συστημάτων, κουφωμάτων αλουμινίου και ενεργειακών υαλοπινάκων στα Δωδεκάνησα.',
   icons: {
     icon: '/favicon.svg',
   },
