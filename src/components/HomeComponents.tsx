@@ -76,28 +76,57 @@ export function SplitSection({
     const [stickyTop, setStickyTop] = useState('1px');
     const isInView = useInView(ref, { once: true, margin: "0px 0px -20% 0px" });
 
-    // Ensure section sticks properly on mobile without clipping bottom content
+    // Ensure section sticks properly on mobile without clipping bottom content, 
+    // using static DOM measurements to completely prevent Safari mobile scroll wobble.
     useEffect(() => {
         const el = sectionRef.current;
         if (!el) return;
 
-        const observer = new ResizeObserver((entries) => {
-            for (let entry of entries) {
-                const height = entry.borderBoxSize?.[0]?.blockSize ?? el.offsetHeight;
-                const winH = window.innerHeight;
-                if (window.innerWidth >= 1024) {
-                    setStickyTop('1px');
-                } else if (height > winH) {
-                    // Mobile: if section is taller than screen, let it scroll up until its bottom hits the bottom of the viewport
-                    setStickyTop(`calc(100svh - ${height}px)`);
-                } else {
-                    setStickyTop('0px');
-                }
-            }
-        });
+        let resizeTimeout: NodeJS.Timeout;
 
-        observer.observe(el);
-        return () => observer.disconnect();
+        const updateStickyTop = () => {
+            if (!el) return;
+            const height = el.offsetHeight;
+            const winH = window.innerHeight; // Static height snapshot
+
+            if (window.innerWidth >= 1024) {
+                setStickyTop('1px');
+            } else if (height > winH) {
+                // Determine exact static pixel offset for CSS engine. 
+                // Prevents all dynamic svh / dvh jitter during scroll.
+                setStickyTop(`${winH - height}px`);
+            } else {
+                setStickyTop('0px');
+            }
+        };
+
+        // Calculate once on mount
+        updateStickyTop();
+        // Recalculate once images load and layout reflows slightly
+        const settleTimer = setTimeout(updateStickyTop, 500);
+
+        let lastWidth = window.innerWidth;
+
+        // Only react to significant width changes (device rotation) 
+        // to prevent URL bar collapse from triggering layout thrashing
+        const handleResize = () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const newWidth = window.innerWidth;
+                if (Math.abs(newWidth - lastWidth) > 50) {
+                    lastWidth = newWidth;
+                    updateStickyTop();
+                }
+            }, 300);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            clearTimeout(resizeTimeout);
+            clearTimeout(settleTimer);
+        };
     }, []);
 
     // Interactive state logic for icon boxes with details
