@@ -93,7 +93,7 @@ export default function ProjectDetails({ id }: { id: string }) {
                         {/* Cover Image Thumb */}
                         <button
                             onClick={() => setActiveImage(project.coverImage)}
-                            className={`shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${displayImage === project.coverImage ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
+                            className={`relative shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${displayImage === project.coverImage ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
                                 }`}
                         >
                             <Image src={project.coverImage} alt={project.title} fill sizes="(max-width: 1024px) 128px, 100%" className="object-cover" />
@@ -104,7 +104,7 @@ export default function ProjectDetails({ id }: { id: string }) {
                             <button
                                 key={i}
                                 onClick={() => setActiveImage(img)}
-                                className={`shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${displayImage === img ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
+                                className={`relative shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${displayImage === img ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
                                     }`}
                             >
                                 <Image src={img} alt={`${project.title} gallery ${i + 1}`} fill sizes="(max-width: 1024px) 128px, 100%" className="object-cover" />
