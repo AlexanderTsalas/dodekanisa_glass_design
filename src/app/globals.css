@@ -44,7 +44,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    overflow-x: clip;
   }
 }
 
@@ -230,22 +229,8 @@ textarea:focus-visible {
 
 /* Scroll reveal for images */
 .reveal-fade-in {
-  animation: reveal-fade-in both ease-out;
-  animation-timeline: view();
-  animation-range: entry 5% cover 20%;
-  will-change: opacity, filter;
-}
-
-@keyframes reveal-fade-in {
-  from {
-    opacity: 0;
-    filter: blur(8px);
-  }
-
-  to {
-    opacity: 1;
-    filter: blur(0);
-  }
+  /* Removed unsupported animation-timeline: view() that breaks Safari mobile */
+  opacity: 1;
 }
 
 /* SVG Line Drawing Entrance Animation */
