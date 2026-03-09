@@ -30,6 +30,8 @@ export default function ProjectDetails({ id }: { id: string }) {
         return null;
     }
 
+    const displayImage = activeImage || project.coverImage;
+
     return (
         <main data-theme="light" className="bg-[#E9EAEC] min-h-screen pt-32 pb-32 text-[#0B0C0E]">
 
@@ -69,7 +71,7 @@ export default function ProjectDetails({ id }: { id: string }) {
                         className="lg:col-span-9 rounded-2xl overflow-hidden bg-[#edede9] relative border border-[rgba(11,12,14,0.1)]/40 shadow-2xl reveal-fade-in group cursor-zoom-in text-left focus:outline-none"
                     >
                         <Image
-                            src={activeImage}
+                            src={displayImage}
                             alt={project.title}
                             fill
                             sizes="(max-width: 1024px) 100vw, 75vw"
@@ -91,7 +93,7 @@ export default function ProjectDetails({ id }: { id: string }) {
                         {/* Cover Image Thumb */}
                         <button
                             onClick={() => setActiveImage(project.coverImage)}
-                            className={`shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${activeImage === project.coverImage ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
+                            className={`shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${displayImage === project.coverImage ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
                                 }`}
                         >
                             <Image src={project.coverImage} alt={project.title} fill sizes="(max-width: 1024px) 128px, 100%" className="object-cover" />
@@ -102,7 +104,7 @@ export default function ProjectDetails({ id }: { id: string }) {
                             <button
                                 key={i}
                                 onClick={() => setActiveImage(img)}
-                                className={`shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${activeImage === img ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
+                                className={`shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${displayImage === img ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
                                     }`}
                             >
                                 <Image src={img} alt={`${project.title} gallery ${i + 1}`} fill sizes="(max-width: 1024px) 128px, 100%" className="object-cover" />
@@ -171,7 +173,7 @@ export default function ProjectDetails({ id }: { id: string }) {
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
                                 transition={{ type: 'spring', damping: 25, stiffness: 300, delay: 0.1 }}
-                                src={activeImage}
+                                src={displayImage}
                                 alt={project.title}
                                 className="w-full h-full object-contain max-h-[90dvh] max-w-[95vw] shadow-2xl rounded-lg cursor-default"
                                 onClick={(e) => e.stopPropagation()}
