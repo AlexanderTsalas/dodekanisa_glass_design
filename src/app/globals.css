@@ -44,6 +44,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    transform: translateZ(0);
     overflow-x: clip;
   }
 }
@@ -72,6 +73,8 @@
   text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 0.92;
+  -webkit-font-smoothing: antialiased;
+  transform: translateZ(0);
 }
 
 /* Micro label */
@@ -260,6 +263,15 @@ textarea:focus-visible {
 .icon-box-container svg * {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
+}
+
+.split-container {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
 
 .icon-box-container.animate-draw-icon svg * {
