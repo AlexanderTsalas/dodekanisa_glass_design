@@ -63,12 +63,12 @@ export default function ProjectDetails({ id }: { id: string }) {
             </div>
 
             {/* Main Gallery Area */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-16 mb-24">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[60vh] lg:h-[75vh]">
-                    {/* Primary Large Image */}
+            <div className="mb-24">
+                {/* Primary Large Image — full-bleed on mobile, contained on desktop */}
+                <div className="lg:max-w-7xl lg:mx-auto lg:px-16 mb-4 lg:mb-6">
                     <button
                         onClick={() => setIsLightboxOpen(true)}
-                        className="lg:col-span-9 rounded-2xl overflow-hidden bg-[#edede9] relative border border-[rgba(11,12,14,0.1)]/40 shadow-2xl group cursor-zoom-in text-left focus:outline-none"
+                        className="w-full aspect-[4/3] lg:aspect-[16/9] lg:rounded-2xl overflow-hidden bg-[#edede9] relative border-0 lg:border lg:border-[rgba(11,12,14,0.1)]/40 shadow-none lg:shadow-2xl group cursor-zoom-in text-left focus:outline-none"
                     >
                         <Image
                             src={displayImage}
@@ -87,16 +87,18 @@ export default function ProjectDetails({ id }: { id: string }) {
                         </div>
                         <div className="absolute inset-0 bg-noise opacity-[0.15] mix-blend-overlay pointer-events-none"></div>
                     </button>
+                </div>
 
-                    {/* Thumbnail Strip */}
-                    <div className="lg:col-span-3 flex lg:flex-col gap-4 overflow-x-auto lg:overflow-y-auto pb-4 lg:pb-0 scrollbar-hide">
+                {/* Thumbnail Strip */}
+                <div className="max-w-7xl mx-auto px-6 lg:px-16">
+                    <div className="flex gap-2 lg:gap-4 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
                         {/* Cover Image Thumb */}
                         <button
                             onClick={() => setActiveImage(project.coverImage)}
-                            className={`relative shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${displayImage === project.coverImage ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
+                            className={`relative shrink-0 w-16 h-16 lg:w-28 lg:h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 ${displayImage === project.coverImage ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
                                 }`}
                         >
-                            <Image src={project.coverImage} alt={project.title} fill sizes="(max-width: 1024px) 128px, 100%" className="object-cover" />
+                            <Image src={project.coverImage} alt={project.title} fill sizes="(max-width: 1024px) 64px, 112px" className="object-cover" />
                         </button>
 
                         {/* Gallery Thumbs */}
@@ -104,10 +106,10 @@ export default function ProjectDetails({ id }: { id: string }) {
                             <button
                                 key={i}
                                 onClick={() => setActiveImage(img)}
-                                className={`relative shrink-0 w-32 lg:w-full aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all duration-300 ${displayImage === img ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
+                                className={`relative shrink-0 w-16 h-16 lg:w-28 lg:h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 ${displayImage === img ? 'border-[#3F4CCB] opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
                                     }`}
                             >
-                                <Image src={img} alt={`${project.title} gallery ${i + 1}`} fill sizes="(max-width: 1024px) 128px, 100%" className="object-cover" />
+                                <Image src={img} alt={`${project.title} gallery ${i + 1}`} fill sizes="(max-width: 1024px) 64px, 112px" className="object-cover" />
                             </button>
                         ))}
                     </div>
