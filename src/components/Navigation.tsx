@@ -117,7 +117,7 @@ export function Navigation() {
     <>
       {/* Desktop Navigation */}
       <nav id="main-nav" className={`fixed top-0 left-0 right-0 z-40 px-6 lg:px-10 flex justify-between items-center transition-all duration-300 ${scrolled && !isHomepage ? 'py-3' : 'py-6'} ${navBackdrop}`}>
-        <Link href="/" className={`flex items-center transition-colors duration-500 hover:opacity-80 ${logoColor}`}>
+        <Link href="/" aria-label="Αρχική σελίδα" className={`flex items-center transition-colors duration-500 hover:opacity-80 ${logoColor}`}>
           <Logo className="h-16 md:h-[72px] w-auto drop-shadow-md" />
         </Link>
         <div className={`hidden md:flex items-center gap-8 transition-colors duration-500 ${linksColor}`}>
