@@ -28,7 +28,7 @@ export const projectsData: Project[] = [
         year: '2025',
         coverImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
         galleryImages: [
-            'https://images.unsplash.com/photo-1600607687931-ce8e0026e570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80',
+            'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80',
             'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
         ],
         description: 'Μια εντυπωσιακή βίλα στην πλαγιά της Λίνδου όπου τα όρια μεταξύ εσωτερικού και εξωτερικού χώρου καταργούνται. Εγκαταστάθηκαν frameless υαλοπετάσματα ύψους 4 μέτρων προσφέροντας ανεμπόδιστη θέα στο απέραντο γαλάζιο, καθώς και γυάλινα υπερχειλισμένα τοιχώματα πισίνας.',
@@ -132,7 +132,7 @@ export const projectsData: Project[] = [
         category: 'Ειδικές',
         clientCategory: 'Εστίαση',
         year: '2025',
-        coverImage: 'https://images.unsplash.com/photo-1510312305653-8ed496efae77?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+        coverImage: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
         galleryImages: ['https://images.unsplash.com/photo-1494607239400-ff147da48308?ixlib=rb-4.0.3'],
         description: 'Θολωτή γυάλινη κατασκευή υψηλής αντοχής για το κεντρικό εστιατόριο της μαρίνας.',
         technicalSpecs: [{ label: 'Τύπος', value: 'Καμπύλο Structural Glass 10mm' }]
