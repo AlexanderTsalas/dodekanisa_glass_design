@@ -14,7 +14,9 @@ export function Navigation() {
   const pathname = rawPathname ?? '/';
   const [logoWhite, setLogoWhite] = useState(false);
   const [linksWhite, setLinksWhite] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { data: navItems } = useAppQuery<NavigationItem[]>('global_navigation');
+  const isHomepage = pathname === '/';
 
   const applyColors = useCallback((el: Element) => {
     const theme = el.getAttribute('data-theme');
@@ -93,13 +95,28 @@ export function Navigation() {
     setMenuOpen(false);
   }, [pathname]);
 
+  // Show glassmorphism backdrop on scroll (non-homepage only)
+  useEffect(() => {
+    if (isHomepage) {
+      setScrolled(false);
+      return;
+    }
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isHomepage]);
+
   const logoColor = logoWhite ? 'text-white' : 'text-[#0B0C0E]';
   const linksColor = linksWhite ? 'text-white' : 'text-[#0B0C0E]';
+  const navBackdrop = !isHomepage && scrolled
+    ? 'bg-[#E9EAEC]/70 backdrop-blur-md shadow-sm'
+    : '';
 
   return (
     <>
       {/* Desktop Navigation */}
-      <nav id="main-nav" className="fixed top-0 left-0 right-0 z-40 px-6 lg:px-10 py-6 flex justify-between items-center">
+      <nav id="main-nav" className={`fixed top-0 left-0 right-0 z-40 px-6 lg:px-10 flex justify-between items-center transition-all duration-300 ${scrolled && !isHomepage ? 'py-3' : 'py-6'} ${navBackdrop}`}>
         <Link href="/" className={`flex items-center transition-colors duration-500 hover:opacity-80 ${logoColor}`}>
           <Logo className="h-16 md:h-[72px] w-auto drop-shadow-md" />
         </Link>
