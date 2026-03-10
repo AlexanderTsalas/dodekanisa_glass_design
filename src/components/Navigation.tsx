@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
@@ -12,55 +12,98 @@ export function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
   const rawPathname = usePathname();
   const pathname = rawPathname ?? '/';
-  const [isNavWhite, setIsNavWhite] = useState(false);
+  const [logoWhite, setLogoWhite] = useState(false);
+  const [linksWhite, setLinksWhite] = useState(false);
   const { data: navItems } = useAppQuery<NavigationItem[]>('global_navigation');
 
-  useEffect(() => {
-    const sections = document.querySelectorAll('[data-theme]');
+  const applyColors = useCallback((el: Element) => {
+    const theme = el.getAttribute('data-theme');
+    const imagePos = el.getAttribute('data-image-position');
+    const isDark = theme === 'dark';
 
-    if (!sections.length) {
-      if (pathname === '/' || pathname === '/contact' || pathname === '/services' || (pathname?.startsWith('/projects/') && pathname !== '/projects')) {
-        setIsNavWhite(true);
+    if (imagePos && window.innerWidth >= 1024 && !isDark) {
+      if (imagePos === 'left') {
+        setLogoWhite(true);
+        setLinksWhite(false);
       } else {
-        setIsNavWhite(false);
+        setLogoWhite(false);
+        setLinksWhite(true);
       }
-      return;
+    } else {
+      setLogoWhite(isDark);
+      setLinksWhite(isDark);
     }
+  }, []);
 
-    const observer = new IntersectionObserver(
+  useEffect(() => {
+    let activeSection: Element | null = null;
+    const observedElements = new Set<Element>();
+
+    const intersectionObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            const theme = entry.target.getAttribute('data-theme');
-            setIsNavWhite(theme === 'dark');
+            activeSection = entry.target;
+            applyColors(entry.target);
           }
         }
       },
-      {
-        rootMargin: '0px 0px -95% 0px',
-        threshold: 0,
-      }
+      { rootMargin: '0px 0px -95% 0px', threshold: 0 }
     );
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, [pathname]);
+    // Watch for data-theme attribute changes (e.g. night mode toggle)
+    const attrObserver = new MutationObserver(() => {
+      if (activeSection) applyColors(activeSection);
+    });
+
+    const observeSection = (el: Element) => {
+      if (observedElements.has(el)) return;
+      observedElements.add(el);
+      intersectionObserver.observe(el);
+      attrObserver.observe(el, { attributes: true, attributeFilter: ['data-theme'] });
+    };
+
+    // Observe all currently existing [data-theme] sections
+    document.querySelectorAll('[data-theme]').forEach(observeSection);
+
+    // Watch for dynamically added [data-theme] elements (e.g. ssr:false SplitSections)
+    const domObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of mutation.addedNodes) {
+          if (node instanceof Element) {
+            if (node.hasAttribute('data-theme')) {
+              observeSection(node);
+            }
+            node.querySelectorAll('[data-theme]').forEach(observeSection);
+          }
+        }
+      }
+    });
+    domObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      intersectionObserver.disconnect();
+      attrObserver.disconnect();
+      domObserver.disconnect();
+    };
+  }, [pathname, applyColors]);
 
   // Close menu on route change
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
 
-  const navTextColor = isNavWhite ? 'text-white' : 'text-[#0B0C0E]';
+  const logoColor = logoWhite ? 'text-white' : 'text-[#0B0C0E]';
+  const linksColor = linksWhite ? 'text-white' : 'text-[#0B0C0E]';
 
   return (
     <>
       {/* Desktop Navigation */}
-      <nav id="main-nav" className={`fixed top-0 left-0 right-0 z-40 px-6 lg:px-10 py-6 flex justify-between items-center transition-colors duration-500 ${navTextColor}`}>
-        <Link href="/" className="flex items-center transition-opacity hover:opacity-80">
+      <nav id="main-nav" className="fixed top-0 left-0 right-0 z-40 px-6 lg:px-10 py-6 flex justify-between items-center">
+        <Link href="/" className={`flex items-center transition-colors duration-500 hover:opacity-80 ${logoColor}`}>
           <Logo className="h-16 md:h-[72px] w-auto drop-shadow-md" />
         </Link>
-        <div className="hidden md:flex items-center gap-8">
+        <div className={`hidden md:flex items-center gap-8 transition-colors duration-500 ${linksColor}`}>
           {navItems ? navItems.map(item => {
             const isActive = item.path === '/'
               ? pathname === '/'
@@ -79,7 +122,7 @@ export function Navigation() {
           )}
         </div>
         <button
-          className="md:hidden"
+          className={`md:hidden transition-colors duration-500 ${logoWhite ? 'text-white' : 'text-[#0B0C0E]'}`}
           onClick={() => setMenuOpen(true)}
           aria-label="Άνοιγμα μενού"
         >

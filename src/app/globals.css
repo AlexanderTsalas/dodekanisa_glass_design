@@ -1,5 +1,3 @@
-@import '../hero.css';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,24 +6,7 @@
   :root {
     --background: 220 7% 92%;
     --foreground: 220 14% 4%;
-    --card: 220 7% 92%;
-    --card-foreground: 220 14% 4%;
-    --popover: 220 7% 92%;
-    --popover-foreground: 220 14% 4%;
-    --primary: 233 60% 52%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 5% 46%;
-    --secondary-foreground: 220 14% 4%;
-    --muted: 220 5% 86%;
-    --muted-foreground: 220 5% 46%;
-    --accent: 233 60% 52%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
     --border: 220 5% 80%;
-    --input: 220 5% 80%;
-    --ring: 233 60% 52%;
-    --radius: 0px;
   }
 }
 
@@ -35,7 +16,7 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    position: relative; /* Required: Framer Motion needs non-static position on scroll container for correct offset calculation */
     overscroll-behavior-y: none;
   }
 
@@ -67,17 +48,13 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overscroll-behavior-y: none;
-    overflow-x: hidden;
+    overflow-x: clip; /* clip instead of hidden — hidden creates an implicit scroll container that breaks sticky */
   }
 }
 
 /* Typography */
 .font-display {
   font-family: var(--font-montserrat), 'Montserrat', sans-serif;
-}
-
-.font-body {
-  font-family: var(--font-inter), 'Inter', sans-serif;
 }
 
 /* Headline styles */
@@ -107,7 +84,7 @@
   text-transform: uppercase;
 }
 
-/* Grain overlay */
+/* Grain overlay — hidden on mobile to avoid compositor overhead with sticky sections */
 .grain-overlay {
   position: fixed;
   top: 0;
@@ -121,24 +98,10 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
-/* Hairline */
-.hairline {
-  background-color: rgba(11, 12, 14, 0.18);
-}
-
-.hairline-light {
-  background-color: rgba(233, 234, 236, 0.22);
-}
-
-
-
-/* Button styles */
-.btn-primary {
-  @apply bg-[#3F4CCB] text-[#0B0C0E] px-6 py-3 font-medium transition-all duration-300;
-}
-
-.btn-primary:hover {
-  @apply bg-[#323db5] -translate-y-0.5;
+@media (max-width: 1024px) {
+  .grain-overlay {
+    display: none;
+  }
 }
 
 /* Form inputs */
@@ -176,6 +139,21 @@ textarea {
   background: rgba(63, 76, 203, 0.2);
 }
 
+/* Hide scrollbar while keeping scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Noise texture background */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
 /* Link underline animation */
 .link-underline {
   position: relative;
@@ -199,19 +177,6 @@ textarea {
   transform-origin: left;
 }
 
-/* Service card hover */
-.service-card {
-  @apply transition-all duration-500;
-}
-
-.service-card:hover {
-  @apply -translate-y-2;
-}
-
-.service-card:hover .service-card-image {
-  @apply scale-105;
-}
-
 /* Mobile menu */
 .mobile-menu {
   @apply fixed inset-0 bg-[#E9EAEC] z-50 flex flex-col items-center justify-center;
@@ -225,8 +190,7 @@ img {
 
 /* Custom cursor for interactive elements */
 button,
-a,
-.service-card {
+a {
   cursor: pointer;
 }
 
@@ -250,26 +214,6 @@ textarea:focus-visible {
   }
 }
 
-/* Scroll reveal for images */
-.reveal-fade-in {
-  animation: reveal-fade-in both ease-out;
-  animation-timeline: view();
-  animation-range: entry 5% cover 20%;
-  will-change: opacity, filter;
-}
-
-@keyframes reveal-fade-in {
-  from {
-    opacity: 0;
-    filter: blur(8px);
-  }
-
-  to {
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-
 /* SVG Line Drawing Entrance Animation */
 @keyframes drawStroke {
   0% {
@@ -284,10 +228,6 @@ textarea:focus-visible {
 .icon-box-container svg * {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
-}
-
-.split-container {
-  will-change: transform;
 }
 
 

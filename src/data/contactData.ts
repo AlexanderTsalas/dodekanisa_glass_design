@@ -17,7 +17,6 @@ export const contactHero = {
         name: 'Ονοματεπώνυμο',
         phone: 'Τηλέφωνο',
         email: 'Email',
-        subject: 'Θέμα (Προαιρετικό)',
         message: 'Μήνυμα',
         button: 'ΑΠΟΣΤΟΛΗ ΜΗΝΥΜΑΤΟΣ'
     }

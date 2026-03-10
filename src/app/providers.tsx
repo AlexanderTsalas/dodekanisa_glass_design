@@ -9,8 +9,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       lerp: 0.05,
       wheelMultiplier: 1.5,
       smoothWheel: true,
-      syncTouch: true, /* Enable native touch momentum scrolling */
-      touchMultiplier: 0 /* Disable Lenis virtual scroll on touch devices */
+      syncTouch: false,
     }}>
       <ScrollToTop />
       {children}

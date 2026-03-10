@@ -148,7 +148,7 @@ export default function Services() {
                                     fill
                                     sizes="(max-width: 1024px) 100vw, 75vw"
                                     priority={index === 0}
-                                    className="object-cover reveal-fade-in"
+                                    className="object-cover"
                                 />
                                 {/* Noise overlay purely for texture */}
                                 <div className="absolute inset-0 bg-noise opacity-[0.15] mix-blend-overlay pointer-events-none"></div>

@@ -26,7 +26,7 @@ export default function Contact() {
             <div className="max-w-7xl mx-auto w-full px-6 lg:px-16 grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] xl:grid-cols-[1.4fr_1fr] gap-12 lg:gap-20 relative z-10 h-auto lg:h-full max-h-none lg:max-h-[850px] items-center">
 
                 {/* Left Side: Content & Cards */}
-                <div className="flex flex-col justify-center h-auto lg:h-full reveal-fade-in pt-12 lg:pt-0">
+                <div className="flex flex-col justify-center h-auto lg:h-full pt-12 lg:pt-0">
                     <div className="mb-8 lg:mb-12">
                         <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[rgba(11,12,14,0.1)]/40 bg-[#E9EAEC]/30 backdrop-blur-sm mb-6 lg:mb-8">
                             <span className="w-2 h-2 rounded-full bg-[#3F4CCB] animate-ping"></span>
@@ -65,7 +65,7 @@ export default function Contact() {
                 </div>
 
                 {/* Right Side: Interactive Form */}
-                <div className="flex flex-col justify-center h-auto lg:h-full reveal-fade-in pb-12 lg:pb-0" style={{ animationDelay: '300ms' }}>
+                <div className="flex flex-col justify-center h-auto lg:h-full pb-12 lg:pb-0">
                     <div className="bg-[#E9EAEC]/30 border border-[rgba(11,12,14,0.1)]/40 rounded-3xl p-6 lg:p-12 backdrop-blur-xl shadow-2xl relative overflow-hidden flex flex-col justify-between">
 
                         {/* Shimmer Effect */}

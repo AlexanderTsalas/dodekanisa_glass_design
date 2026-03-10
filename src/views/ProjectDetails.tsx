@@ -68,7 +68,7 @@ export default function ProjectDetails({ id }: { id: string }) {
                     {/* Primary Large Image */}
                     <button
                         onClick={() => setIsLightboxOpen(true)}
-                        className="lg:col-span-9 rounded-2xl overflow-hidden bg-[#edede9] relative border border-[rgba(11,12,14,0.1)]/40 shadow-2xl reveal-fade-in group cursor-zoom-in text-left focus:outline-none"
+                        className="lg:col-span-9 rounded-2xl overflow-hidden bg-[#edede9] relative border border-[rgba(11,12,14,0.1)]/40 shadow-2xl group cursor-zoom-in text-left focus:outline-none"
                     >
                         <Image
                             src={displayImage}
@@ -119,15 +119,25 @@ export default function ProjectDetails({ id }: { id: string }) {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
 
                     {/* Left: Narrative Description */}
-                    <div className="lg:col-span-7 reveal-fade-in">
+                    <motion.div
+                        initial={{ opacity: 0, filter: 'blur(8px)' }}
+                        whileInView={{ opacity: 1, filter: 'blur(0px)' }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, ease: 'easeOut' }}
+                        className="lg:col-span-7">
                         <h2 className="text-xs uppercase tracking-[0.2em] text-brand-muted mb-8 border-b border-[rgba(11,12,14,0.1)]/40 pb-4">Το Έργο</h2>
                         <p className="text-[#0B0C0E] text-lg lg:text-xl leading-relaxed opacity-90 font-medium whitespace-pre-line">
                             {project.description}
                         </p>
-                    </div>
+                    </motion.div>
 
                     {/* Right: Technical Specs */}
-                    <div className="lg:col-span-5 reveal-fade-in" style={{ animationDelay: '150ms' }}>
+                    <motion.div
+                        initial={{ opacity: 0, filter: 'blur(8px)' }}
+                        whileInView={{ opacity: 1, filter: 'blur(0px)' }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
+                        className="lg:col-span-5">
                         <div className="bg-white/40 backdrop-blur-xl border border-white/40 rounded-2xl p-8 shadow-[0_8px_32px_rgba(11,12,14,0.05)]">
                             <h3 className="text-xs uppercase tracking-[0.15em] text-[#0B0C0E] font-bold mb-6 border-b border-[#0B0C0E]/20 pb-4">
                                 Τεχνικά Χαρακτηριστικά
@@ -143,7 +153,7 @@ export default function ProjectDetails({ id }: { id: string }) {
                             </ul>
                         </div>
 
-                    </div>
+                    </motion.div>
                 </div>
             </div>
 

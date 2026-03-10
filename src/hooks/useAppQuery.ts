@@ -4,8 +4,6 @@ import { contactMethods, contactHero } from '../data/contactData';
 import { homeSplits } from '../data/homeData';
 import { projectsData } from '../data/projectsData';
 
-// This is a proxy mapping for our temporary local database.
-// When migrating to Supabase, this map is entirely deleted.
 const localDatabaseMap: Record<string, any> = {
     'global_settings': siteSettings,
     'global_navigation': navigationData,
@@ -22,14 +20,6 @@ interface AppQueryResponse<T> {
     error: Error | null;
 }
 
-/**
- * useAppQuery
- * Returns local data synchronously to avoid layout shifts and render delays.
- *
- * Future Supabase Migration:
- * Replace with async fetch using useState/useEffect:
- * const { data, error } = await supabase.from(tableName).select();
- */
 export function useAppQuery<T = any>(tableName: string): AppQueryResponse<T> {
     const result = localDatabaseMap[tableName];
 
