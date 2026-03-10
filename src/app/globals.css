@@ -262,6 +262,7 @@ textarea:focus-visible {
   .headline-xl,
   .headline-lg {
     letter-spacing: -0.01em;
+    line-height: 1.05;
   }
 }
 
